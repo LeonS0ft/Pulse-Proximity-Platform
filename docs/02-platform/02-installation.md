@@ -22,7 +22,7 @@ Make sure these folders are writable:
 
 ## Configuration file
 
-In the root directory, copy `.env.example` to `.env` and open the file with a text editor.
+Copy `core/.env.example` to `.env` and open the file with a text editor.
 
 > In Windows, you have to enter a space and a dot after `.env` to rename the file. Like this: `.env .` and press enter.
 
