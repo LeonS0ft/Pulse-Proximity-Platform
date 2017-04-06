@@ -15,12 +15,12 @@
     </div>
 <?php } ?>
   </div>
-<?php if (Gate::allows('limitation', 'proximity.visible')) { ?>
+<?php if (Gate::allows('limitation', 'mobile.visible')) { ?>
 <?php
 $cols = 4;
 
-if (! Gate::allows('limitation', 'proximity.beacons_visible')) $cols--;
-if (! Gate::allows('limitation', 'proximity.geofences_visible')) $cols--;
+if (! Gate::allows('limitation', 'mobile.beacons_visible')) $cols--;
+if (! Gate::allows('limitation', 'mobile.geofences_visible')) $cols--;
 
 switch ($cols) {
   case 4: $col_class = 'col-sm-6 col-lg-3'; break;
@@ -51,7 +51,7 @@ switch ($cols) {
         </a>
       </div>
     </div>
-<?php if (Gate::allows('limitation', 'proximity.beacons_visible')) { ?>
+<?php if (Gate::allows('limitation', 'mobile.beacons_visible')) { ?>
     <div class="{{ $col_class }}">
       <div class="card-box widget-icon">
         <a href="#/beacons">
@@ -64,7 +64,7 @@ switch ($cols) {
       </div>
     </div>
 <?php } ?>
-<?php if (Gate::allows('limitation', 'proximity.geofences_visible')) { ?>
+<?php if (Gate::allows('limitation', 'mobile.geofences_visible')) { ?>
     <div class="{{ $col_class }}">
       <div class="card-box widget-icon">
         <a href="#/geofences">
