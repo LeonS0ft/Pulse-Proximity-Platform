@@ -1,4 +1,9 @@
 # Proximity Marketing Platform
+
+Based on [Laravel](https://laravel.com/) and [Ionic](http://ionicframework.com/).
+
+![Pulse Proximity Marketing Platform](assets/images/platform-visual.png)
+
 Pulse is a Proximity Marketing platform to provide location aware notifications and content for Bluetooth beacons (iBeacons) and geo-fences. Its goal is to provide a flexible and user friendly way of managing location based scenarios. It's SaaS from the ground up, so you can manage all your customers with one installation. You can even enable resellers to use the system with their own (sub)domain.
 
 The system consists of two parts; a web interface for the management and a [mobile app](https://github.com/madewithpepper/Pulse-Proximity-App) for the end users.
