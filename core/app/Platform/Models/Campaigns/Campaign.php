@@ -68,6 +68,10 @@ class Campaign extends Model implements StaplerableInterface {
     return $this->belongsToMany('Platform\Models\Location\Card', 'campaign_card', 'campaign_id', 'card_id');
   }
 
+  public function cardStat() {
+    return $this->hasMany('Platform\Models\Analytics\CardStat', 'card_stats', 'campaign_id', 'card_id');
+  }
+
   public function apps() {
     return $this->belongsToMany('Platform\Models\Campaigns\App', 'app_campaigns', 'campaign_id', 'app_id');
   }

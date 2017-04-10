@@ -21841,7 +21841,7 @@ h3.timeline-title {
   font-size: .8em;
 }
 /* Flot chart */
-#flotTip {
+.flotTip {
   padding: 8px 12px;
   background-color: #36404a;
   z-index: 100;

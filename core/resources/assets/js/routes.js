@@ -47,7 +47,6 @@ $(function() {
       '/campaign/new': function () { loadRoute('platform/campaign/new', 'campaigns'); },
       '/campaign/edit/:sl': function (sl) { loadRoute('platform/campaign/edit?sl=' + sl, 'campaigns'); },
 
-      '/campaign/analytics': function () { loadRoute('platform/campaign/analytics'); },
       '/campaign/analytics/:sl': function (sl) { loadRoute('platform/campaign/analytics?sl=' + sl, 'campaigns'); },
       '/campaign/analytics/:start/:end': function (start, end) { loadRoute('platform/campaign/analytics?start=' + start + '&end=' + end, 'campaigns'); },
       '/campaign/analytics/:start/:end/:sl': function (start, end, sl) { loadRoute('platform/campaign/analytics?sl=' + sl + '&start=' + start + '&end=' + end, 'campaigns'); },

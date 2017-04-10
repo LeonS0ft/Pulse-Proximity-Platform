@@ -27,6 +27,10 @@ class CardStat extends Model
     return $this->hasOne('App\User');
   }
 
+  public function campaigns() {
+    return $this->belongsToMany('Platform\Models\Campaigns\Campaign', 'campaign_card', 'card_id', 'campaign_id');
+  }
+
   public function member() {
     return $this->hasOne('Platform\Models\Members\Member');
   }

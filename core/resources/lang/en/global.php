@@ -136,6 +136,7 @@ return array(
    */
 
   "campaigns" => "Campaigns",
+  "all_campaigns" => "All campaigns",
   "new_campaign" => "New campaign",
   "edit_campaign" => "Edit campaign",
   "view_campaigns" => "View campaigns",
@@ -313,13 +314,18 @@ return array(
 
   "analytics" => "Analytics",
   "view_analytics" => "View analytics",
+  "views_and_interactions" => "Views and interactions",
   "views" => "Views",
+  "interactions" => "Interactions",
+  "cards_viewed" => "Cards viewed",
+  "scenarios_triggered" => "Scenarios triggered",
   "map" => "Map",
+  "heatmap" => "Heatmap",
   "hits" => "Hits",
   "browsers" => "Browsers",
   "os" => "OS",
   "no_data_found" => "No data found.",
- 
+
   /*
   |--------------------------------------------------------------------------
   | Date time

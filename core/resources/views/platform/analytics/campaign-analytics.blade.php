@@ -17,8 +17,9 @@ if (count($campaigns) == 0) {
 echo '<option value="">' . trans('global.all_campaigns') . '</option>';
 
 foreach($campaigns as $key => $row) {
+  $sl_campaign = \Platform\Controllers\Core\Secure::array2string(array('campaign_id' => $row['id']));
   $selected = ($row['id'] == $campaign_id) ? ' selected' : '';
-  echo '<option value="' . $key . '"' . $selected . '>' . $row['name'] . '</option>';
+  echo '<option value="' . $sl_campaign . '"' . $selected . '>' . $row['name'] . '</option>';
 }
 ?>
       </select>
@@ -38,7 +39,7 @@ $('#campaigns').on('change', function() {
   <div class="col-lg-12">
 
       <div class="card-box">
-        <h3 class="page-title">{{ trans('global.views') }}</h3>
+        <h3 class="page-title">{{ trans('global.views_and_interactions') }}</h3>
         <div id="combine-chart">
           <div id="combine-chart-container" class="flot-chart" style="height: 320px;"> </div>
         </div>
@@ -100,6 +101,158 @@ $('#reportrange').on('apply.daterangepicker', function(ev, picker) {
   document.location = (sl == '') ? '#/campaign/analytics/' + start + '/' + end : '#/campaign/analytics/' + start + '/' + end + '/' + sl;
 });
 
+
+//Combine graph data
+var statCardViews = [
+<?php foreach($interaction_range as $date => $row) { ?>
+[(new Date(<?php echo $row['y'] ?>, <?php echo $row['m'] - 1 ?>, <?php echo $row['d'] + 1 ?>)).getTime(), <?php echo $row['views'] ?>],
+<?php } ?>
+];
+
+var statInteractions = [
+<?php foreach($interaction_range as $date => $row) { ?>
+[(new Date(<?php echo $row['y'] ?>, <?php echo $row['m'] - 1 ?>, <?php echo $row['d']  + 1?>)).getTime(), <?php echo $row['interactions'] ?>],
+<?php } ?>
+];
+var ticks = [
+<?php foreach($interaction_range as $date => $row) { ?>
+[(new Date(<?php echo $row['y'] ?>, <?php echo $row['m'] - 1 ?>, <?php echo $row['d'] + 1 ?>)).getTime(), '<?php echo $row['m'] . '/' . $row['d'] ?>'],
+<?php } ?>
+];
+var combinelabels = ["{{ trans('global.cards_viewed') }}", "{{ trans('global.scenarios_triggered') }}"];
+var combinedatas = [statCardViews, statInteractions];
+
+// first correct the timestamps - they are recorded as the daily
+// midnights in UTC+0100, but Flot always displays dates in UTC
+// so we have to add one hour to hit the midnights in the plot
+for (var i = 0; i < statCardViews.length; ++i) {
+  statCardViews[i][0] += 60 * 60 * 1000;
+}
+
+for (var i = 0; i < statInteractions.length; ++i) {
+  statInteractions[i][0] += 60 * 60 * 1000;
+}
+
+function weekendAreas(axes) {
+
+  var markings = [],
+    d = new Date(axes.xaxis.min);
+
+  // go to the first Saturday
+  d.setUTCDate(d.getUTCDate() - ((d.getUTCDay() + 1) % 7))
+  d.setUTCSeconds(0);
+  d.setUTCMinutes(0);
+  d.setUTCHours(0);
+
+  var i = d.getTime();
+
+  // when we don't set yaxis, the rectangle automatically
+  // extends to infinity upwards and downwards
+
+  do {
+    markings.push({ xaxis: { from: i, to: i + 2 * 24 * 60 * 60 * 1000 }, color:"#fafafa" });
+    i += 7 * 24 * 60 * 60 * 1000;
+  } while (i < axes.xaxis.max);
+
+  return markings;
+}
+
+var options = {
+  series : {
+    shadowSize : 0,
+    lines: { 
+      show: true,
+      fill: false,
+      lineWidth: 3
+    },
+    points: { 
+      show: true,
+      fill: true,
+      radius: 3
+    }
+  },
+  grid : {
+    markings: weekendAreas,
+    hoverable : true,
+    clickable : true,
+    tickColor : "#f9f9f9",
+    borderWidth : 1,
+    borderColor : "hsla(0,0%,93%,.1)"
+  },
+  colors : ["#50b432", "#058dc7"],
+  tooltip : true,
+  tooltipOpts : {
+    content : "%y %s",
+    defaultTheme : false
+  },
+  legend : {
+    position : "ne",
+    margin : [0, -24],
+    noColumns : 0,
+    labelBoxBorderColor : null,
+    labelFormatter : function(label, series) {
+      // just add some space to labes
+      return '' + label + '&nbsp;&nbsp;';
+    },
+    width : 30,
+    height : 2
+  },
+  yaxis : {
+    tickColor : '#efefef',
+    tickDecimals: 0,
+    font : {
+      color : 'rgb(68, 68, 68)'
+    }
+  },
+  xaxis : {
+    mode: "time", 
+    timeformat: "%Y-%m-%d",
+    ticks: ticks,
+    tickLength: 0,
+    tickColor : '#f5f5f5',
+    font : {
+      color : 'rgb(68, 68, 68)'
+    }
+  }
+};
+
+var data = [{
+  label : combinelabels[0],
+  data : combinedatas[0],
+  lines : {
+    show : true,
+    fill : false
+  },
+  points : {
+    show : true,
+    fillColor: "#50b432"
+  }
+}, {
+  label : combinelabels[1],
+  data : combinedatas[1],
+  lines : {
+    show : false
+  },
+  bars : {
+    show : true,
+    align: "center",
+    fill: true,
+    barWidth: (1000*60*60*12)
+  },
+  points : {
+    show : false,
+    fillColor: "#058dc7"
+  }
+}
+];
+
+$.plot($("#combine-chart #combine-chart-container"), data, options);
+
+$(window).resize(function(event) {
+  if ($("#combine-chart #combine-chart-container").length) {
+    $.plot($("#combine-chart #combine-chart-container"), data, options);
+  }
+});
 
 </script>
 <?php } ?>
