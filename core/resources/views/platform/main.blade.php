@@ -121,6 +121,6 @@ if (count($languages) > 1) {
 </div>
 
 <script async defer
-src="https://maps.googleapis.com/maps/api/js?key={{ env('GMAPS_KEY') }}&libraries=places">
+src="https://maps.googleapis.com/maps/api/js?key={{ env('GMAPS_KEY') }}&libraries=places,visualization">
 </script>
 @endsection 
