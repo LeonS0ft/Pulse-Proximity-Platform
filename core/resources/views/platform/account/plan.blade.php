@@ -87,8 +87,8 @@ foreach($plans as $plan) {
                 </div>
 
                 <ul class="plan-stats list-unstyled text-center">
-                    <li><?php echo ($plan->limitations['proximity']['beacons_visible'] == 1) ? '<i class="ti-check text-success"></i>' : '<i class="ti-na text-danger"></i>'; ?> {{ trans('global.beacons') }}</li>
-                    <li><?php echo ($plan->limitations['proximity']['geofences_visible'] == 1) ? '<i class="ti-check text-success"></i>' : '<i class="ti-na text-danger"></i>'; ?> {{ trans('global.geofences') }}</li>
+                    <li><?php echo ($plan->limitations['mobile']['beacons_visible'] == 1) ? '<i class="ti-check text-success"></i>' : '<i class="ti-na text-danger"></i>'; ?> {{ trans('global.beacons') }}</li>
+                    <li><?php echo ($plan->limitations['mobile']['geofences_visible'] == 1) ? '<i class="ti-check text-success"></i>' : '<i class="ti-na text-danger"></i>'; ?> {{ trans('global.geofences') }}</li>
                 </ul>
 
                 <div class="text-center">
