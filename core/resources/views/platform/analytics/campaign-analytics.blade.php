@@ -37,14 +37,23 @@ $('#campaigns').on('change', function() {
 
 <div class="row">
   <div class="col-lg-12">
-
-      <div class="card-box">
-        <h3 class="page-title">{{ trans('global.views_and_interactions') }}</h3>
-        <div id="combine-chart">
-          <div id="combine-chart-container" class="flot-chart" style="height: 320px;"> </div>
+    <div class="card-box">
+      <h3 class="page-title">{{ trans('global.views_and_interactions') }}</h3>
+      <div id="combine-chart">
+        <div id="main_chart" class="flot-chart" style="height: 240px;">
         </div>
       </div>
+    </div>
+  </div>
+</div>
 
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card-box">
+      <h3 class="page-title">{{ trans('global.heatmap') }}</h3>
+      <div id="heatmap" style="height: 380px;">
+      </div>
+    </div>
   </div>
 </div>
 
@@ -101,21 +110,20 @@ $('#reportrange').on('apply.daterangepicker', function(ev, picker) {
   document.location = (sl == '') ? '#/campaign/analytics/' + start + '/' + end : '#/campaign/analytics/' + start + '/' + end + '/' + sl;
 });
 
-
 //Combine graph data
 var statCardViews = [
-<?php foreach($interaction_range as $date => $row) { ?>
+<?php foreach($main_chart_range as $date => $row) { ?>
 [(new Date(<?php echo $row['y'] ?>, <?php echo $row['m'] - 1 ?>, <?php echo $row['d'] + 1 ?>)).getTime(), <?php echo $row['views'] ?>],
 <?php } ?>
 ];
 
 var statInteractions = [
-<?php foreach($interaction_range as $date => $row) { ?>
+<?php foreach($main_chart_range as $date => $row) { ?>
 [(new Date(<?php echo $row['y'] ?>, <?php echo $row['m'] - 1 ?>, <?php echo $row['d']  + 1?>)).getTime(), <?php echo $row['interactions'] ?>],
 <?php } ?>
 ];
 var ticks = [
-<?php foreach($interaction_range as $date => $row) { ?>
+<?php foreach($main_chart_range as $date => $row) { ?>
 [(new Date(<?php echo $row['y'] ?>, <?php echo $row['m'] - 1 ?>, <?php echo $row['d'] + 1 ?>)).getTime(), '<?php echo $row['m'] . '/' . $row['d'] ?>'],
 <?php } ?>
 ];
@@ -179,7 +187,7 @@ var options = {
     borderWidth : 1,
     borderColor : "hsla(0,0%,93%,.1)"
   },
-  colors : ["#50b432", "#058dc7"],
+  colors : ["#50b432", "#058dc7", "#ed7e17", "#af49c5"],
   tooltip : true,
   tooltipOpts : {
     content : "%y %s",
@@ -246,13 +254,113 @@ var data = [{
 }
 ];
 
-$.plot($("#combine-chart #combine-chart-container"), data, options);
+$.plot($("#combine-chart #main_chart"), data, options);
 
 $(window).resize(function(event) {
-  if ($("#combine-chart #combine-chart-container").length) {
-    $.plot($("#combine-chart #combine-chart-container"), data, options);
+  if ($("#combine-chart #main_chart").length) {
+    $.plot($("#combine-chart #main_chart"), data, options);
   }
 });
 
+// Heatmap
+initMap();
+
+var map, heatmap;
+
+function initMap() {
+  map = new google.maps.Map(document.getElementById('heatmap'), {
+    center: {lat: {{ env('GMAPS_DEFAULT_LAT') }}, lng: {{ env('GMAPS_DEFAULT_LNG') }}},
+    zoom: {{ env('GMAPS_DEFAULT_ZOOM') }},
+    mapTypeId: 'roadmap'
+  });
+
+<?php if (count($heatmap) > 0) { ?>
+  // Bounding box
+  var bounds = new google.maps.LatLngBounds();
+  getPoints().forEach(function(point) {
+    bounds.extend({'lat': point.location.lat(), 'lng': point.location.lng()});
+  });
+
+  map.fitBounds(bounds);
+
+  // Calculate zoom
+  var mapDim = { height: $('#heatmap').height(), width: $('#heatmap').width() };
+  map.setZoom(getBoundsZoomLevel(bounds, mapDim));
+
+  heatmap = new google.maps.visualization.HeatmapLayer({
+    data: getPoints(),
+    map: map
+  });
+<?php } ?>
+}
+
+function toggleHeatmap() {
+  heatmap.setMap(heatmap.getMap() ? null : map);
+}
+
+function changeGradient() {
+  var gradient = [
+    'rgba(0, 255, 255, 0)',
+    'rgba(0, 255, 255, 1)',
+    'rgba(0, 191, 255, 1)',
+    'rgba(0, 127, 255, 1)',
+    'rgba(0, 63, 255, 1)',
+    'rgba(0, 0, 255, 1)',
+    'rgba(0, 0, 223, 1)',
+    'rgba(0, 0, 191, 1)',
+    'rgba(0, 0, 159, 1)',
+    'rgba(0, 0, 127, 1)',
+    'rgba(63, 0, 91, 1)',
+    'rgba(127, 0, 63, 1)',
+    'rgba(191, 0, 31, 1)',
+    'rgba(255, 0, 0, 1)'
+  ]
+  heatmap.set('gradient', heatmap.get('gradient') ? null : gradient);
+}
+
+function changeRadius() {
+  heatmap.set('radius', heatmap.get('radius') ? null : 20);
+}
+
+function changeOpacity() {
+  heatmap.set('opacity', heatmap.get('opacity') ? null : 0.2);
+}
+
+// Heatmap data: 500 Points
+function getPoints() {
+  return [
+<?php foreach($heatmap as $location) { ?>
+    {location: new google.maps.LatLng({{ $location['lat'] }} , {{ $location['lng'] }}), weight: {{ $location['weight'] }}},
+<?php } ?>
+  ];
+}
+
+function getBoundsZoomLevel(bounds, mapDim) {
+  var WORLD_DIM = { height: 256, width: 256 };
+  var ZOOM_MAX = 21;
+
+  function latRad(lat) {
+      var sin = Math.sin(lat * Math.PI / 180);
+      var radX2 = Math.log((1 + sin) / (1 - sin)) / 2;
+      return Math.max(Math.min(radX2, Math.PI), -Math.PI) / 2;
+  }
+
+  function zoom(mapPx, worldPx, fraction) {
+      return Math.floor(Math.log(mapPx / worldPx / fraction) / Math.LN2);
+  }
+
+  var ne = bounds.getNorthEast();
+  var sw = bounds.getSouthWest();
+
+  var latFraction = (latRad(ne.lat()) - latRad(sw.lat())) / Math.PI;
+
+  var lngDiff = ne.lng() - sw.lng();
+  var lngFraction = ((lngDiff < 0) ? (lngDiff + 360) : lngDiff) / 360;
+
+  var latZoom = zoom(mapDim.height, WORLD_DIM.height, latFraction);
+  var lngZoom = zoom(mapDim.width, WORLD_DIM.width, lngFraction);
+
+  return Math.min(latZoom, lngZoom, ZOOM_MAX);
+}
 </script>
 <?php } ?>
