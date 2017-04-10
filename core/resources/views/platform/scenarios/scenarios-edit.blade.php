@@ -294,7 +294,7 @@ echo '</select>';
 
         <button class="btn btn-primary btn-popover btn-config" data-toggle="tooltip" title="{{ trans('global.timing') }}"><i class="fa fa-hourglass-start"></i></button>
         <div class="settings-content config-content">
-          <div style="width:260px">
+          <div>
             <div class="form-group">
               <label>{{ trans('global.frequency') }}</label>
               <input type="number" class="form-control frequency" value="@{{frequency}}" min="0" placeholder="0">
