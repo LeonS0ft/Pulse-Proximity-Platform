@@ -64,7 +64,7 @@ $('#reportrange').daterangepicker({
   format: 'MM-DD-YYYY',
   startDate: moment('<?php echo $date_start ?>').format('MM-D-YYYY'),
   endDate: moment('<?php echo $date_end ?>').format('MM-D-YYYY'),
-  minDate: moment('<?php echo $first_date ?>').format('MM-D-YYYY'),
+  minDate: moment('<?php echo $earliest_date ?>').format('MM-D-YYYY'),
   maxDate: '<?php echo date('m/d/Y') ?>',
   dateLimit: {
       days: 60

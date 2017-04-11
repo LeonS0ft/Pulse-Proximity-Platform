@@ -54,73 +54,75 @@ class CampaignAnalyticsController extends \App\Http\Controllers\Controller {
 
     /*
      |--------------------------------------------------------------------------
-     | First date
+     | Get earliest date for campaign selection
      |--------------------------------------------------------------------------
      */
-    $stats_found = false;
-    $first_date = date('Y-m-d');
+    $earliest_date = date('Y-m-d');
 
-    // Card views
-    // Raw query because of this issue: https://github.com/laravel/framework/issues/18523
+    // Get earliest date of card
     if (is_numeric($campaign_id)) {
-      $stats_card_views = \DB::select("select DATE(created_at) as date
-        from `card_stats` 
+
+      $card = \DB::select("select DATE(created_at) as date
+        from `cards` 
         where `user_id` = :user_id 
-        and exists (select * from `campaigns` inner join `campaign_card` on `campaigns`.`id` = `campaign_card`.`campaign_id` where `campaign_card`.`campaign_id` in (:campaign_id))  
-        order by date asc", 
+        and exists (select * from `campaigns` inner join `campaign_card` on `campaigns`.`id` = `campaign_card`.`campaign_id` where `campaign_card`.`campaign_id` in (:campaign_id)) 
+        order by date asc
+        limit 1", 
       [
         'user_id' => Core\Secure::userId(),
         'campaign_id' => $campaign_id
       ]);
+
     } elseif(is_array($campaign_id)) {
       $campaign_ids = implode(',', $campaign_id);
-      $stats_card_views = \DB::select("select DATE(created_at) as date
-        from `card_stats` 
+
+      $card = \DB::select("select DATE(created_at) as date
+        from `cards` 
         where `user_id` = :user_id 
         and exists (select * from `campaigns` inner join `campaign_card` on `campaigns`.`id` = `campaign_card`.`campaign_id` where `campaign_card`.`campaign_id` in (:campaign_ids)) 
-        order by date asc", 
+        order by date asc
+        limit 1", 
       [
         'user_id' => Core\Secure::userId(),
         'campaign_ids' => $campaign_ids
       ]);
     }  else {
-      $stats_card_views = \DB::select("select DATE(created_at) as date
-        from `card_stats` 
+      $card = \DB::select("select DATE(created_at) as date
+        from `cards` 
         where `user_id` = :user_id 
-        order by date asc", 
+        order by date asc
+        limit 1", 
       [
         'user_id' => Core\Secure::userId()
       ]);
     }
 
-    if (! empty($card_views_stats)) {
-      $stats_found = true;
-      if ($card_views_stats->date < $first_date) $first_date = $card_views_stats->date;
+    if (count($card) > 0) {
+      if ($card[0]->date < $earliest_date) $earliest_date = $card[0]->date;
     }
 
-    // Interactions
+    // Get earliest date of campaign
     if (is_numeric($campaign_id)) {
-      $stats_interactions = Location\Interaction::where('user_id', Core\Secure::userId())
+      $campaign = Campaigns\Campaign::where('user_id', Core\Secure::userId())
         ->select(\DB::raw('DATE(created_at) as date'))
-        ->where('campaign_id', $campaign_id)
+        ->where('id', $campaign_id)
         ->orderBy('date', 'asc')
         ->first();
     } elseif(is_array($campaign_id)) {
-      $stats_interactions = Location\Interaction::where('user_id', Core\Secure::userId())
+      $campaign = Campaigns\Campaign::where('user_id', Core\Secure::userId())
         ->select(\DB::raw('DATE(created_at) as date'))
-        ->whereIn('campaign_id', $campaign_id)
+        ->whereIn('id', $campaign_id)
         ->orderBy('date', 'asc')
         ->first();
     } else {
-      $stats_interactions = Location\Interaction::where('user_id', Core\Secure::userId())
+      $campaign = Campaigns\Campaign::where('user_id', Core\Secure::userId())
         ->select(\DB::raw('DATE(created_at) as date'))
         ->orderBy('date', 'asc')
         ->first();
     }
 
-    if (count($stats_interactions) > 0) {
-      $stats_found = true;
-      if ($stats_interactions->date < $first_date) $first_date = $stats_interactions->date;
+    if (! empty($campaign)) {
+      if ($campaign->date < $earliest_date) $earliest_date = $campaign->date;
     }
 
     /*
@@ -220,7 +222,7 @@ class CampaignAnalyticsController extends \App\Http\Controllers\Controller {
     foreach($main_chart_range as $date => $arr) {
 
       // Views
-      $views = ($date < $first_date) ? NULL : 0;
+      $views = ($date < $earliest_date) ? NULL : 0;
       foreach($stats_card_views as $row) {
         if ($date == $row->date) {
           $views = $row->views;
@@ -232,7 +234,7 @@ class CampaignAnalyticsController extends \App\Http\Controllers\Controller {
 
       // Interactions
       $interactions = 0;
-      $interactions = ($date < $first_date) ? NULL : 0;
+      $interactions = ($date < $earliest_date) ? NULL : 0;
       foreach($stats_interactions as $row) {
         if ($date == $row['date']) {
           $interactions = $row['interactions'];
@@ -334,6 +336,6 @@ class CampaignAnalyticsController extends \App\Http\Controllers\Controller {
     foreach ($heatmap_card_views as $row) { $heatmap[] = ['lat' => $row->lat, 'lng' => $row->lng, 'weight' => $row->weight]; } 
     foreach ($heatmap_interactions as $row) { $heatmap[] = ['lat' => $row['lat'], 'lng' => $row['lng'], 'weight' => $row['weight']]; } 
 
-    return view('platform.analytics.campaign-analytics', compact('sl', 'first_date', 'stats_found', 'date_start', 'date_end', 'campaigns', 'campaign_id', 'main_chart_range', 'heatmap'));
+    return view('platform.analytics.campaign-analytics', compact('sl', 'earliest_date', 'date_start', 'date_end', 'campaigns', 'campaign_id', 'main_chart_range', 'heatmap'));
   }
 }
