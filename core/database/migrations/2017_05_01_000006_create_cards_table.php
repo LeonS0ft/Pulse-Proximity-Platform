@@ -54,10 +54,10 @@ class CreateCardsTable extends Migration
       $table->bigIncrements('id');
       $table->integer('user_id')->unsigned();
       $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-      $table->bigInteger('card_id')->unsigned();
-      $table->foreign('card_id')->references('id')->on('cards')->onDelete('cascade');
       $table->integer('member_id')->unsigned()->nullable();
       $table->foreign('member_id')->references('id')->on('members')->onDelete('cascade');
+      $table->bigInteger('card_id')->unsigned();
+      $table->foreign('card_id')->references('id')->on('cards')->onDelete('cascade');
       $table->string('ip', 40)->nullable();
       $table->uuid('device_uuid')->nullable();
       $table->string('platform', 16)->nullable();

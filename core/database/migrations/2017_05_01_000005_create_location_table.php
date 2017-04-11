@@ -188,6 +188,8 @@ class CreateLocationTable extends Migration
       $table->bigIncrements('id');
       $table->integer('user_id')->unsigned();
       $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+      $table->integer('member_id')->unsigned()->nullable();
+      $table->foreign('member_id')->references('id')->on('members')->onDelete('cascade');
       $table->bigInteger('campaign_id')->unsigned()->nullable();
       $table->foreign('campaign_id')->references('id')->on('campaigns')->onDelete('set null');
       $table->bigInteger('scenario_id')->unsigned()->nullable();
@@ -215,6 +217,8 @@ class CreateLocationTable extends Migration
       $table->bigIncrements('id');
       $table->integer('user_id')->unsigned();
       $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+      $table->integer('member_id')->unsigned()->nullable();
+      $table->foreign('member_id')->references('id')->on('members')->onDelete('cascade');
       $table->bigInteger('campaign_id')->unsigned()->nullable();
       $table->foreign('campaign_id')->references('id')->on('campaigns')->onDelete('set null');
       $table->bigInteger('geofence_id')->unsigned()->nullable();
@@ -240,6 +244,8 @@ class CreateLocationTable extends Migration
       $table->bigIncrements('id');
       $table->integer('user_id')->unsigned();
       $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+      $table->integer('member_id')->unsigned()->nullable();
+      $table->foreign('member_id')->references('id')->on('members')->onDelete('cascade');
       $table->bigInteger('campaign_id')->unsigned()->nullable();
       $table->foreign('campaign_id')->references('id')->on('campaigns')->onDelete('set null');
       $table->uuid('device_uuid');
