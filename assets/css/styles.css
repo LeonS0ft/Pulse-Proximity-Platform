@@ -14582,10 +14582,12 @@ i.help-icon:hover {
 .daterangepicker .ranges li:hover {
   color: #fff;
 }
+/*
 .daterangepicker td.in-range {
   background-color: #000000;
   color: #fff;
 }
+*/
 .mce-tinymce.mce-container.mce-panel {
   border-top-width: 1px !important;
   border-bottom-width: 1px !important;
