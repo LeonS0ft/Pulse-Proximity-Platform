@@ -13,7 +13,7 @@ if(config('app.demo'))
 	if($email == '') $email = 'info@example.com';
 	$password = 'welcome'; 
 
-	echo '<div class="alert alert-warning"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> This demo is reset every hour</div>';
+	echo '<div class="alert alert-warning"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> ' . trans('global.login_demo_mode') . '</div>';
 }
 ?>
     <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
