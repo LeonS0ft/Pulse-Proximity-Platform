@@ -3,6 +3,7 @@ Homestead.json
 Homestead.yaml
 .env
 *.env
+*.bu.php
 _notes
 .sass-cache
 /core/public/storage
