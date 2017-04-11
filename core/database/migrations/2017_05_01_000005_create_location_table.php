@@ -207,11 +207,8 @@ class CreateLocationTable extends Migration
       $table->string('platform', 16)->nullable();
       $table->json('segment')->nullable();
       $table->json('extra')->nullable();
-      $table->timestamp('created_at')->nullable();
+      $table->dateTime('created_at')->nullable();
     });
-
-    // Add lat/lng
-    DB::statement('ALTER TABLE interactions ADD location POINT' );
 
     Schema::create('dwelling_time', function(Blueprint $table)
     {
@@ -235,11 +232,8 @@ class CreateLocationTable extends Migration
       $table->integer('dwelling_time')->unsigned()->nullable();
       $table->json('segment')->nullable();
       $table->json('extra')->nullable();
-      $table->timestamp('created_at')->nullable();
+      $table->dateTime('created_at')->nullable();
     });
-
-    // Add lat/lng
-    DB::statement('ALTER TABLE dwelling_time ADD location POINT' );
 
     Schema::create('visits', function(Blueprint $table)
     {
@@ -249,7 +243,7 @@ class CreateLocationTable extends Migration
       $table->bigInteger('campaign_id')->unsigned()->nullable();
       $table->foreign('campaign_id')->references('id')->on('campaigns')->onDelete('set null');
       $table->uuid('device_uuid');
-      $table->timestamp('created_at')->nullable();
+      $table->dateTime('created_at')->nullable();
     });
   }
 

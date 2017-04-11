@@ -60,18 +60,12 @@ class CreateCardsTable extends Migration
       $table->foreign('member_id')->references('id')->on('members')->onDelete('cascade');
       $table->string('ip', 40)->nullable();
       $table->uuid('device_uuid')->nullable();
-      $table->string('os', 32)->nullable();
-      $table->string('client', 32)->nullable();
-      $table->string('device', 32)->nullable();
       $table->string('platform', 16)->nullable();
       $table->string('model', 32)->nullable();
-      $table->char('country', 2)->nullable();
-      $table->string('city', 32)->nullable();
       $table->decimal('lat', 10, 8)->nullable();
       $table->decimal('lng', 11, 8)->nullable();
       $table->json('meta')->nullable();
-
-      $table->timestamp('created_at')->default(\DB::raw('CURRENT_TIMESTAMP'));
+      $table->dateTime('created_at')->default(\DB::raw('CURRENT_TIMESTAMP'));
     });
 
     // Creates the campaign_card (Many-to-Many relation) table
