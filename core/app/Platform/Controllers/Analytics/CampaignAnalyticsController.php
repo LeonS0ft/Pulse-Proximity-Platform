@@ -133,6 +133,21 @@ class CampaignAnalyticsController extends \App\Http\Controllers\Controller {
 
     // Card views
     // Raw query because of this issue: https://github.com/laravel/framework/issues/18523
+
+    // This is not working because of bug above:
+    /*
+    $stats_card_views = ModelAnalytics\CardStat::where('user_id', Core\Secure::userId())
+      ->whereHas('campaigns', function($query) use ($campaign_id) { 
+        $query->whereIn('campaign_card.campaign_id', [$campaign_id]);     
+      })
+      ->select(\DB::raw('DATE(created_at) as date'), \DB::raw('count(id) as views'))
+      ->where('created_at', '>=', $from)
+      ->where('created_at', '<=', $to)
+      ->groupBy([\DB::raw('DATE(created_at)')])
+      ->get()
+      ->toArray();
+    */
+
     if (is_numeric($campaign_id)) {
       $stats_card_views = \DB::select("select DATE(created_at) as date, count(id) as views 
         from `card_stats` 
@@ -173,19 +188,6 @@ class CampaignAnalyticsController extends \App\Http\Controllers\Controller {
       ]);
     }
 
-    /*
-    $stats_card_views = ModelAnalytics\CardStat::where('user_id', Core\Secure::userId())
-      ->whereHas('campaigns', function($query) use ($campaign_id) { 
-        $query->whereIn('campaign_card.campaign_id', [$campaign_id]);     
-      })
-      ->select(\DB::raw('DATE(created_at) as date'), \DB::raw('count(id) as views'))
-      ->where('created_at', '>=', $from)
-      ->where('created_at', '<=', $to)
-      ->groupBy([\DB::raw('DATE(created_at)')])
-      ->get()
-      ->toArray();
-    */
-
     // Interactions
     if (is_numeric($campaign_id)) {
       $stats_interactions = Location\Interaction::where('user_id', Core\Secure::userId())
@@ -220,7 +222,6 @@ class CampaignAnalyticsController extends \App\Http\Controllers\Controller {
 
     // Merge stats with range
     foreach($main_chart_range as $date => $arr) {
-
       // Views
       $views = ($date < $earliest_date) ? NULL : 0;
       foreach($stats_card_views as $row) {
@@ -244,6 +245,227 @@ class CampaignAnalyticsController extends \App\Http\Controllers\Controller {
 
       $arr = array_merge(['interactions' => $interactions], $arr);
       $main_chart_range[$date] = $arr;
+    }
+
+    /*
+     |--------------------------------------------------------------------------
+     | Pie charts
+     |--------------------------------------------------------------------------
+     */
+
+    if (is_numeric($campaign_id)) {
+
+      /*
+       |--------------------------------------------------------------------------
+       | Platform
+       |--------------------------------------------------------------------------
+       */
+
+      $segmentation_platform_interactions = Location\Interaction::where('user_id', Core\Secure::userId())
+        ->select('platform as name', \DB::raw('count(id) as total'))
+        ->where('campaign_id', $campaign_id)
+        ->where('created_at', '>=', $from)
+        ->where('created_at', '<=', $to)
+        ->groupBy('platform')
+        ->get()
+        ->toArray();
+
+      $segmentation_platform_cards = \DB::select("select platform as name, count(id) as total 
+        from `card_stats` 
+        where `user_id` = :user_id 
+        and exists (select * from `campaigns` inner join `campaign_card` on `campaigns`.`id` = `campaign_card`.`campaign_id` where `campaign_card`.`campaign_id` in (:campaign_id)) 
+        and `created_at` >= :from and `created_at` <= :to 
+        group by `platform`", 
+      [
+        'user_id' => Core\Secure::userId(),
+        'campaign_id' => $campaign_id,
+        'from' => $from,
+        'to' => $to
+      ]);
+
+      /*
+       |--------------------------------------------------------------------------
+       | Model
+       |--------------------------------------------------------------------------
+       */
+
+      $segmentation_model_interactions = Location\Interaction::where('user_id', Core\Secure::userId())
+        ->select('model as name', \DB::raw('count(id) as total'))
+        ->where('campaign_id', $campaign_id)
+        ->where('created_at', '>=', $from)
+        ->where('created_at', '<=', $to)
+        ->groupBy('model')
+        ->get()
+        ->toArray();
+
+      $segmentation_model_cards = \DB::select("select model as name, count(id) as total 
+        from `card_stats` 
+        where `user_id` = :user_id 
+        and exists (select * from `campaigns` inner join `campaign_card` on `campaigns`.`id` = `campaign_card`.`campaign_id` where `campaign_card`.`campaign_id` in (:campaign_id)) 
+        and `created_at` >= :from and `created_at` <= :to 
+        group by `model`", 
+      [
+        'user_id' => Core\Secure::userId(),
+        'campaign_id' => $campaign_id,
+        'from' => $from,
+        'to' => $to
+      ]);
+
+    } elseif(is_array($campaign_id)) {
+
+      /*
+       |--------------------------------------------------------------------------
+       | Platform
+       |--------------------------------------------------------------------------
+       */
+
+      $segmentation_platform_interactions = Location\Interaction::where('user_id', Core\Secure::userId())
+        ->select('platform as name', \DB::raw('count(id) as total'))
+        ->whereIn('campaign_id', $campaign_id)
+        ->where('created_at', '>=', $from)
+        ->where('created_at', '<=', $to)
+        ->groupBy('platform')
+        ->get()
+        ->toArray();
+
+      $campaign_ids = implode(',', $campaign_id);
+      $segmentation_platform_cards = \DB::select("select platform as name, count(id) as total 
+        from `card_stats` 
+        where `user_id` = :user_id 
+        and exists (select * from `campaigns` inner join `campaign_card` on `campaigns`.`id` = `campaign_card`.`campaign_id` where `campaign_card`.`campaign_id` in (:campaign_ids)) 
+        and `created_at` >= :from and `created_at` <= :to 
+        group by `platform`", 
+      [
+        'user_id' => Core\Secure::userId(),
+        'campaign_ids' => $campaign_ids,
+        'from' => $from,
+        'to' => $to
+      ]);
+
+      /*
+       |--------------------------------------------------------------------------
+       | Model
+       |--------------------------------------------------------------------------
+       */
+
+      $segmentation_model_interactions = Location\Interaction::where('user_id', Core\Secure::userId())
+        ->select('model as name', \DB::raw('count(id) as total'))
+        ->whereIn('campaign_id', $campaign_id)
+        ->where('created_at', '>=', $from)
+        ->where('created_at', '<=', $to)
+        ->groupBy('model')
+        ->get()
+        ->toArray();
+
+      $campaign_ids = implode(',', $campaign_id);
+      $segmentation_model_cards = \DB::select("select model as name, count(id) as total 
+        from `card_stats` 
+        where `user_id` = :user_id 
+        and exists (select * from `campaigns` inner join `campaign_card` on `campaigns`.`id` = `campaign_card`.`campaign_id` where `campaign_card`.`campaign_id` in (:campaign_ids)) 
+        and `created_at` >= :from and `created_at` <= :to 
+        group by `model`", 
+      [
+        'user_id' => Core\Secure::userId(),
+        'campaign_ids' => $campaign_ids,
+        'from' => $from,
+        'to' => $to
+      ]);
+
+    } else {
+
+      /*
+       |--------------------------------------------------------------------------
+       | Platform
+       |--------------------------------------------------------------------------
+       */
+
+      $segmentation_platform_interactions = Location\Interaction::where('user_id', Core\Secure::userId())
+        ->select('platform as name', \DB::raw('count(id) as total'))
+        ->where('created_at', '>=', $from)
+        ->where('created_at', '<=', $to)
+        ->groupBy('platform')
+        ->get()
+        ->toArray();
+
+      $segmentation_platform_cards = \DB::select("select platform as name, count(id) as total 
+        from `card_stats` 
+        where `user_id` = :user_id 
+        and `created_at` >= :from and `created_at` <= :to 
+        group by `platform`", 
+      [
+        'user_id' => Core\Secure::userId(),
+        'from' => $from,
+        'to' => $to
+      ]);
+
+      /*
+       |--------------------------------------------------------------------------
+       | Model
+       |--------------------------------------------------------------------------
+       */
+
+      $segmentation_model_interactions = Location\Interaction::where('user_id', Core\Secure::userId())
+        ->select('model as name', \DB::raw('count(id) as total'))
+        ->where('created_at', '>=', $from)
+        ->where('created_at', '<=', $to)
+        ->groupBy('model')
+        ->get()
+        ->toArray();
+
+      $segmentation_model_cards = \DB::select("select model as name, count(id) as total 
+        from `card_stats` 
+        where `user_id` = :user_id 
+        and `created_at` >= :from and `created_at` <= :to 
+        group by `model`", 
+      [
+        'user_id' => Core\Secure::userId(),
+        'from' => $from,
+        'to' => $to
+      ]);
+
+    }
+
+    /*
+     |--------------------------------------------------------------------------
+     | Platform
+     |--------------------------------------------------------------------------
+     */
+
+    // Combine segments
+    $segmentation_platform = [];
+    foreach ($segmentation_platform_interactions as $segment) {
+      if (isset($segmentation_platform[$segment['name']])) {
+        $segmentation_platform[$segment['name']] += $segment['total'];
+      } else {
+        $segmentation_platform[$segment['name']] = $segment['total'];
+      }
+    }
+
+    // Default values
+    if (count($segmentation_platform) == 0) {
+      $segmentation_platform['Android'] = 0;
+      $segmentation_platform['iOS'] = 0;
+    }
+
+    /*
+     |--------------------------------------------------------------------------
+     | Model
+     |--------------------------------------------------------------------------
+     */
+
+    // Combine segments
+    $segmentation_model = [];
+    foreach ($segmentation_model_interactions as $segment) {
+      if (isset($segmentation_model[$segment['name']])) {
+        $segmentation_model[$segment['name']] += $segment['total'];
+      } else {
+        $segmentation_model[$segment['name']] = $segment['total'];
+      }
+    }
+
+    // Default values
+    if (count($segmentation_model) == 0) {
+      $segmentation_model[trans('global.device')] = 0;
     }
 
     /*
@@ -336,6 +558,6 @@ class CampaignAnalyticsController extends \App\Http\Controllers\Controller {
     foreach ($heatmap_card_views as $row) { $heatmap[] = ['lat' => $row->lat, 'lng' => $row->lng, 'weight' => $row->weight]; } 
     foreach ($heatmap_interactions as $row) { $heatmap[] = ['lat' => $row['lat'], 'lng' => $row['lng'], 'weight' => $row['weight']]; } 
 
-    return view('platform.analytics.campaign-analytics', compact('sl', 'earliest_date', 'date_start', 'date_end', 'campaigns', 'campaign_id', 'main_chart_range', 'heatmap'));
+    return view('platform.analytics.campaign-analytics', compact('sl', 'earliest_date', 'date_start', 'date_end', 'campaigns', 'campaign_id', 'main_chart_range', 'heatmap', 'segmentation_platform', 'segmentation_model'));
   }
 }

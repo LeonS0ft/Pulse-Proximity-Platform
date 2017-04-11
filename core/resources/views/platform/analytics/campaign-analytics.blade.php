@@ -38,9 +38,8 @@ $('#campaigns').on('change', function() {
 <div class="row">
   <div class="col-lg-12">
     <div class="card-box">
-      <h3 class="page-title">{{ trans('global.views_and_interactions') }}</h3>
       <div id="combine-chart">
-        <div id="main_chart" class="flot-chart" style="height: 240px;">
+        <div id="main_chart" class="flot-chart" style="height: 200px;">
         </div>
       </div>
     </div>
@@ -48,10 +47,25 @@ $('#campaigns').on('change', function() {
 </div>
 
 <div class="row">
-  <div class="col-lg-12">
+  <div class="col-sm-7">
     <div class="card-box">
-      <h3 class="page-title">{{ trans('global.heatmap') }}</h3>
-      <div id="heatmap" style="height: 380px;">
+      <div id="heatmap" style="height: 582px;">
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-5">
+    <div class="card-box">
+      <div id="platformLegend" style="margin-bottom: 20px"></div>
+      <div id="platform-donut-chart" style="height: 180px">
+        <div class="flot-chart" style="height: 180px;">
+        </div>
+      </div>
+    </div>
+    <div class="card-box">
+      <div id="modelLegend" style="margin-bottom: 20px; height: 100px"></div>
+      <div id="model-donut-chart">
+        <div class="flot-chart" style="height: 180px;">
+        </div>
       </div>
     </div>
   </div>
@@ -190,12 +204,14 @@ var options = {
   colors : ["#50b432", "#058dc7", "#ed7e17", "#af49c5"],
   tooltip : true,
   tooltipOpts : {
-    content : "%y %s",
+    content : function(label, date, value) {
+      return "%x<br>%s: %y";
+    },
     defaultTheme : false
   },
   legend : {
     position : "ne",
-    margin : [0, -24],
+    margin : [0, -10],
     noColumns : 0,
     labelBoxBorderColor : null,
     labelFormatter : function(label, series) {
@@ -239,16 +255,11 @@ var data = [{
   label : combinelabels[1],
   data : combinedatas[1],
   lines : {
-    show : false
-  },
-  bars : {
     show : true,
-    align: "center",
-    fill: true,
-    barWidth: (1000*60*60*12)
+    fill : false
   },
   points : {
-    show : false,
+    show : true,
     fillColor: "#058dc7"
   }
 }
@@ -256,9 +267,97 @@ var data = [{
 
 $.plot($("#combine-chart #main_chart"), data, options);
 
+var platformData = [
+<?php foreach($segmentation_platform as $name => $value) { ?>
+{
+  label : "{{ $name }}",
+  data : {{ $value }}
+},
+<?php } ?>
+];
+
+var platformOptions = {
+  series : {
+    pie : {
+      show : true,
+      innerRadius : 0
+    }
+  },
+  legend : {
+    show : true,
+    container: '#platformLegend',
+    position: 'ne',
+    noColumns: 3,
+    labelFormatter : function(label, series) {
+      return '<div style="font-size:14px;margin:5px">&nbsp;' + label + '</div>'
+    },
+    labelBoxBorderColor : null,
+    margin : 10
+  },
+  grid : {
+    hoverable : true,
+    clickable : true
+  },
+  colors : ["#50b432", "#058dc7", "#80deea", "#00b19d"],
+  tooltip : true,
+  tooltipOpts : {
+    content : "%s (%p.0%)"
+  }
+};
+
+$.plot($("#platform-donut-chart .flot-chart"), platformData, platformOptions);
+
+var modelData = [
+<?php foreach($segmentation_model as $name => $value) { ?>
+{
+  label : "{{ $name }}",
+  data : {{ $value }}
+},
+<?php } ?>
+];
+
+var modelOptions = {
+  series : {
+    pie : {
+      show : true,
+      innerRadius : 0
+    }
+  },
+  legend : {
+    show : true,
+    container: '#modelLegend',
+    position: 'ne',
+    noColumns: 3,
+    labelFormatter : function(label, series) {
+      return '<div style="font-size:14px;margin:5px">&nbsp;' + label + '</div>'
+    },
+    labelBoxBorderColor : null,
+    margin : 10
+  },
+  grid : {
+    hoverable : true,
+    clickable : true
+  },
+  colors : ["#50b432", "#058dc7", "#ed7e17", "#af49c5"],
+  tooltip : true,
+  tooltipOpts : {
+    content : "%s (%p.0%)"
+  }
+};
+
+$.plot($("#model-donut-chart .flot-chart"), modelData, modelOptions);
+  
 $(window).resize(function(event) {
   if ($("#combine-chart #main_chart").length) {
     $.plot($("#combine-chart #main_chart"), data, options);
+  }
+
+  if ($("#platform-donut-chart .flot-chart").length) {
+   $.plot($("#platform-donut-chart .flot-chart"), platformData, platformOptions);
+  }
+
+  if ($("#model-donut-chart .flot-chart").length) {
+   $.plot($("#model-donut-chart .flot-chart"), modelData, modelOptions);
   }
 });
 
@@ -291,6 +390,9 @@ function initMap() {
     data: getPoints(),
     map: map
   });
+
+  heatmap.set('radius', 10);
+  heatmap.set('opacity', 0.6);
 <?php } ?>
 }
 
@@ -316,14 +418,6 @@ function changeGradient() {
     'rgba(255, 0, 0, 1)'
   ]
   heatmap.set('gradient', heatmap.get('gradient') ? null : gradient);
-}
-
-function changeRadius() {
-  heatmap.set('radius', heatmap.get('radius') ? null : 20);
-}
-
-function changeOpacity() {
-  heatmap.set('opacity', heatmap.get('opacity') ? null : 0.2);
 }
 
 // Heatmap data: 500 Points

@@ -314,11 +314,11 @@ return array(
 
   "analytics" => "Analytics",
   "view_analytics" => "View analytics",
-  "views_and_interactions" => "Views and interactions",
   "views" => "Views",
   "interactions" => "Interactions",
   "cards_viewed" => "Cards viewed",
   "scenarios_triggered" => "Scenarios triggered",
+  "device" => "Device",
   "map" => "Map",
   "heatmap" => "Heatmap",
   "hits" => "Hits",
