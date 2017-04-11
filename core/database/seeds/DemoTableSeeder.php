@@ -12,7 +12,11 @@ class DemoTableSeeder extends Seeder
      */
     public function run()
     {
-        $faker = Faker\Factory::create();
+        /*
+         |--------------------------------------------------------------------------
+         | Demo data settings
+         |--------------------------------------------------------------------------
+         */
 
         // Bounding box for random generated locations
         $lat_min = 51.439747;
@@ -20,10 +24,60 @@ class DemoTableSeeder extends Seeder
         $lat_max = 51.438810;
         $lng_max = 5.479960;
 
-        // Users
-        $limit_users = 100;
+        // System users
+        $system_user_count = 5;
 
-        for ($i = 0; $i < $limit_users; $i++) {
+        // Beacons
+        $beacon_count = 10;
+
+        // Geofences
+        $geofence_count = 10;
+
+        // Scenarios
+        $beacon_scenario_monitor_count = 10;
+        $beacon_scenario_range_count = 10;
+        $geofence_scenario_monitor_count = 10;
+
+        // Analytics
+        $startDate = '-2 months';
+        $endDate = 'now';
+        $analytics_unique_user_count = 40;
+        $analytics_card_view_count = 300;
+        $analytics_beacon_monitor_count = 200;
+        $analytics_beacon_range_count = 200;
+        $analytics_geofence_monitor_count = 200;
+
+        // Cards
+        $cards = [];
+        $cards[] = ["name" => "McDonald's", "description" => "There's always something brewing in our kitchens. Get in the loop with the latest on promotions, events, new products, specials, and more."];
+        $cards[] = ["name" => "Disney Store", "description" => "The Disney Store offers a one-of-a-kind, interactive experience for Disney fans of all ages."];
+        $cards[] = ["name" => "Apple Store", "description" => "Experience the wide world of Apple at the Apple Store. Shop for Apple computers, compare iPod and iPhone models, and discover Apple and third-party accessories, software, and much more."];
+        $cards[] = ["name" => "ECCO Shoes", "description" => "ECCO, a world-leading brand of shoes combining style and comfort, has built its success on great design, leather quality, and innovative technology."];
+        $cards[] = ["name" => "Foot Locker", "description" => "Foot Locker is a leading global athletic footwear and apparel retailer. Its stores offer the latest in athletic-inspired performance products, manufactured primarily by the leading athletic brands."];
+        $cards[] = ["name" => "Hallmark", "description" => "Exclusive card and gift products and exceptional service in a friendly and pleasant environment. "];
+        $cards[] = ["name" => "Jack & Jones", "description" => "Jack & Jones is a jeans brand that makes it easy for fashion conscious men to create their own personal style. In terms of design, the four lines, Jeans Intelligence, Premium, Vintage and Premium Tech, have different target groups and expressions, but every piece of clothing can be combined with our jeans."];
+        $cards[] = ["name" => "KFC/TACO BELL", "description" => "KFC is the largest chain of chicken restaurants in the world. The first restaurant opened in Calgary in 1954. Today over 2.5 billion great tasting meals are served every year in over 10,000 KFC Restaurants worldwide."];
+        $cards[] = ["name" => "Michael Kors", "description" => "Michael Kors is recognized as a preeminent designer for luxury accessories and ready to wear. His namesake company, established in 1981, currently produces a range of products through his Michael Kors Collection."];
+        $cards[] = ["name" => "Banana Republic", "description" => "Banana Republic is a global accessible luxury brand that delivers the best in city style. Characterized by elevated design and luxurious fabrications, the Banana Republic lifestyle collections include men's and women's apparel, handbags, jewelery and fragrance."];
+        $cards[] = ["name" => "The Body Shop", "description" => "We believe there is only one way to beautiful, nature's way. We've believed this for years and still do. We constantly seek out wonderful natural ingredients from all four corners of the globe, and we bring you products bursting with effectiveness to enhance your natural beauty and express your unique personality."];
+        $cards[] = ["name" => "The Gap", "description" => "Since 1969, Gap has provided customers with clothing and accessories that enhance personal style while providing great value and service."];
+        $cards[] = ["name" => "LUSH Cosmetics", "description" => "LUSH Fresh Handmade Natural Cosmetics complete range of natural handmade bath and body products including handmade natural soaps, bath bombs and MORE!"];
+        $cards[] = ["name" => "Pandora", "description" => "PANDORA designs, manufactures and markets hand-finished and modern jewellery made from genuine materials at affordable prices."];
+        $cards[] = ["name" => "Sears Optical", "description" => "At Sears Optical, we value you, our customer, and are committed to helping you find the best solutions for your eyewear needs."];
+        $cards[] = ["name" => "Starbucks Coffee", "description" => "Our coffeehouses have become a beacon for coffee lovers everywhere. Why do they insist on Starbucks? Because they know they can count on genuine service, an inviting atmosphere and a superb cup of expertly roasted and richly brewed coffee every time."];
+        $cards[] = ["name" => "Subway", "description" => "Subway, the way a sandwich should be. We sell fresh, hot and cold submarines sandwiches with choice of Italian, wheat, hearty Italian, harvest wheat and parmesan oregano breads baked daily."];
+        $cards[] = ["name" => "TOYS 'R' US", "description" => "Find the largest selection of kids toys, games, and electronics for children of all ages!"];
+        $cards[] = ["name" => "Zara", "description" => "Zara is one of the largest international fashion companies. The customer is at the heart of our unique business model, which includes design, production, distribution and sales through our extensive retail network."];
+
+        /*
+         |--------------------------------------------------------------------------
+         | Generate demo data
+         |--------------------------------------------------------------------------
+         */
+
+        $faker = Faker\Factory::create();
+
+        for ($i = 0; $i < $system_user_count; $i++) {
             DB::table('users')->insert([
                 'reseller_id' => 1,
                 'name' => $faker->name,
@@ -44,7 +98,6 @@ class DemoTableSeeder extends Seeder
         ]);
 
         // Beacons
-        $beacon_count = 10;
         for ($i = 1; $i < $beacon_count + 1; $i++) {
           $date = $faker->dateTimeThisMonth($max = 'now');
           $lat = $faker->latitude($min = $lat_min, $max = $lat_max);
@@ -67,7 +120,6 @@ class DemoTableSeeder extends Seeder
         }
 
         // Geofences
-        $geofence_count = 10;
         for ($i = 1; $i < $geofence_count + 1; $i++) {
           $date = $faker->dateTimeThisMonth($max = 'now');
           $lat = $faker->latitude($min = $lat_min, $max = $lat_max);
@@ -134,7 +186,7 @@ class DemoTableSeeder extends Seeder
         ]);
 
         // Beacon scenarios enter/exit
-        $scenario_count1 = 10;
+        $scenario_count1 = $beacon_scenario_monitor_count;
         for ($scenario_id = 1; $scenario_id < $scenario_count1 + 1; $scenario_id++) {
           DB::table('scenarios')->insert([
               'campaign_id' => mt_rand(1, 2),
@@ -156,7 +208,7 @@ class DemoTableSeeder extends Seeder
         }
 
         // Beacon scenarios range
-        $scenario_count2 = 10;
+        $scenario_count2 = $beacon_scenario_range_count;
         for ($scenario_id = $scenario_count1 + 1; $scenario_id < ($scenario_count1 + $scenario_count2) + 1; $scenario_id++) {
           DB::table('scenarios')->insert([
               'campaign_id' => mt_rand(1, 2),
@@ -177,7 +229,7 @@ class DemoTableSeeder extends Seeder
         }
 
         // Geofence scenarios enter/exit
-        $scenario_count3 = 10;
+        $scenario_count3 = $geofence_scenario_monitor_count;
         for ($scenario_id = ($scenario_count1 + $scenario_count2) + 1; $scenario_id < ($scenario_count1 + $scenario_count2 + $scenario_count3) + 1; $scenario_id++) {
           DB::table('scenarios')->insert([
               'campaign_id' => mt_rand(1, 2),
@@ -199,31 +251,10 @@ class DemoTableSeeder extends Seeder
         }
 
         // Cards
-        $cards = [];
-        $cards[] = ["name" => "McDonald's", "description" => "There's always something brewing in our kitchens. Get in the loop with the latest on promotions, events, new products, specials, and more."];
-        $cards[] = ["name" => "Disney Store", "description" => "The Disney Store offers a one-of-a-kind, interactive experience for Disney fans of all ages."];
-        $cards[] = ["name" => "Apple Store", "description" => "Experience the wide world of Apple at the Apple Store. Shop for Apple computers, compare iPod and iPhone models, and discover Apple and third-party accessories, software, and much more."];
-        $cards[] = ["name" => "ECCO Shoes", "description" => "ECCO, a world-leading brand of shoes combining style and comfort, has built its success on great design, leather quality, and innovative technology."];
-        $cards[] = ["name" => "Foot Locker", "description" => "Foot Locker is a leading global athletic footwear and apparel retailer. Its stores offer the latest in athletic-inspired performance products, manufactured primarily by the leading athletic brands."];
-        $cards[] = ["name" => "Hallmark", "description" => "Exclusive card and gift products and exceptional service in a friendly and pleasant environment. "];
-        $cards[] = ["name" => "Jack & Jones", "description" => "Jack & Jones is a jeans brand that makes it easy for fashion conscious men to create their own personal style. In terms of design, the four lines, Jeans Intelligence, Premium, Vintage and Premium Tech, have different target groups and expressions, but every piece of clothing can be combined with our jeans."];
-        $cards[] = ["name" => "KFC/TACO BELL", "description" => "KFC is the largest chain of chicken restaurants in the world. The first restaurant opened in Calgary in 1954. Today over 2.5 billion great tasting meals are served every year in over 10,000 KFC Restaurants worldwide."];
-        $cards[] = ["name" => "Michael Kors", "description" => "Michael Kors is recognized as a preeminent designer for luxury accessories and ready to wear. His namesake company, established in 1981, currently produces a range of products through his Michael Kors Collection."];
-        $cards[] = ["name" => "Banana Republic", "description" => "Banana Republic is a global accessible luxury brand that delivers the best in city style. Characterized by elevated design and luxurious fabrications, the Banana Republic lifestyle collections include men's and women's apparel, handbags, jewelery and fragrance."];
-        $cards[] = ["name" => "The Body Shop", "description" => "We believe there is only one way to beautiful, nature's way. We've believed this for years and still do. We constantly seek out wonderful natural ingredients from all four corners of the globe, and we bring you products bursting with effectiveness to enhance your natural beauty and express your unique personality."];
-        $cards[] = ["name" => "The Gap", "description" => "Since 1969, Gap has provided customers with clothing and accessories that enhance personal style while providing great value and service."];
-        $cards[] = ["name" => "LUSH Cosmetics", "description" => "LUSH Fresh Handmade Natural Cosmetics complete range of natural handmade bath and body products including handmade natural soaps, bath bombs and MORE!"];
-        $cards[] = ["name" => "Pandora", "description" => "PANDORA designs, manufactures and markets hand-finished and modern jewellery made from genuine materials at affordable prices."];
-        $cards[] = ["name" => "Sears Optical", "description" => "At Sears Optical, we value you, our customer, and are committed to helping you find the best solutions for your eyewear needs."];
-        $cards[] = ["name" => "Starbucks Coffee", "description" => "Our coffeehouses have become a beacon for coffee lovers everywhere. Why do they insist on Starbucks? Because they know they can count on genuine service, an inviting atmosphere and a superb cup of expertly roasted and richly brewed coffee every time."];
-        $cards[] = ["name" => "Subway", "description" => "Subway, the way a sandwich should be. We sell fresh, hot and cold submarines sandwiches with choice of Italian, wheat, hearty Italian, harvest wheat and parmesan oregano breads baked daily."];
-        $cards[] = ["name" => "TOYS 'R' US", "description" => "Find the largest selection of kids toys, games, and electronics for children of all ages!"];
-        $cards[] = ["name" => "Zara", "description" => "Zara is one of the largest international fashion companies. The customer is at the heart of our unique business model, which includes design, production, distribution and sales through our extensive retail network."];
-
         $card_id = 1;
 
         foreach ($cards as $card) {
-          $date = $faker->dateTimeThisMonth($max = 'now');
+          $date = $faker->dateTimeBetween($startDate, $endDate);
           $lat = $faker->latitude($min = $lat_min, $max = $lat_max);
           $lng = $faker->longitude($min = $lng_min, $max = $lng_max);
 
@@ -254,11 +285,9 @@ class DemoTableSeeder extends Seeder
           $card_id++;
         }
 
-        // These are the unique users used for analytics
-        $unique_user_count = 20;
-
+        // Analytics users
         $user = [];
-        for ($i = 0; $i < $unique_user_count; $i++) {
+        for ($i = 0; $i < $analytics_unique_user_count; $i++) {
           $_platform = ['Android', 'iOS'];
           $platform = $_platform[mt_rand(0, count($_platform) - 1)];
 
@@ -278,11 +307,10 @@ class DemoTableSeeder extends Seeder
         }
 
         // Card analytics
-        $limit = 200;
+        $limit = $analytics_card_view_count;
 
         for ($i = 0; $i < $limit; $i++) {
-
-          $date = $faker->dateTimeThisMonth($max = 'now');
+          $date = $faker->dateTimeBetween($startDate, $endDate);
           $lat = $faker->latitude($min = $lat_min, $max = $lat_max);
           $lng = $faker->longitude($min = $lng_min, $max = $lng_max);
           $user_id = mt_rand(0, count($user)-1);
@@ -303,11 +331,10 @@ class DemoTableSeeder extends Seeder
         }
 
         // Beacons enter/exit analytics (interactions)
-        $limit = 100;
+        $limit = $analytics_beacon_monitor_count;
 
         for ($i = 0; $i < $limit; $i++) {
-
-          $date = $faker->dateTimeThisMonth($max = 'now');
+          $date = $faker->dateTimeBetween($startDate, $endDate);
           $lat = $faker->latitude($min = $lat_min, $max = $lat_max);
           $lng = $faker->longitude($min = $lng_min, $max = $lng_max);
           $user_id = mt_rand(0, count($user)-1);
@@ -334,11 +361,10 @@ class DemoTableSeeder extends Seeder
         }
 
         // Beacons range analytics (interactions)
-        $limit = 100;
+        $limit = $analytics_beacon_range_count;
 
         for ($i = 0; $i < $limit; $i++) {
-
-          $date = $faker->dateTimeThisMonth($max = 'now');
+          $date = $faker->dateTimeBetween($startDate, $endDate);
           $lat = $faker->latitude($min = $lat_min, $max = $lat_max);
           $lng = $faker->longitude($min = $lng_min, $max = $lng_max);
           $user_id = mt_rand(0, count($user)-1);
@@ -365,11 +391,10 @@ class DemoTableSeeder extends Seeder
         }
 
         // Geofence enter/exit analytics (interactions)
-        $limit = 100;
+        $limit = $analytics_geofence_monitor_count;
 
         for ($i = 0; $i < $limit; $i++) {
-
-          $date = $faker->dateTimeThisMonth($max = 'now');
+          $date = $faker->dateTimeBetween($startDate, $endDate);
           $lat = $faker->latitude($min = $lat_min, $max = $lat_max);
           $lng = $faker->longitude($min = $lng_min, $max = $lng_max);
           $user_id = mt_rand(0, count($user)-1);
