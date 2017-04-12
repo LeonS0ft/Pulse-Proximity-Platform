@@ -58,7 +58,7 @@ class AccountController extends \App\Http\Controllers\Controller {
     $rules = array(
       'name' => 'required|max:64',
       'email' => 'required|email|unique:users,email,' . \Auth::user()->id,
-      'new_password' => 'min:5|max:20',
+      'new_password' => 'nullable|min:5|max:20',
       'timezone' => 'required',
       'current_password' => 'required'
     );

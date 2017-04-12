@@ -268,7 +268,7 @@ class UserController extends \App\Http\Controllers\Controller {
 
       $rules = array(
         'email' => 'required|email|unique:users,email,' . $qs['user_id'],
-        'new_password' => 'min:5|max:32',
+        'new_password' => 'nullable|min:5|max:32',
         'name' => 'required|max:64',
         'timezone' => 'required'
       );
