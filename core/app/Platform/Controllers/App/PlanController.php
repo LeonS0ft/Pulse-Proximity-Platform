@@ -66,8 +66,8 @@ class PlanController extends \App\Http\Controllers\Controller {
       'name' => 'required',
       'price1' => 'required|numeric',
       'price1_string' => 'required',
-      'order_url' => 'url',
-      'upgrade_url' => 'url'
+      'order_url' => 'nullable|url',
+      'upgrade_url' => 'nullable|url'
     );
 
     $validator = \Validator::make($input, $rules);
@@ -149,8 +149,8 @@ class PlanController extends \App\Http\Controllers\Controller {
         'name' => 'required',
         'price1' => 'required|numeric',
         'price1_string' => 'required',
-        'order_url' => 'url',
-        'upgrade_url' => 'url'
+        'order_url' => 'nullable|url',
+        'upgrade_url' => 'nullable|url'
       );
 
       $validator = \Validator::make($input, $rules);
