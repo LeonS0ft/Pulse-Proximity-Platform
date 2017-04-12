@@ -38,6 +38,7 @@
     "notifyjs": "^0.4.2",
     "bootstrap-timepicker": "^0.5.2",
     "hopscotch": "^0.2.7",
-    "datatables-rowreorder": "^1.2.0"
+    "datatables-rowreorder": "^1.2.0",
+    "circliful": "^1.0.2"
   }
 }

@@ -117,6 +117,7 @@ gulp.task('styles', function() {
       'bower_components/bootstrap-daterangepicker/daterangepicker.css',
       'bower_components/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.css',
       'bower_components/jquery-colorbox/example1/colorbox.css',
+      'bower_components/circliful/css/jquery.circliful.css',
 /*
       'bower_components/tinymce/skins/lightgray/content.inline.min.css',
       'bower_components/tinymce/skins/lightgray/content.min.css',
@@ -197,6 +198,7 @@ gulp.task('scripts', function() {
       'bower_components/notifyjs/dist/styles/metro/notify-metro.js',
       'bower_components/bootstrap-timepicker/js/bootstrap-timepicker.js',
       'bower_components/hopscotch/dist/js/hopscotch.js',
+      'bower_components/circliful/js/jquery.circliful.js',
 
       'bower_components/tinymce/tinymce.js',
       /*'bower_components/tinymce/plugins/** /*.js',*/
