@@ -1,0 +1,3 @@
+# Beacons
+
+> More coming soon
