@@ -63,7 +63,7 @@ $('#remove_avatar').on('click', function() {
 });
 </script>
           <div class="text-left m-t-40">
-            <table width="100%" class="table m-b-0">
+            <table width="100%" class="table table-cutoff m-b-0">
               <tbody>
                 <tr>
                   <td><strong>{{ trans('global.logins') }}:</strong></td>
@@ -71,10 +71,10 @@ $('#remove_avatar').on('click', function() {
                 </tr>
                 <tr>
                   <td><strong>{{ trans('global.last_login') }}:</strong></td>
-                  <td>{{ ($user->last_login != NULL) ? $user->last_login->timezone(\Auth::user()->timezone)->format('Y-m-d H:i:s') : '' }}</td>
+                  <td>{!! ($user->last_login != NULL) ? '<div data-moment="fromNowDateTime">' . $user->last_login->timezone(\Auth::user()->timezone)->format('Y-m-d H:i:s') . '</div>' : '' !!}</td>
                 </tr>
                 <tr>
-                  <td>{{ trans('global.last_ip') }}</td>
+                  <td><strong>{{ trans('global.last_ip') }}</strong></td>
                   <td>{{ $user->last_ip }}</td>
                 </tr>
               </tbody>

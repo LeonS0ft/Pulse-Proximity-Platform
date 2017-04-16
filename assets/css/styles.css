@@ -1462,6 +1462,14 @@ a.editable-click.editable-disabled:hover {
   cursor: pointer;
 }
 
+.table.table-cutoff {
+  table-layout: fixed;
+}
+.table.table-cutoff td, .table.table-cutoff th {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
 .table tbody tr td:last-child {
   padding: 7px !important;
 }

@@ -224,9 +224,20 @@ function onPartialLoaded() {
   ajaxForms();
   counterUp();
   circliful();
+  fromNowDateTime();
   bindMediaBrowser();
   bindFormElements();
   bindTinyMce();
+}
+
+function fromNowDateTime() {
+  $('[data-moment=fromNowDateTime]').each(function(index, value) {
+    var date = $(this).text();
+
+    if (moment(date, 'YYYY-MM-DD HH:mm:ss').isValid()) {
+      $(this).html('<abbr data-toggle="tooltip" title="' + moment(date).format(_lang['date_time_notation']) + '">' + moment(date, 'YYYY-MM-DD HH:mm:ss').fromNow() + '</abbr>');
+    }
+  });
 }
 
 function circliful() {
@@ -788,15 +799,7 @@ function onDataTableLoad()
    * moment.js
    */
 
-  $('[data-moment=fromNowDateTime]').each(function(index, value)
-  {
-    var date = $(this).text();
-
-    if (moment(date, 'YYYY-MM-DD HH:mm:ss').isValid())
-    {
-      $(this).html('<abbr data-toggle="tooltip" title="' + moment(date).format(_lang['date_time_notation']) + '">' + moment(date, 'YYYY-MM-DD HH:mm:ss').fromNow() + '</abbr>');
-    }
-  });
+  fromNowDateTime();
 
   /*
    * Bootstrap Tooltips, Popovers and AJAX Popovers
