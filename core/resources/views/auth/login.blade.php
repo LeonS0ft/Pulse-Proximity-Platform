@@ -13,7 +13,9 @@ if(config('app.demo'))
 	if($email == '') $email = 'info@example.com';
 	$password = 'welcome'; 
 
-	echo '<div class="alert alert-warning"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> ' . trans('global.login_demo_mode') . '</div>';
+  $demo_txt = (env('DEMO_TXT_LOGIN', null)) ? env('DEMO_TXT_LOGIN') : '<i class="fa fa-exclamation-triangle" aria-hidden="true"></i> ' . trans('global.login_demo_mode');
+
+	echo '<div class="alert alert-warning">' . $demo_txt . '</div>';
 }
 ?>
     <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
