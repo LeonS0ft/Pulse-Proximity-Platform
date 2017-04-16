@@ -6,6 +6,7 @@ Homestead.yaml
 *.bu.php
 _notes
 .sass-cache
+/github-deploy-*
 /core/public/storage
 /core/bower_components
 /core/node_modules
