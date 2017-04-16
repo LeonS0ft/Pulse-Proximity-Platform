@@ -1,3 +1,2 @@
 # Cards
-
-> More coming soon
+A card is a piece of information, like a store or an event, which has a location. It consists of a description, location and optionally an icon and image. Cards are shown in the app and sorted by distance of the user's location.

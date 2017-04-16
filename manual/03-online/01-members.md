@@ -1,3 +1,2 @@
 # Members
-
-> More coming soon
+Members are not yet implemented.
