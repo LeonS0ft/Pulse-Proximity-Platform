@@ -39,6 +39,9 @@ class ApiCardController extends \App\Http\Controllers\Controller
     if ($length > 500) $length = 500;
     $start = ($page - 1) * $length;
 
+    // Increase distance for demo
+    if(config('app.demo')) $distance = 1000 * 30000;
+      
     //\DB::enableQueryLog();
     //dd(\DB::getQueryLog()); 
 
