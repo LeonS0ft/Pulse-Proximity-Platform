@@ -65,12 +65,12 @@ var campaigns_table = $('#dt-table-campaigns').DataTable({
     [10, 25, 50, 75, 100, 1000000],
     [10, 25, 50, 75, 100, "{{ trans('global.all') }}"]
   ],
-  columns: [{
-		data: "name"
-	}, {
+  columns: [ {
     data: "apps",
     sortable: false
-  }, {
+  },{
+		data: "name"
+	}, {
     data: "scenarios",
     sortable: false,
     width: 160
@@ -233,8 +233,8 @@ function checkButtonVisibility()
         <table class="table table-striped table-bordered table-hover table-selectable" id="dt-table-campaigns" style="width:100%">
           <thead>
             <tr>
-              <th>{{ Lang::get('global.name') }}</th>
               <th>{{ trans('global.apps') }}</th>
+              <th>{{ Lang::get('global.name') }}</th>
               <th>{{ trans('global.scenarios') }}</th>
               <th>{{ trans('global.analytics') }}</th>
               <th>{{ trans('global.created') }}</th>
