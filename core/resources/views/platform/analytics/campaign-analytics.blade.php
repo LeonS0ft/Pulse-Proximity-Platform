@@ -179,7 +179,7 @@ function weekendAreas(axes) {
   return markings;
 }
 
-var options = {
+var mainOptions = {
   series : {
     shadowSize : 0,
     lines: { 
@@ -202,12 +202,12 @@ var options = {
     borderColor : "hsla(0,0%,93%,.1)"
   },
   colors : ["#50b432", "#058dc7", "#ed7e17", "#af49c5"],
-  tooltip : true,
-  tooltipOpts : {
+  tooltip : {
+    show: true,
     content : function(label, date, value) {
       return "%x<br>%s: %y";
     },
-    defaultTheme : false
+    defaultTheme: false
   },
   legend : {
     position : "ne",
@@ -240,7 +240,7 @@ var options = {
   }
 };
 
-var data = [{
+var mainData = [{
   label : combinelabels[0],
   data : combinedatas[0],
   lines : {
@@ -265,7 +265,7 @@ var data = [{
 }
 ];
 
-$.plot($("#combine-chart #main_chart"), data, options);
+$.plot($("#combine-chart #main_chart"), mainData, mainOptions);
 
 var platformData = [
 <?php foreach($segmentation_platform as $name => $value) { ?>
@@ -299,9 +299,10 @@ var platformOptions = {
     clickable : true
   },
   colors : ["#50b432", "#058dc7", "#80deea", "#00b19d"],
-  tooltip : true,
-  tooltipOpts : {
-    content : "%s (%p.0%)"
+  tooltip : {
+    show: true,
+    content : "%s (%p.0%)",
+    defaultTheme: false
   }
 };
 
@@ -339,9 +340,10 @@ var modelOptions = {
     clickable : true
   },
   colors : ["#50b432", "#058dc7", "#ed7e17", "#af49c5"],
-  tooltip : true,
-  tooltipOpts : {
-    content : "%s (%p.0%)"
+  tooltip : {
+    show: true,
+    content : "%s (%p.0%)",
+    defaultTheme: false
   }
 };
 
@@ -349,7 +351,7 @@ $.plot($("#model-donut-chart .flot-chart"), modelData, modelOptions);
   
 $(window).resize(function(event) {
   if ($("#combine-chart #main_chart").length) {
-    $.plot($("#combine-chart #main_chart"), data, options);
+    $.plot($("#combine-chart #main_chart"), mainData, mainOptions);
   }
 
   if ($("#platform-donut-chart .flot-chart").length) {
@@ -420,7 +422,6 @@ function changeGradient() {
   heatmap.set('gradient', heatmap.get('gradient') ? null : gradient);
 }
 
-// Heatmap data: 500 Points
 function getPoints() {
   return [
 <?php foreach($heatmap as $location) { ?>
