@@ -121,17 +121,7 @@ var cards_table = $('#dt-table-cards').DataTable({
 		},
 		{
 			render: function (data, type, row) {
-        var map = '<div class="gmap" id="gmap-' + row.DT_RowId + '" style="width:240px;height:240px;"></div>';
-
-        var html = '<div class="text-center"><button class="btn btn-default btn-xs" id="mapRow' + row.DT_RowId + '" data-toggle="popover" data-placement="top" data-html="true" data-trigger="focus" data-content=" "><i class="fa fa-map-marker" aria-hidden="true"></i> {{ trans('global.map') }}</button></div>';
-
-        $('#mapRow' + row.DT_RowId).on('show.bs.popover', function () {
-          $(this).attr('data-content', map);
-          setTimeout(function(){
-            
-          initMap('gmap-' + row.DT_RowId, row.lat, row.lng, row.zoom);
-          }, 100);
-        });
+        var html = '<div class="text-center"><button class="btn btn-default btn-xs mapRow" data-id="' + row.DT_RowId + '" data-lat="' + row.lat + '" data-lng="' + row.lng + '" data-zoom="' + row.zoom + '" id="mapRow' + row.DT_RowId + '" data-toggle="popover" data-placement="top" data-html="true" data-trigger="focus" data-content="<div class=\'gmap\' id=\'gmap-' + row.DT_RowId + '\' style=\'width:240px;height:240px;\'></div>"><i class="fa fa-map-marker" aria-hidden="true"></i> {{ trans('global.map') }}</button></div>';
 
 				return html;
 			},
@@ -254,19 +244,26 @@ function checkButtonVisibility()
     </div>
   </div>
 <script>
-function initMap(map_id, lat, lng, zoom) {
-  var map = new google.maps.Map(document.getElementById(map_id), {
-    center: {lat: parseFloat(lat), lng: parseFloat(lng)},
-    zoom: zoom,
-    mapTypeId: 'roadmap'
-  });
+$(document).on('click', '.mapRow', function () {
+  var map_id = 'gmap-' + $(this).attr('data-id');
+  var lat = parseFloat($(this).attr('data-lat'));
+  var lng = parseFloat($(this).attr('data-lng'));
+  var zoom = parseInt($(this).attr('data-zoom'));
 
-  var marker = new google.maps.Marker({
-    map: map,
-    animation: google.maps.Animation.DROP,
-    position: {lat: parseFloat(lat), lng: parseFloat(lng)}
-  });
-}
+  setTimeout(function() {
+    var map = new google.maps.Map(document.getElementById(map_id), {
+      center: {lat: lat, lng: lng},
+      zoom: zoom,
+      mapTypeId: 'roadmap'
+    });
+
+    var marker = new google.maps.Marker({
+      map: map,
+      animation: google.maps.Animation.DROP,
+      position: {lat: lat, lng: lng}
+    });
+  }, 100);
+});
 
 $('#dt-table-cards').on('click', '.row-btn-delete', function() {
   var sl = $(this).parent('.row-actions').attr('data-sl');
