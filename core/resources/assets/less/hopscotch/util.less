@@ -15,27 +15,6 @@
   -moz-box-sizing: @sizing;
   box-sizing: @sizing;
 }
-.gradient(@color, @start, @stop) {
-  background-color: @color;
-  filter:progid:DXImageTransform.Microsoft.gradient(gradientType=0, startColorstr='@{start}', endColorstr='@{stop}');
-  background-image:-webkit-gradient(linear,
-                                    50% 0%,
-                                    50% 100%,
-                                    color-stop(0%, @start),
-                                    color-stop(100%, @stop));
-  background-image:-webkit-linear-gradient(top,
-                                           @start 0%,
-                                           @stop 100%);
-  background-image:-moz-linear-gradient(top,
-                                        @start 0%,
-                                        @stop 100%);
-  background-image:-o-linear-gradient(top,
-                                      @start 0%,
-                                      @stop 100%);
-  background-image:linear-gradient(top,
-                                   @start 0%,
-                                   @stop 100%);
-}
 .box-shadow(@x, @y, @blur, @color, @inset) when (@inset = true) {
   -webkit-box-shadow: @x @y @blur @color inset;
   -moz-box-shadow: @x @y @blur @color inset;
