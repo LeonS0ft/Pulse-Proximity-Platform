@@ -291,7 +291,8 @@ class CardController extends \App\Http\Controllers\Controller {
     foreach($oData as $row)
     {
       $campaigns = $row->campaigns->pluck('name')->toArray();
-      $campaigns = implode(', ', $campaigns);
+
+      $campaigns = '<span class="label label-inverse">' . implode('</span> <span class="label label-inverse">', $campaigns) . '</span>';
 
       $data[] = array(
         'DT_RowId' => 'row_' . $row->id,

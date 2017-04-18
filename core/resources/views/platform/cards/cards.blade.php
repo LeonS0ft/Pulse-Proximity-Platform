@@ -72,7 +72,7 @@ var cards_table = $('#dt-table-cards').DataTable({
 		data: "name"
 	}, {
 		data: "lat",
-    width: 260,
+    width: 60,
     sortable: false
 	}, {
 		data: "created_at",
@@ -121,10 +121,17 @@ var cards_table = $('#dt-table-cards').DataTable({
 		},
 		{
 			render: function (data, type, row) {
-				var html = '<div class="gmap" id="gmap-' + row.DT_RowId + '" style="width:100%;height:180px;"></div>';
-				html += '<script>';
-				html += 'initMap("gmap-' + row.DT_RowId + '", ' + row.lat + ', ' + row.lng + ', ' + row.zoom + ');';
-				html += '<\/script>';
+        var map = '<div class="gmap" id="gmap-' + row.DT_RowId + '" style="width:240px;height:240px;"></div>';
+
+        var html = '<div class="text-center"><button class="btn btn-default btn-xs" id="mapRow' + row.DT_RowId + '" data-toggle="popover" data-placement="top" data-html="true" data-trigger="focus" data-content=" "><i class="fa fa-map-marker" aria-hidden="true"></i> {{ trans('global.map') }}</button></div>';
+
+        $('#mapRow' + row.DT_RowId).on('show.bs.popover', function () {
+          $(this).attr('data-content', map);
+          setTimeout(function(){
+            
+          initMap('gmap-' + row.DT_RowId, row.lat, row.lng, row.zoom);
+          }, 100);
+        });
 
 				return html;
 			},
@@ -249,7 +256,7 @@ function checkButtonVisibility()
 <script>
 function initMap(map_id, lat, lng, zoom) {
   var map = new google.maps.Map(document.getElementById(map_id), {
-    center: {lat: lat, lng: lng},
+    center: {lat: parseFloat(lat), lng: parseFloat(lng)},
     zoom: zoom,
     mapTypeId: 'roadmap'
   });
@@ -257,7 +264,7 @@ function initMap(map_id, lat, lng, zoom) {
   var marker = new google.maps.Marker({
     map: map,
     animation: google.maps.Animation.DROP,
-    position: {lat: lat, lng: lng}
+    position: {lat: parseFloat(lat), lng: parseFloat(lng)}
   });
 }
 
