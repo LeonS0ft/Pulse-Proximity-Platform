@@ -71,6 +71,10 @@ var beacons_table = $('#dt-table-beacons').DataTable({
 	},{
 		data: "name"
 	}, {
+		data: "map",
+    width: 60,
+    sortable: false
+	}, {
 		data: "uuid",
     width: 260
 	}, {
@@ -100,7 +104,7 @@ var beacons_table = $('#dt-table-beacons').DataTable({
       render: function (data, type, row) {
         return '<div class="text-center">' + data + '</div>';
       },
-      targets: [3, 4] /* Column to re-render */
+      targets: [4, 5] /* Column to re-render */
     },
     {
       render: function (data, type, row) {
@@ -113,14 +117,21 @@ var beacons_table = $('#dt-table-beacons').DataTable({
           return '<div class="text-center"><i class="fa fa-times" aria-hidden="true"></i></div>';
         }
       },
-      targets: 5
+      targets: 6
     },
 		{
 			render: function (data, type, row) {
-				var html = '<div class="gmap" id="gmap-' + row.DT_RowId + '" style="width:100%;height:180px;"></div>';
-				html += '<script>';
-				html += 'initMap("gmap-' + row.DT_RowId + '", ' + row.lat + ', ' + row.lng + ', ' + row.zoom + ');';
-				html += '<\/script>';
+        var map = '<div class="gmap" id="gmap-' + row.DT_RowId + '" style="width:240px;height:240px;"></div>';
+
+        var html = '<div class="text-center"><button class="btn btn-default btn-xs" id="mapRow' + row.DT_RowId + '" data-toggle="popover" data-placement="top" data-html="true" data-trigger="focus" data-content=" "><i class="fa fa-map-marker" aria-hidden="true"></i> {{ trans('global.map') }}</button></div>';
+
+        $('#mapRow' + row.DT_RowId).on('show.bs.popover', function () {
+          $(this).attr('data-content', map);
+          setTimeout(function(){
+            
+          initMap('gmap-' + row.DT_RowId, row.lat, row.lng, row.zoom);
+          }, 100);
+        });
 
 				return html;
 			},
@@ -133,7 +144,7 @@ var beacons_table = $('#dt-table-beacons').DataTable({
           '<a href="javascript:void(0);" class="btn btn-xs btn-danger row-btn-delete" data-toggle="tooltip" title="{{ trans('global.delete') }}"><i class="fa fa-trash"></i></a>' + 
           '</div></div>';
       },
-      targets: 6 /* Column to re-render */
+      targets: 7 /* Column to re-render */
     },
   ],
   language: {
@@ -231,11 +242,12 @@ function checkButtonVisibility()
         <table class="table table-striped table-bordered table-hover table-selectable" id="dt-table-beacons" style="width:100%">
           <thead>
             <tr>
-              <th>{{ Lang::get('global.group') }}</th>
-              <th>{{ Lang::get('global.name') }}</th>
-              <th>{{ Lang::get('global.location') }}</th>
-              <th class="text-center">{{ Lang::get('global.major') }}</th>
-              <th class="text-center">{{ Lang::get('global.minor') }}</th>
+              <th>{{ trans('global.group') }}</th>
+              <th>{{ trans('global.name') }}</th>
+              <th>{{ trans('global.location') }}</th>
+              <th>{{ trans('global.uuid') }}</th>
+              <th class="text-center">{{ trans('global.major') }}</th>
+              <th class="text-center">{{ trans('global.minor') }}</th>
               <th class="text-center">{{ trans('global.active') }}</th>
               <th class="text-center">{{ trans('global.actions') }}</th>
             </tr>
@@ -247,7 +259,7 @@ function checkButtonVisibility()
 <script>
 function initMap(map_id, lat, lng, zoom) {
   var map = new google.maps.Map(document.getElementById(map_id), {
-    center: {lat: lat, lng: lng},
+    center: {lat: parseFloat(lat), lng: parseFloat(lng)},
     zoom: zoom,
     mapTypeId: 'roadmap'
   });
@@ -255,7 +267,7 @@ function initMap(map_id, lat, lng, zoom) {
   var marker = new google.maps.Marker({
     map: map,
     animation: google.maps.Animation.DROP,
-    position: {lat: lat, lng: lng}
+    position: {lat: parseFloat(lat), lng: parseFloat(lng)}
   });
 }
 
