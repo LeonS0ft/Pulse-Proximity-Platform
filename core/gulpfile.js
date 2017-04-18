@@ -14,7 +14,7 @@ var gulp = require('gulp'),
     cache = require('gulp-cache'),
     livereload = require('gulp-livereload'),
     del = require('del'),
-    merge = require('merge-stream');
+    orderedMergeStream = require('ordered-merge-stream');
 
 /*
  |--------------------------------------------------------------------------
@@ -93,13 +93,15 @@ gulp.task('styles', function() {
   var scssStream = sass([
     'resources/assets/sass/style.scss',
     'bower_components/ladda/css/ladda.scss',
+    'bower_components/font-awesome/scss/font-awesome.scss',
+    'bower_components/font-awesome/scss/font-awesome.scss',
     ], {
       style: 'expanded',
       loadPath: [
         'resources/assets/sass',
         'bower_components/ladda/css',
         'bower_components/spinthatshit/src',
-        'bower_components/spinthatshit/src/loaders'
+        'bower_components/font-awesome/scss'
       ]
     })
     .pipe(concat('scss-files.scss'));
@@ -135,8 +137,9 @@ gulp.task('styles', function() {
     }))
     .pipe(concat('css-files.css'));
 
-  var mergedStream = merge(cssStream, lessStream, scssStream)
-      .pipe(concat('styles.css'))
+  var mergedStream = orderedMergeStream([cssStream, lessStream, scssStream]);
+
+  mergedStream.pipe(concat('styles.css'))
       .pipe(autoprefixer({
         browsers: ['last 2 version'],
         cascade: false
@@ -296,7 +299,7 @@ gulp.task('images', function() {
 
 gulp.task('copy', function(){
   gulp.src('bower_components/font-awesome/fonts/*.*')
-    .pipe(gulp.dest('../assets/fonts/font-awesome'));
+    .pipe(gulp.dest('../assets/fonts'));
 
   gulp.src('bower_components/bootstrap-colorpicker/dist/img/bootstrap-colorpicker/*.*')
     .pipe(gulp.dest('../assets/images/bootstrap-colorpicker'));
