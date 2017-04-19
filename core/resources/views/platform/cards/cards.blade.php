@@ -254,7 +254,8 @@ $(document).on('click', '.mapRow', function () {
     var map = new google.maps.Map(document.getElementById(map_id), {
       center: {lat: lat, lng: lng},
       zoom: zoom,
-      mapTypeId: 'roadmap'
+      mapTypeId: 'roadmap',
+      disableDefaultUI: true
     });
 
     var marker = new google.maps.Marker({
