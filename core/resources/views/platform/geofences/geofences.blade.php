@@ -72,7 +72,8 @@ var geofences_table = $('#dt-table-geofences').DataTable({
 		data: "name"
 	}, {
 		data: "lat",
-    width: 260
+    width: 60,
+    sortable: false
 	}, {
 		data: "active",
     width: 60
@@ -105,10 +106,7 @@ var geofences_table = $('#dt-table-geofences').DataTable({
     },
 		{
 			render: function (data, type, row) {
-				var html = '<div class="gmap" id="gmap-' + row.DT_RowId + '" style="width:100%;height:180px;"></div>';
-				html += '<script>';
-				html += 'initMap("gmap-' + row.DT_RowId + '", ' + row.lat + ', ' + row.lng + ', ' + row.radius + ');';
-				html += '<\/script>';
+        var html = '<div class="text-center"><button class="btn btn-default btn-xs mapRow" data-id="' + row.DT_RowId + '" data-lat="' + row.lat + '" data-lng="' + row.lng + '" data-radius="' + row.radius + '" data-zoom="' + row.zoom + '" id="mapRow' + row.DT_RowId + '" data-toggle="popover" data-placement="top" data-html="true" data-trigger="focus" data-content="<div class=\'gmap\' id=\'gmap-' + row.DT_RowId + '\' style=\'width:240px;height:240px;\'></div>"><i class="fa fa-map-marker" aria-hidden="true"></i> {{ trans('global.map') }}</button></div>';
 
 				return html;
 			},
@@ -230,6 +228,35 @@ function checkButtonVisibility()
     </div>
   </div>
 <script>
+
+$(document).on('click', '.mapRow', function () {
+  var map_id = 'gmap-' + $(this).attr('data-id');
+  var lat = parseFloat($(this).attr('data-lat'));
+  var lng = parseFloat($(this).attr('data-lng'));
+  var zoom = parseInt($(this).attr('data-zoom'));
+  var radius = parseInt($(this).attr('data-radius'));
+
+  setTimeout(function() {
+    var map = new google.maps.Map(document.getElementById(map_id), {
+      center: {lat: lat, lng: lng},
+      mapTypeId: 'roadmap',
+      disableDefaultUI: true
+    });
+
+    geofence = new google.maps.Circle({
+      strokeColor: '#FF0000',
+      strokeOpacity: 0.8,
+      strokeWeight: 2,
+      fillColor: '#FF0000',
+      fillOpacity: 0.35,
+      map: map,
+      center: {lat: lat, lng: lng},
+      radius: radius
+    });
+
+    map.fitBounds(geofence.getBounds());
+  }, 100);
+});
 
 function initMap(map_id, lat, lng, radius) {
   var map = new google.maps.Map(document.getElementById(map_id), {

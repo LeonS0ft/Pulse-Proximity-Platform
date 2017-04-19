@@ -268,6 +268,7 @@ class GeofenceController extends \App\Http\Controllers\Controller {
         'name' => $row->name,
         'lng' => $row->lng,
         'lat' => $row->lat,
+        'zoom' => $row->zoom,
         'radius' => $row->radius,
         'active' => $row->active,
         'sl' => Core\Secure::array2string(array('geofence_id' => $row->id))
