@@ -132,7 +132,7 @@ class GeofenceController extends \App\Http\Controllers\Controller {
   {
     $type = request()->input('type', 'xls');
     if (! in_array($type, ['xls', 'xlsx', 'csv'])) $type = 'xls';
-    $filename = config('app.name', 'Platform') . '-' . str_slug(trans('global.geofences')) . '-' . date('Y-m-d h:i:s');
+    $filename = Core\Reseller::get()->name . '-' . str_slug(trans('global.geofences')) . '-' . date('Y-m-d h:i:s');
     $geofences = Location\Geofence::where('geofences.user_id', Core\Secure::userId())->leftJoin('location_groups as bg', 'geofences.location_group_id', '=', 'bg.id')
       ->select(\DB::raw("
         bg.name as '" . trans('global.group') . "', 

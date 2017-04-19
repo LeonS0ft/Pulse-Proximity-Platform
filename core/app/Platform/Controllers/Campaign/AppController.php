@@ -107,7 +107,7 @@ class AppController extends \App\Http\Controllers\Controller {
   {
     $type = request()->input('type', 'xls');
     if (! in_array($type, ['xls', 'xlsx', 'csv'])) $type = 'xls';
-    $filename = config('app.name', 'Platform') . '-' . str_slug(trans('global.apps')) . '-' . date('Y-m-d h:i:s');
+    $filename = Core\Reseller::get()->name . '-' . str_slug(trans('global.apps')) . '-' . date('Y-m-d h:i:s');
     $apps = Campaigns\App::where('campaign_apps.user_id', Core\Secure::userId())
       ->select(\DB::raw("
         name as '" . trans('global.name') . "', 

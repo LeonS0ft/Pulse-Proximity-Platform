@@ -175,7 +175,7 @@ class BeaconController extends \App\Http\Controllers\Controller {
   {
     $type = request()->input('type', 'xls');
     if (! in_array($type, ['xls', 'xlsx', 'csv'])) $type = 'xls';
-    $filename = config('app.name', 'Platform') . '-' . str_slug(trans('global.beacons')) . '-' . date('Y-m-d h:i:s');
+    $filename = Core\Reseller::get()->name . '-' . str_slug(trans('global.beacons')) . '-' . date('Y-m-d h:i:s');
     $beacons = Location\Beacon::where('beacons.user_id', Core\Secure::userId())->leftJoin('location_groups as bg', 'beacons.location_group_id', '=', 'bg.id')
       ->select(\DB::raw("
         bg.name as '" . trans('global.group') . "', 
