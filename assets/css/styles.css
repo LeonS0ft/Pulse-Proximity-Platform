@@ -19705,6 +19705,7 @@ h3.timeline-title {
 
 #cboxTopLeft, #cboxTopRight, #cboxBottomLeft, #cboxBottomRight, #cboxMiddleLeft, #cboxMiddleRight, #cboxPrevious, #cboxNext, #cboxClose {
   background-image: url(../images/colorbox/controls.png);
+  background-position: -10000px;
 }
 
 #cboxTitle {
@@ -19713,6 +19714,8 @@ h3.timeline-title {
 
 #cboxLoadedContent {
   margin-bottom: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
 }
 
 #colorbox, #cboxOverlay, #cboxWrapper {
@@ -20754,7 +20757,6 @@ a.editable-click.editable-disabled:hover {
 
 #cboxClose {
   background: url(../images/colorbox/controls.png) no-repeat -52px -3px !important;
-  right: 1px !important;
   margin-top: 4px !important;
   width: 17px !important;
   height: 17px !important;

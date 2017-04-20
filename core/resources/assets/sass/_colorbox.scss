@@ -8,6 +8,7 @@
 
 #cboxTopLeft, #cboxTopRight, #cboxBottomLeft, #cboxBottomRight, #cboxMiddleLeft, #cboxMiddleRight, #cboxPrevious, #cboxNext, #cboxClose {
   background-image: url(../images/colorbox/controls.png);
+  background-position: -10000px;
 }
 
 #cboxTitle {
@@ -16,6 +17,8 @@
 
 #cboxLoadedContent {
   margin-bottom: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
 }
 
 #colorbox, #cboxOverlay, #cboxWrapper {
