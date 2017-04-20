@@ -83,6 +83,13 @@ table.dataTable.dtr-inline.collapsed>tbody>tr>td:first-child:before, table.dataT
   left: 6px !important;
 }
 
+// Make expaneded rows 100% wide
+.dataTable.collapsed {
+  ul.dtr-details {
+    width: 100%;
+  }
+}
+
 i.help-icon {
   color: #cacaca;
   font-size: 19px!important;
@@ -108,10 +115,72 @@ i.help-icon:hover {
       color: @primary;
     }
   }
-/*
-  .navbar-form.navbar-right {
-    margin-right: -35px;
-  }*/
+
+  .navbar-collapse.collapsing,
+  .navbar-collapse.in {
+    .btn {
+      width: 100%;
+    }
+    .navbar-form {
+      border: 0;
+      padding: 5px 0;
+    }
+    .dropdown-menu {
+      position: relative;
+      border-bottom: 1px solid #e5e5e5;
+      box-shadow: none;
+      border-radius: 0;
+    }
+    .caret {
+      transform: rotate(-90deg);
+    }
+    .dropdown.open {
+      .caret {
+        transform: rotate(0deg);
+      }
+    }
+  }
+
+  .navbar-toggle {
+    border: none;
+    margin-right: 5px;
+    margin-top: 9px;
+    background: transparent !important;
+
+    &:hover {
+      background: transparent !important;
+    }
+
+    // Animated close button
+    .icon-bar {
+      width: 22px;
+      transition: all 0.2s;
+    }
+
+    .icon-bar:nth-of-type(2) {
+      transform: rotate(45deg);
+      transform-origin: 10% 10%;
+    }
+    .icon-bar:nth-of-type(3) {
+      opacity: 0;
+    }
+    .icon-bar:nth-of-type(4) {
+      transform: rotate(-45deg);
+      transform-origin: 10% 90%;
+    }
+
+    &.collapsed {
+      .icon-bar:nth-of-type(2) {
+        transform: rotate(0);      
+      }
+      .icon-bar:nth-of-type(3) {
+        opacity: 1;
+      }
+      .icon-bar:nth-of-type(4) {
+        transform: rotate(0);
+      }
+    }
+  }
 }
 
 @media (min-width: 768px) {
@@ -119,6 +188,22 @@ i.help-icon:hover {
     .navbar-toggle {
       display: none !important;
     }
+  }
+
+  .navbar-form.navbar-right {
+    margin-right: -35px;
+  }
+}
+
+@media (max-width: 768px) {
+  .sub-navbar {
+    .navbar-brand {
+      padding: 15px 2px;
+    }
+  }
+
+  .navbar-header {
+    margin-left: -7px !important;
   }
 }
 

@@ -232,7 +232,7 @@ class CampaignController extends \App\Http\Controllers\Controller {
     foreach($oData as $row)
     {
       $apps = $row->apps->pluck('name')->toArray();
-      $apps = '<span class="label label-inverse">' . implode('</span> <span class="label label-inverse">', $apps) . '</span>';
+      $apps = '<span class="label label-default">' . implode('</span> <span class="label label-default">', $apps) . '</span>';
 
       $data[] = array(
         'DT_RowId' => 'row_' . $row->id,
