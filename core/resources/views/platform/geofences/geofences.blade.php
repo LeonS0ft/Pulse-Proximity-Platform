@@ -67,9 +67,9 @@ var geofences_table = $('#dt-table-geofences').DataTable({
     [10, 25, 50, 75, 100, "{{ trans('global.all') }}"]
   ],
   columns: [{
-		data: "location_group_id"
-	},{
 		data: "name"
+	}, {
+		data: "location_group_id"
 	}, {
 		data: "lat",
     width: 60,
@@ -216,8 +216,8 @@ function checkButtonVisibility()
         <table class="table table-striped table-bordered table-hover table-selectable" id="dt-table-geofences" style="width:100%">
           <thead>
             <tr>
-              <th>{{ Lang::get('global.group') }}</th>
               <th>{{ Lang::get('global.name') }}</th>
+              <th>{{ Lang::get('global.group') }}</th>
               <th>{{ Lang::get('global.geofence') }}</th>
               <th class="text-center">{{ trans('global.active') }}</th>
               <th class="text-center">{{ trans('global.actions') }}</th>

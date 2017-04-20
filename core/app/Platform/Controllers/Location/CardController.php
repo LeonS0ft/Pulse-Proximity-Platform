@@ -291,13 +291,13 @@ class CardController extends \App\Http\Controllers\Controller {
     foreach($oData as $row)
     {
       $campaigns = $row->campaigns->pluck('name')->toArray();
-      $campaigns = '<span class="label label-default">' . implode('</span> <span class="label label-default">', $campaigns) . '</span>';
+      $campaigns = '<span class="label label-default label-table">' . implode('</span> <span class="label label-default label-table">', $campaigns) . '</span>';
 
       $data[] = array(
         'DT_RowId' => 'row_' . $row->id,
         'campaigns' => $campaigns,
         'name' => $row->name,
-        'description' => $row->description,
+        /*'description' => $row->description,*/
         'lng' => $row->lng,
         'lat' => $row->lat,
         'zoom' => $row->zoom,

@@ -88,7 +88,7 @@ return array(
 
   "api" => "API",
   "api_token" => "API token",
-  "api_token_help" => "The API token is a 60 character string. It's used in the app to link campaigns to the app. Multiple apps can have the same token, even over multiple accounts. This way multiple users can create campaigns for the same app in seperate user accounts.",
+  "api_token_help" => "The API token is a 60 character string. It's used in the app to link campaigns to the app. Multiple apps can have the same token. Even over multiple accounts, so users can create campaigns for the same app in seperate user accounts.",
   "view_json" => "View JSON",
 
   /*
@@ -241,12 +241,12 @@ return array(
   "import_beacons" => "Import beacons",
   "vendors" => "Vendors",
   "uuid" => "UUID",
-  "uuid_help" => "A UUID is case sensitive. Verify this with the app or platform from your beacon vendor.",
+  "uuid_help" => "A UUID can be case sensitive. Verify this with the beacon vendor app.",
   "major" => "Major",
   "minor" => "Minor",
   "location" => "Location",
   "location_name" => "Location name",
-  "beacon_location_help" => "The beacon should roughly be within a radius of 20 meter of this location.",
+  "beacon_location_help" => "The beacon should be within a 100 meter radius of this location.",
   "beacon_vendor_uuids" => [
     "b9407f30-f5f8-466e-aff9-25556b57fe6d" => "Estimote - b9407f30-f5f8-466e-aff9-25556b57fe6d",
     "f7826da6-4fa2-4e98-8024-bc5b71e0893e" => "Kontakt.io - fda50693-a4e2-4fb1-afcf-c6eb07647825",

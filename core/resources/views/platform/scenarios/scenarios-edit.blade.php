@@ -482,6 +482,7 @@ function addRepeaterRow(action, data)
 
     $('#tbl-scenarios tbody').append(html);
     rowBindings();
+    bsTooltipsPopovers();
   }
 }
 

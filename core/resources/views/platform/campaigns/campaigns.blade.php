@@ -53,7 +53,7 @@
 var campaigns_table = $('#dt-table-campaigns').DataTable({
   ajax: "{{ url('platform/campaigns/data') }}",
   order: [
-    [4, "asc"]
+    [0, "asc"]
   ],
   dom: "<'row'<'col-sm-12 dt-header'<'pull-left'lr><'pull-right'f><'pull-right hidden-sm hidden-xs'T><'clearfix'>>>t<'row'<'col-sm-12 dt-footer'<'pull-left'i><'pull-right'p><'clearfix'>>>",
   processing: true,
@@ -66,11 +66,11 @@ var campaigns_table = $('#dt-table-campaigns').DataTable({
     [10, 25, 50, 75, 100, "{{ trans('global.all') }}"]
   ],
   columns: [ {
-    data: "apps",
-    sortable: false
-  },{
 		data: "name"
 	}, {
+    data: "apps",
+    sortable: false
+  }, {
     data: "scenarios",
     sortable: false,
     width: 160
@@ -233,8 +233,8 @@ function checkButtonVisibility()
         <table class="table table-striped table-bordered table-hover table-selectable" id="dt-table-campaigns" style="width:100%">
           <thead>
             <tr>
+              <th>{{ trans('global.name') }}</th>
               <th>{{ trans('global.apps') }}</th>
-              <th>{{ Lang::get('global.name') }}</th>
               <th>{{ trans('global.scenarios') }}</th>
               <th>{{ trans('global.analytics') }}</th>
               <th>{{ trans('global.created') }}</th>

@@ -67,13 +67,9 @@ var beacons_table = $('#dt-table-beacons').DataTable({
     [10, 25, 50, 75, 100, "{{ trans('global.all') }}"]
   ],
   columns: [{
-		data: "location_group_id"
-	},{
 		data: "name"
 	}, {
-		data: "map",
-    width: 60,
-    sortable: false
+		data: "location_group_id"
 	}, {
 		data: "uuid",
     width: 260
@@ -83,6 +79,10 @@ var beacons_table = $('#dt-table-beacons').DataTable({
 	}, {
 		data: "minor",
     width: 60
+	}, {
+		data: "map",
+    width: 60,
+    sortable: false
 	}, {
 		data: "active",
     width: 60
@@ -104,7 +104,7 @@ var beacons_table = $('#dt-table-beacons').DataTable({
       render: function (data, type, row) {
         return '<div class="text-center">' + data + '</div>';
       },
-      targets: [4, 5] /* Column to re-render */
+      targets: [3, 4] /* Column to re-render */
     },
     {
       render: function (data, type, row) {
@@ -125,7 +125,7 @@ var beacons_table = $('#dt-table-beacons').DataTable({
 
 				return html;
 			},
-			targets: [2] // Column to re-render
+			targets: [5] // Column to re-render
 		},
     {
       render: function (data, type, row) {
@@ -195,7 +195,7 @@ $('#dt-table-beacons tbody').on('click dblclick', 'tr', function(e) {
     {
         var td_index = $(e.target).parents('td').index();
     }
-    if(td_index == 6 || td_index == 2) return;
+    if(td_index == 6 || td_index == 3) return;
 
     var id = this.id.replace('row_', '');
     var index = $.inArray(id, selected_beacons);
@@ -232,12 +232,12 @@ function checkButtonVisibility()
         <table class="table table-striped table-bordered table-hover table-selectable" id="dt-table-beacons" style="width:100%">
           <thead>
             <tr>
-              <th>{{ trans('global.group') }}</th>
               <th>{{ trans('global.name') }}</th>
-              <th>{{ trans('global.location') }}</th>
+              <th>{{ trans('global.group') }}</th>
               <th>{{ trans('global.uuid') }}</th>
               <th class="text-center">{{ trans('global.major') }}</th>
               <th class="text-center">{{ trans('global.minor') }}</th>
+              <th>{{ trans('global.location') }}</th>
               <th class="text-center">{{ trans('global.active') }}</th>
               <th class="text-center">{{ trans('global.actions') }}</th>
             </tr>

@@ -66,10 +66,10 @@ var cards_table = $('#dt-table-cards').DataTable({
     [10, 25, 50, 75, 100, "{{ trans('global.all') }}"]
   ],
   columns: [{
+		data: "name"
+	}, {
 		data: "campaigns",
     sortable: false
-	}, {
-		data: "name"
 	}, {
 		data: "lat",
     width: 60,
@@ -112,13 +112,13 @@ var cards_table = $('#dt-table-cards').DataTable({
         return '<div data-moment="fromNowDateTime">' + data + '</div>';
       },
       targets: [3] /* Column to re-render */
-    },
+    }/*,
 		{
 			render: function (data, type, row) {
-				return '<strong>' + row.name + '</strong><p>' + row.description + '</p>';
+				return '<strong>' + row.name + '</strong><p class="ellipsis" style="max-width: 320px;">' + row.description + '</p>';
 			},
-			targets: [1] // Column to re-render
-		},
+			targets: [0] // Column to re-render
+		}*/,
 		{
 			render: function (data, type, row) {
         var html = '<div class="text-center"><button class="btn btn-default btn-xs mapRow" data-id="' + row.DT_RowId + '" data-lat="' + row.lat + '" data-lng="' + row.lng + '" data-zoom="' + row.zoom + '" id="mapRow' + row.DT_RowId + '" data-toggle="popover" data-placement="top" data-html="true" data-trigger="focus" data-content="<div class=\'gmap\' id=\'gmap-' + row.DT_RowId + '\' style=\'width:240px;height:240px;\'></div>"><i class="fa fa-map-marker" aria-hidden="true"></i> {{ trans('global.map') }}</button></div>';
@@ -231,8 +231,8 @@ function checkButtonVisibility()
         <table class="table table-striped table-bordered table-hover table-selectable" id="dt-table-cards" style="width:100%">
           <thead>
             <tr>
-              <th>{{ Lang::get('global.campaigns') }}</th>
               <th>{{ Lang::get('global.card') }}</th>
+              <th>{{ Lang::get('global.campaigns') }}</th>
               <th>{{ Lang::get('global.location') }}</th>
               <th>{{ trans('global.created') }}</th>
               <th class="text-center">{{ trans('global.active') }}</th>
