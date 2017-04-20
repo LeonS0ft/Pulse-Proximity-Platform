@@ -178,7 +178,7 @@ class AppController extends \App\Http\Controllers\Controller {
     $length = $request->input('length', 10);
     $data = array();    
     
-    $aColumn = array('campaign_apps.name', 'campaign_apps.api_token', '', 'created_at', 'campaign_apps.active');
+    $aColumn = array('campaign_apps.name', 'campaign_apps.api_token', 'created_at', 'campaign_apps.active');
 
     if($q != '')
     {

@@ -240,7 +240,7 @@ class CardController extends \App\Http\Controllers\Controller {
     $length = $request->input('length', 10);
     $data = array();    
     
-    $aColumn = array('campaigns', 'cards.name', 'cards.lng', 'cards.created_at', 'cards.active');
+    $aColumn = array('cards.name', '', 'cards.lng', 'cards.created_at', 'cards.active');
 
     if($q != '')
     {
