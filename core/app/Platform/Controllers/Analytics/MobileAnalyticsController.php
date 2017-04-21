@@ -7,7 +7,7 @@ use \Platform\Models\Location;
 use \Platform\Models\Campaigns;
 use Illuminate\Http\Request;
 
-class CampaignAnalyticsController extends \App\Http\Controllers\Controller {
+class MobileAnalyticsController extends \App\Http\Controllers\Controller {
 
   /*
    |--------------------------------------------------------------------------
@@ -558,6 +558,6 @@ class CampaignAnalyticsController extends \App\Http\Controllers\Controller {
     foreach ($heatmap_card_views as $row) { $heatmap[] = ['lat' => $row->lat, 'lng' => $row->lng, 'weight' => $row->weight]; } 
     foreach ($heatmap_interactions as $row) { $heatmap[] = ['lat' => $row['lat'], 'lng' => $row['lng'], 'weight' => $row['weight']]; } 
 
-    return view('platform.analytics.campaign-analytics', compact('sl', 'earliest_date', 'date_start', 'date_end', 'campaigns', 'campaign_id', 'main_chart_range', 'heatmap', 'segmentation_platform', 'segmentation_model'));
+    return view('platform.analytics.mobile-analytics', compact('sl', 'earliest_date', 'date_start', 'date_end', 'campaigns', 'campaign_id', 'main_chart_range', 'heatmap', 'segmentation_platform', 'segmentation_model'));
   }
 }

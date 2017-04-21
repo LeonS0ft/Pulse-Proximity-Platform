@@ -86,6 +86,9 @@ Route::group(['middleware' => 'auth:web'], function () {
   // Plan limitation mobile.visible
   Route::group(['middleware' => 'limitation:mobile.visible'], function () {
 
+    // Mobile analytics
+    Route::get('platform/mobile/analytics', '\Platform\Controllers\Analytics\MobileAnalyticsController@showAnalytics');
+
     // Campaign apps
     Route::get('platform/campaign/apps', '\Platform\Controllers\Campaign\AppController@showApps'); 
     Route::get('platform/campaign/apps/data', '\Platform\Controllers\Campaign\AppController@getAppData');
@@ -105,9 +108,6 @@ Route::group(['middleware' => 'auth:web'], function () {
     Route::post('platform/campaign/switch', '\Platform\Controllers\Campaign\CampaignController@postSwitch');
     Route::post('platform/campaign', '\Platform\Controllers\Campaign\CampaignController@postCampaign');
     Route::get('platform/campaigns/export', '\Platform\Controllers\Campaign\CampaignController@getExport');
-
-    // Campaign analytics
-    Route::get('platform/campaign/analytics', '\Platform\Controllers\Analytics\CampaignAnalyticsController@showAnalytics');
 
     // Scenarios
     Route::get('platform/scenarios', '\Platform\Controllers\Location\ScenarioController@showEditScenarios');

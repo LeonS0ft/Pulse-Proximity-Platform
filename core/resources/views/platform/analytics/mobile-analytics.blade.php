@@ -25,7 +25,7 @@ foreach($campaigns as $key => $row) {
       </select>
 <script>
 $('#campaigns').on('change', function() {
-  document.location = ($(this).val() == '') ? '#/campaign/analytics/<?php echo $date_start ?>/<?php echo $date_end ?>' : '#/campaign/analytics/<?php echo $date_start ?>/<?php echo $date_end ?>/' + $(this).val();
+  document.location = ($(this).val() == '') ? '#/mobile/analytics/<?php echo $date_start ?>/<?php echo $date_end ?>' : '#/mobile/analytics/<?php echo $date_start ?>/<?php echo $date_end ?>/' + $(this).val();
 });
 </script>
     </div>
@@ -121,7 +121,7 @@ $('#reportrange').on('apply.daterangepicker', function(ev, picker) {
   var end = picker.endDate.format('YYYY-MM-DD');
 
   var sl = '{{ $sl }}';
-  document.location = (sl == '') ? '#/campaign/analytics/' + start + '/' + end : '#/campaign/analytics/' + start + '/' + end + '/' + sl;
+  document.location = (sl == '') ? '#/mobile/analytics/' + start + '/' + end : '#/mobile/analytics/' + start + '/' + end + '/' + sl;
 });
 
 //Combine graph data

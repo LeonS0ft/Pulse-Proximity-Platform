@@ -60,14 +60,14 @@ if (count($languages) > 1) {
 <?php if (Gate::allows('limitation', 'mobile.visible')) { ?>
           <li class="has-submenu"> <a href="javascript:void(0);"><i class="material-icons">&#xE32C;</i> {{ trans('global.mobile') }}</a>
             <ul class="submenu">
-              <li class="dropdown-header">{{ trans('global.scenarios_and_content') }}</li>
-              <li><a href="#/campaign/apps">{{ trans('global.apps') }}</a></li>
+              <li><a href="#/mobile/analytics">{{ trans('global.analytics') }}</a></li>
+              <li role="separator" class="divider"><hr></li>
               <li><a href="#/campaigns">{{ trans('global.campaigns') }}</a></li>
 <?php if (Gate::allows('limitation', 'mobile.cards_visible')) { ?>
               <li><a href="#/cards">{{ trans('global.cards') }}</a></li>
 <?php } ?>
               <li role="separator" class="divider"><hr></li>
-              <li class="dropdown-header">{{ trans('global.spots') }}</li>
+              <li><a href="#/campaign/apps">{{ trans('global.apps') }}</a></li>
 <?php if (Gate::allows('limitation', 'mobile.beacons_visible')) { ?>
               <li><a href="#/beacons">{{ trans('global.beacons') }}</a></li>
 <?php } ?>

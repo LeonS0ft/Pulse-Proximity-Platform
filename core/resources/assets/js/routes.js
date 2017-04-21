@@ -47,10 +47,10 @@ $(function() {
       '/campaign/new': function () { loadRoute('platform/campaign/new', 'campaigns'); },
       '/campaign/edit/:sl': function (sl) { loadRoute('platform/campaign/edit?sl=' + sl, 'campaigns'); },
 
-      '/campaign/analytics': function () { loadRoute('platform/campaign/analytics', 'campaigns'); },
-      '/campaign/analytics/:sl': function (sl) { loadRoute('platform/campaign/analytics?sl=' + sl, 'campaigns'); },
-      '/campaign/analytics/:start/:end': function (start, end) { loadRoute('platform/campaign/analytics?start=' + start + '&end=' + end, 'campaigns'); },
-      '/campaign/analytics/:start/:end/:sl': function (start, end, sl) { loadRoute('platform/campaign/analytics?sl=' + sl + '&start=' + start + '&end=' + end, 'campaigns'); },
+      '/mobile/analytics': function () { loadRoute('platform/mobile/analytics', 'mobile/analytics'); },
+      '/mobile/analytics/:sl': function (sl) { loadRoute('platform/mobile/analytics?sl=' + sl, 'mobile/analytics'); },
+      '/mobile/analytics/:start/:end': function (start, end) { loadRoute('platform/mobile/analytics?start=' + start + '&end=' + end, 'mobile/analytics'); },
+      '/mobile/analytics/:start/:end/:sl': function (start, end, sl) { loadRoute('platform/mobile/analytics?sl=' + sl + '&start=' + start + '&end=' + end, 'mobile/analytics'); },
 
       '/scenarios/:sl': function (sl) { loadRoute('platform/scenarios?sl=' + sl, 'campaigns'); },
 
