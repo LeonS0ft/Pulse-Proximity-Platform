@@ -43,6 +43,7 @@ class CreateCardsTable extends Migration
       $table->decimal('lat', 17, 14)->nullable();
       $table->decimal('lng', 18, 15)->nullable();
       $table->integer('radius')->nullable()->unsigned();
+      $table->integer('views')->unsigned()->default(0);
       $table->timestamps();
     });
 

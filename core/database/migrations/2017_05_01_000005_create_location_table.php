@@ -78,6 +78,7 @@ class CreateLocationTable extends Migration
       $table->text('open_url')->nullable();
       $table->integer('add_points')->unsigned()->nullable();
       $table->integer('substract_points')->unsigned()->nullable();
+      $table->integer('triggers')->unsigned()->default(0);
       $table->json('settings')->nullable();
 
       // Image
@@ -117,6 +118,7 @@ class CreateLocationTable extends Migration
       $table->timestamp('photo_updated_at')->nullable();
 
       $table->json('settings')->nullable();
+      $table->integer('triggers')->unsigned()->default(0);
       $table->boolean('active')->default(true);
 
       $table->tinyInteger('zoom')->nullable();
@@ -160,6 +162,7 @@ class CreateLocationTable extends Migration
       $table->timestamp('photo_updated_at')->nullable();
 
       $table->json('settings')->nullable();
+      $table->integer('triggers')->unsigned()->default(0);
       $table->boolean('active')->default(true);
 
       $table->tinyInteger('zoom')->nullable();
