@@ -25,6 +25,7 @@ class ApiCardController extends \App\Http\Controllers\Controller
    */
 
   public function getCards() {
+    $preview = (boolean) request()->input('preview', false);
     $token = request()->input('token', NULL);
     $lat = request()->input('lat', env('GMAPS_DEFAULT_LAT'));
     $lng = request()->input('lng', env('GMAPS_DEFAULT_LNG'));
@@ -39,8 +40,8 @@ class ApiCardController extends \App\Http\Controllers\Controller
     if ($length > 500) $length = 500;
     $start = ($page - 1) * $length;
 
-    // Increase distance for demo
-    if(config('app.demo')) $distance = 1000 * 30000;
+    // Increase distance for demo or preview
+    if(config('app.demo') || $preview) $distance = 1000 * 30000;
       
     //\DB::enableQueryLog();
     //dd(\DB::getQueryLog()); 
@@ -134,6 +135,9 @@ class ApiCardController extends \App\Http\Controllers\Controller
       $card = Location\Card::where('id', $qs['card_id'])->where('active', 1)->first();
 
       if (! empty($card)) {
+        // Increment views
+        $card->increment('views');
+
         if ($lat != 'undefined' && $lng != 'undefined') {
           // Add stat
           $stat = new Analytics\CardStat;

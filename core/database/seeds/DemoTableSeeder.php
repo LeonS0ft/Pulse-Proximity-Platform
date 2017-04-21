@@ -278,7 +278,7 @@ class DemoTableSeeder extends Seeder
             DB::table('category_card')->insert(['category_id' => $i, 'card_id' => $card_id]);
           }
 
-          // Add card to áll campaigns
+          // Add card to all campaigns
           DB::table('campaign_card')->insert(['campaign_id' => 1, 'card_id' => $card_id]);
           DB::table('campaign_card')->insert(['campaign_id' => 2, 'card_id' => $card_id]);
 
@@ -314,11 +314,12 @@ class DemoTableSeeder extends Seeder
           $lat = $faker->latitude($min = $lat_min, $max = $lat_max);
           $lng = $faker->longitude($min = $lng_min, $max = $lng_max);
           $user_id = mt_rand(0, count($user)-1);
+          $card_id = mt_rand(1, count($cards));
 
           $card_stat = new \Platform\Models\Analytics\CardStat;
 
           $card_stat->user_id = 1;
-          $card_stat->card_id = mt_rand(1, count($cards)-1);
+          $card_stat->card_id = $card_id;
           $card_stat->ip = $user[$user_id]['ip'];
           $card_stat->device_uuid = $user[$user_id]['uuid'];
           $card_stat->platform = $user[$user_id]['platform'];
@@ -328,6 +329,9 @@ class DemoTableSeeder extends Seeder
           $card_stat->created_at = $date;
 
           $card_stat->save();
+
+          // Increment card view
+          DB::table('cards')->whereId($card_id)->increment('views');
         }
 
         // Beacons enter/exit analytics (interactions)
@@ -339,13 +343,14 @@ class DemoTableSeeder extends Seeder
           $lng = $faker->longitude($min = $lng_min, $max = $lng_max);
           $user_id = mt_rand(0, count($user)-1);
           $beacon_id = mt_rand(1, $beacon_count);
+          $scenario_id = mt_rand(1, $scenario_count1);
           $state = ['enter', 'exit'];
 
           $interaction = new \Platform\Models\Location\Interaction;
 
           $interaction->user_id = 1;
           $interaction->campaign_id = mt_rand(1, 2);
-          $interaction->scenario_id = mt_rand(1, $scenario_count1);
+          $interaction->scenario_id = $scenario_id;
           $interaction->beacon_id = $beacon_id;
           $interaction->beacon = 'Beacon ' . $beacon_id;
           $interaction->state = $state[mt_rand(0, count($state) - 1)];
@@ -358,6 +363,10 @@ class DemoTableSeeder extends Seeder
           $interaction->created_at = $date;
 
           $interaction->save();
+
+          // Increment trigger
+          DB::table('scenarios')->whereId($scenario_id)->increment('triggers');
+          DB::table('beacons')->whereId($beacon_id)->increment('triggers');
         }
 
         // Beacons range analytics (interactions)
@@ -369,13 +378,14 @@ class DemoTableSeeder extends Seeder
           $lng = $faker->longitude($min = $lng_min, $max = $lng_max);
           $user_id = mt_rand(0, count($user)-1);
           $beacon_id = mt_rand(1, $beacon_count);
+          $scenario_id = mt_rand($scenario_count1 + 1, ($scenario_count1 + $scenario_count2));
           $state = ['immediate', 'near', 'far'];
 
           $interaction = new \Platform\Models\Location\Interaction;
 
           $interaction->user_id = 1;
           $interaction->campaign_id = mt_rand(1, 2);
-          $interaction->scenario_id = mt_rand($scenario_count1 + 1, ($scenario_count1 + $scenario_count2));
+          $interaction->scenario_id = $scenario_id;
           $interaction->beacon_id = $beacon_id;
           $interaction->beacon = 'Beacon ' . $beacon_id;
           $interaction->state = $state[mt_rand(0, count($state) - 1)];
@@ -388,6 +398,10 @@ class DemoTableSeeder extends Seeder
           $interaction->created_at = $date;
 
           $interaction->save();
+
+          // Increment triggers
+          DB::table('scenarios')->whereId($scenario_id)->increment('triggers');
+          DB::table('beacons')->whereId($beacon_id)->increment('triggers');
         }
 
         // Geofence enter/exit analytics (interactions)
@@ -399,13 +413,14 @@ class DemoTableSeeder extends Seeder
           $lng = $faker->longitude($min = $lng_min, $max = $lng_max);
           $user_id = mt_rand(0, count($user)-1);
           $geofence_id = mt_rand(1, $geofence_count);
+          $scenario_id = mt_rand(($scenario_count1 + $scenario_count2) + 1, ($scenario_count1 + $scenario_count2 + $scenario_count3));
           $state = ['enter', 'exit'];
 
           $interaction = new \Platform\Models\Location\Interaction;
 
           $interaction->user_id = 1;
           $interaction->campaign_id = mt_rand(1, 2);
-          $interaction->scenario_id = mt_rand(($scenario_count1 + $scenario_count2) + 1, ($scenario_count1 + $scenario_count2 + $scenario_count3));
+          $interaction->scenario_id = $scenario_id;
           $interaction->geofence_id = $geofence_id;
           $interaction->geofence = 'Geofence ' . $geofence_id;
           $interaction->state = $state[mt_rand(0, count($state) - 1)];
@@ -418,6 +433,10 @@ class DemoTableSeeder extends Seeder
           $interaction->created_at = $date;
 
           $interaction->save();
+
+          // Increment triggers
+          DB::table('scenarios')->whereId($scenario_id)->increment('triggers');
+          DB::table('geofences')->whereId($geofence_id)->increment('triggers');
         }
     }
 }

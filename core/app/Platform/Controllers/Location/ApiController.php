@@ -35,7 +35,10 @@ class ApiController extends \App\Http\Controllers\Controller
 
     if ($device_uuid != NULL && $type != NULL && $scenario_id != NULL) {
       $scenario = Location\Scenario::where('id', '=', $scenario_id)->first();
-      
+
+      // Inrement scenario triggers
+      $scenario->increment('triggers');
+
       $interaction = new Location\Interaction;
 
       $interaction->user_id = $scenario->campaign->user_id;
@@ -58,12 +61,19 @@ class ApiController extends \App\Http\Controllers\Controller
 
         $interaction->beacon_id = $type_id;
         $interaction->beacon = $name;
+
+        // Inrement beacon triggers
+        $beacon->increment('triggers');
+
       } elseif ($type == 'geofence') {
-          $geofence = Location\Geofence::where('id', '=', $type_id)->first();
+        $geofence = Location\Geofence::where('id', '=', $type_id)->first();
         $name = (! empty($geofence)) ? $geofence->name : NULL;
 
         $interaction->geofence_id = $type_id;
         $interaction->geofence = $name;
+
+        // Inrement beacon triggers
+        $geofence->increment('triggers');
       }
 
       $interaction->save();
@@ -79,12 +89,15 @@ class ApiController extends \App\Http\Controllers\Controller
 
   function getApp()
   {
+    $preview = (boolean) request()->input('preview', false);
     $token = request()->input('token', NULL);
     $timezone = request()->input('tz', 'UTC');
-    $lat = request()->input('lat', NULL);
-    $lng = request()->input('lng', NULL);
+    $lat = request()->input('lat', env('GMAPS_DEFAULT_LAT'));
+    $lng = request()->input('lng', env('GMAPS_DEFAULT_LNG'));
     $accuracy = request()->input('acc', 0);
     if ($accuracy > 1000) $accuracy = 1000;
+    if ($preview) $accuracy = 1000 * 30000;
+
     $distance_beacons = 100 + $accuracy;
     $distance_geofences = 50000 + $accuracy;
 
