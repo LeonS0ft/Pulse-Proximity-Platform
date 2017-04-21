@@ -46,7 +46,6 @@ class CampaignController extends \App\Http\Controllers\Controller {
     if($sl != '') {
       $qs = Core\Secure::string2array($sl);
       $campaign = Campaigns\Campaign::where('id', $qs['campaign_id'])->where('user_id', '=', Core\Secure::userId())->first();
-
       $apps = Campaigns\App::where('user_id', '=', Core\Secure::userId())->orderBy('name', 'asc')->get();
 
       return view('platform.campaigns.campaign-edit', compact('sl', 'campaign', 'apps'));
@@ -231,8 +230,11 @@ class CampaignController extends \App\Http\Controllers\Controller {
 
     foreach($oData as $row)
     {
-      $apps = $row->apps->pluck('name')->toArray();
-      $apps = '<span class="label label-default label-table">' . implode('</span> <span class="label label-default label-table">', $apps) . '</span>';
+      $app_array = $row->apps->pluck('name', 'id')->toArray();
+      $apps = [];
+      foreach ($app_array as $key => $val) {
+        $apps[] = ['sl' => Core\Secure::array2string(array('app_id' => $key)), 'name' => $val];
+      }
 
       $data[] = array(
         'DT_RowId' => 'row_' . $row->id,

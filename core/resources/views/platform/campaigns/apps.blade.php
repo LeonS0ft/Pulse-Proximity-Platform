@@ -93,15 +93,21 @@ var apps_table = $('#dt-table-apps').DataTable({
   columnDefs: [
   {
     render: function (data, type, row) {
-<?php /*
       return '<div class="input-group input-group-sm" style="width:100%">' + 
       '<input type="text" value="' + row.api_token + '" class="form-control input-sm" readonly>' + 
       '<span class="input-group-btn">' + 
-      '  <a href="{{ url('api/v1/remote') }}?token=' + row.api_token + '" class="btn btn-default" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i> JSON</a>' + 
+      '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-code" aria-hidden="true"></i> <span class="caret"></span></button>' + 
+      '  <ul class="dropdown-menu">' + 
+      '    <li><a href="{{ url('api/v1/remote') }}?token=' + row.api_token + '&preview=1" target="_blank">{{ trans('global.scenarios') }}</a></li>' + 
+      '    <li><a href="{{ url('api/v1/remote/cards') }}?token=' + row.api_token + '&preview=1" target="_blank">{{ trans('global.cards') }}</a></li>' + 
+      '  </ul>' + 
+/*      '  <a href="{{ url('api/v1/remote') }}?token=' + row.api_token + '&preview=1" class="btn btn-default" target="_blank"><i class="fa fa-code" aria-hidden="true"></i></a>' + */
       '</span>' + 
       '</div>';
-      */ ?>
-      return '<input type="text" value="' + row.api_token + '" class="form-control input-sm" readonly style="width:100%">';
+<?php /*
+      return '<input type="text" value="' + row.api_token + '" class="form-control input-sm" readonly style="width:100%; font-size:12px">';
+            */ ?>
+
     },
     targets: 1
   },
@@ -229,7 +235,7 @@ function checkButtonVisibility()
   </style>
   <div class="row">
   <div class="col-sm-12">
-    <div class="card-box table-responsive">
+    <div class="card-box">
     <table class="table table-striped table-bordered table-hover table-selectable" id="dt-table-apps" style="width:100%">
       <thead>
       <tr>

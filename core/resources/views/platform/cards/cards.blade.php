@@ -96,6 +96,19 @@ var cards_table = $('#dt-table-cards').DataTable({
   columnDefs: [
     {
       render: function (data, type, row) {
+        var html = '';
+        for (var key in data) {
+          if (! data.hasOwnProperty(key)) continue;
+          var obj = data[key];
+          
+          html += '<a href="#/campaign/edit/' + obj.sl + '" class="btn btn-default btn-xs btn-table">' + obj.name + '</a>';
+        }
+        return html;
+      },
+      targets: 1
+    },
+    {
+      render: function (data, type, row) {
         if(data == 1)
         {
           return '<div class="text-center"><i class="fa fa-check" aria-hidden="true"></i></div>';
@@ -195,7 +208,7 @@ $('#dt-table-cards tbody').on('click dblclick', 'tr', function(e) {
     {
         var td_index = $(e.target).parents('td').index();
     }
-    if(td_index == 2 || td_index == 5) return;
+    if(td_index == 1 || td_index == 2 || td_index == 5) return;
 
     var id = this.id.replace('row_', '');
     var index = $.inArray(id, selected_cards);

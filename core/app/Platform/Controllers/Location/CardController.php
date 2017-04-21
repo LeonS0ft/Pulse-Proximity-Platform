@@ -290,8 +290,11 @@ class CardController extends \App\Http\Controllers\Controller {
 
     foreach($oData as $row)
     {
-      $campaigns = $row->campaigns->pluck('name')->toArray();
-      $campaigns = '<span class="label label-default label-table">' . implode('</span> <span class="label label-default label-table">', $campaigns) . '</span>';
+      $campaigns_array = $row->campaigns->pluck('name', 'campaign_id')->toArray();
+      $campaigns = [];
+      foreach ($campaigns_array as $key => $val) {
+        $campaigns[] = ['sl' => Core\Secure::array2string(array('campaign_id' => $key)), 'name' => $val];
+      }
 
       $data[] = array(
         'DT_RowId' => 'row_' . $row->id,

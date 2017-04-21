@@ -77,7 +77,7 @@ var campaigns_table = $('#dt-table-campaigns').DataTable({
   }, {
     data: "analytics",
     sortable: false,
-    width: 160
+    width: 130
   }, {
 		data: "created_at",
     width: 120
@@ -100,13 +100,26 @@ var campaigns_table = $('#dt-table-campaigns').DataTable({
   columnDefs: [
     {
       render: function (data, type, row) {
-        return '<a href="#/scenarios/' + row.sl + '" class="link">{{ trans('global.edit_scenarios') }} (' + data + ')</a>';
+        var html = '';
+        for (var key in data) {
+          if (! data.hasOwnProperty(key)) continue;
+          var obj = data[key];
+          
+          html += '<a href="#/campaign/app/edit/' + obj.sl + '" class="btn btn-default btn-xs btn-table">' + obj.name + '</a>';
+        }
+        return html;
+      },
+      targets: 1
+    },
+    {
+      render: function (data, type, row) {
+        return '<a href="#/scenarios/' + row.sl + '" class="btn btn-default btn-xs"><i class="fa fa-bell" aria-hidden="true"></i> {{ trans('global.edit_scenarios') }} (' + data + ')</a>';
       },
       targets: 2
     },
     {
       render: function (data, type, row) {
-        return '<a href="#/campaign/analytics/' + row.sl + '" class="link">{{ trans('global.view_analytics') }}</a>';
+        return '<a href="#/mobile/analytics/' + row.sl + '" class="btn btn-default btn-xs"><i class="fa fa-pie-chart" aria-hidden="true"></i> {{ trans('global.view_analytics') }}</a>';
       },
       targets: 3
     },
@@ -197,7 +210,7 @@ $('#dt-table-campaigns tbody').on('click dblclick', 'tr', function(e) {
     {
         var td_index = $(e.target).parents('td').index();
     }
-    if(td_index == 2 || td_index == 3 || td_index == 6) return;
+    if(td_index == 1 || td_index == 2 || td_index == 3 || td_index == 6) return;
 
     var id = this.id.replace('row_', '');
     var index = $.inArray(id, selected_campaigns);
@@ -210,7 +223,6 @@ $('#dt-table-campaigns tbody').on('click dblclick', 'tr', function(e) {
 
     $(this).toggleClass('success');
 });
-
 
 checkButtonVisibility();
 
