@@ -8,13 +8,13 @@ var ladda_button;
 function getCookie(cname) {
   var name = cname + "=";
   var ca = document.cookie.split(';');
-  for(var i = 0; i <ca.length; i++) {
+  for (var i = 0; i < ca.length; i++) {
     var c = ca[i];
-    while (c.charAt(0)==' ') {
+    while (c.charAt(0) == ' ') {
       c = c.substring(1);
     }
     if (c.indexOf(name) == 0) {
-      return c.substring(name.length,c.length);
+      return c.substring(name.length, c.length);
     }
   }
   return "";
@@ -24,11 +24,11 @@ function getCookie(cname) {
  * Navigation
  */
 
-(function($){
+(function($) {
 
   'use strict';
 
-  function initNavbar () {
+  function initNavbar() {
 
     $('.navbar-toggle').on('click', function(event) {
       $(this).toggleClass('open');
@@ -53,7 +53,7 @@ function getCookie(cname) {
     });
   }
 
-  function init () {
+  function init() {
     initNavbar();
     initNavbarMenuActive();
   }
@@ -66,7 +66,7 @@ function getCookie(cname) {
 function initNavbarMenuActive(route) {
   route = (typeof route !== 'undefined') ? window.location.protocol + "//" + window.location.host + '/platform#/' + route : '';
 
-  $(".navigation-menu a").each(function () {
+  $(".navigation-menu a").each(function() {
     if (this.href == window.location.href || route == this.href) {
       $(this).parent().addClass("active"); // add active to li of the current link
       $(this).parent().parent().parent().addClass("active"); // add active class to an anchor
@@ -78,130 +78,130 @@ function initNavbarMenuActive(route) {
 /**
  * Notifications
  */
-!function($) {
+! function($) {
   "use strict";
 
   var Notification = function() {};
 
   //simple notificaiton
-  Notification.prototype.notify = function(style,position, title, text) {
-    var icon = 'fa fa-adjust';
-    if(style == "error"){
-      icon = "fa fa-exclamation";
-    }else if(style == "warning"){
-      icon = "fa fa-warning";
-    }else if(style == "success"){
-      icon = "fa fa-check";
-    }else if(style == "custom"){
-      icon = "md md-album";
-    }else if(style == "info"){
-      icon = "fa fa-question";
-    }else{
-      icon = "fa fa-adjust";
-    }
-    $.notify({
-      title: title,
-      text: text,
-      image: "<i class='"+icon+"'></i>"
-    }, {
-      style: 'metro',
-      className: style,
-      globalPosition:position,
-      showAnimation: "show",
-      showDuration: 0,
-      hideDuration: 0,
-      autoHide: true,
-      clickToHide: true
-    });
-  },
+  Notification.prototype.notify = function(style, position, title, text) {
+      var icon = 'fa fa-adjust';
+      if (style == "error") {
+        icon = "fa fa-exclamation";
+      } else if (style == "warning") {
+        icon = "fa fa-warning";
+      } else if (style == "success") {
+        icon = "fa fa-check";
+      } else if (style == "custom") {
+        icon = "md md-album";
+      } else if (style == "info") {
+        icon = "fa fa-question";
+      } else {
+        icon = "fa fa-adjust";
+      }
+      $.notify({
+        title: title,
+        text: text,
+        image: "<i class='" + icon + "'></i>"
+      }, {
+        style: 'metro',
+        className: style,
+        globalPosition: position,
+        showAnimation: "show",
+        showDuration: 0,
+        hideDuration: 0,
+        autoHide: true,
+        clickToHide: true
+      });
+    },
 
-  //auto hide notification
-  Notification.prototype.autoHideNotify = function (style,position, title, text) {
-    var icon = "fa fa-adjust";
-    if(style == "error"){
-      icon = "fa fa-exclamation";
-    }else if(style == "warning"){
-      icon = "fa fa-warning";
-    }else if(style == "success"){
-      icon = "fa fa-check";
-    }else if(style == "custom"){
-      icon = "md md-album";
-    }else if(style == "info"){
-      icon = "fa fa-question";
-    }else{
-      icon = "fa fa-adjust";
-    }
-    $.notify({
-      title: title,
-      text: text,
-      image: "<i class='"+icon+"'></i>"
-    }, {
-      style: 'metro',
-      className: style,
-      globalPosition:position,
-      showAnimation: "show",
-      showDuration: 0,
-      hideDuration: 0,
-      autoHideDelay: 5000,
-      autoHide: true,
-      clickToHide: true
-    });
-  },
-  //confirmation notification
-  Notification.prototype.confirm = function(style,position, title) {
-    var icon = "fa fa-adjust";
-    if(style == "error"){
-      icon = "fa fa-exclamation";
-    }else if(style == "warning"){
-      icon = "fa fa-warning";
-    }else if(style == "success"){
-      icon = "fa fa-check";
-    }else if(style == "custom"){
-      icon = "md md-album";
-    }else if(style == "info"){
-      icon = "fa fa-question";
-    }else{
-      icon = "fa fa-adjust";
-    }
-    $.notify({
-      title: title,
-      text: 'Are you sure you want to do nothing?<div class="clearfix"></div><br><a class="btn btn-sm btn-white yes">Yes</a> <a class="btn btn-sm btn-danger no">No</a>',
-      image: "<i class='"+icon+"'></i>"
-    }, {
-      style: 'metro',
-      className: style,
-      globalPosition:position,
-      showAnimation: "show",
-      showDuration: 0,
-      hideDuration: 0,
-      autoHide: false,
-      clickToHide: false
-    });
-    //listen for click events from this style
-    $(document).on('click', '.notifyjs-metro-base .no', function() {
-      //programmatically trigger propogating hide event
-      $(this).trigger('notify-hide');
-    });
-    $(document).on('click', '.notifyjs-metro-base .yes', function() {
-      //show button text
-      alert($(this).text() + " clicked!");
-      //hide notification
-      $(this).trigger('notify-hide');
-    });
-  },
-  //init - examples
-  Notification.prototype.init = function() {
+    //auto hide notification
+    Notification.prototype.autoHideNotify = function(style, position, title, text) {
+      var icon = "fa fa-adjust";
+      if (style == "error") {
+        icon = "fa fa-exclamation";
+      } else if (style == "warning") {
+        icon = "fa fa-warning";
+      } else if (style == "success") {
+        icon = "fa fa-check";
+      } else if (style == "custom") {
+        icon = "md md-album";
+      } else if (style == "info") {
+        icon = "fa fa-question";
+      } else {
+        icon = "fa fa-adjust";
+      }
+      $.notify({
+        title: title,
+        text: text,
+        image: "<i class='" + icon + "'></i>"
+      }, {
+        style: 'metro',
+        className: style,
+        globalPosition: position,
+        showAnimation: "show",
+        showDuration: 0,
+        hideDuration: 0,
+        autoHideDelay: 5000,
+        autoHide: true,
+        clickToHide: true
+      });
+    },
+    //confirmation notification
+    Notification.prototype.confirm = function(style, position, title) {
+      var icon = "fa fa-adjust";
+      if (style == "error") {
+        icon = "fa fa-exclamation";
+      } else if (style == "warning") {
+        icon = "fa fa-warning";
+      } else if (style == "success") {
+        icon = "fa fa-check";
+      } else if (style == "custom") {
+        icon = "md md-album";
+      } else if (style == "info") {
+        icon = "fa fa-question";
+      } else {
+        icon = "fa fa-adjust";
+      }
+      $.notify({
+        title: title,
+        text: 'Are you sure you want to do nothing?<div class="clearfix"></div><br><a class="btn btn-sm btn-white yes">Yes</a> <a class="btn btn-sm btn-danger no">No</a>',
+        image: "<i class='" + icon + "'></i>"
+      }, {
+        style: 'metro',
+        className: style,
+        globalPosition: position,
+        showAnimation: "show",
+        showDuration: 0,
+        hideDuration: 0,
+        autoHide: false,
+        clickToHide: false
+      });
+      //listen for click events from this style
+      $(document).on('click', '.notifyjs-metro-base .no', function() {
+        //programmatically trigger propogating hide event
+        $(this).trigger('notify-hide');
+      });
+      $(document).on('click', '.notifyjs-metro-base .yes', function() {
+        //show button text
+        alert($(this).text() + " clicked!");
+        //hide notification
+        $(this).trigger('notify-hide');
+      });
+    },
+    //init - examples
+    Notification.prototype.init = function() {
 
-  },
-  //init
-  $.Notification = new Notification, $.Notification.Constructor = Notification
+    },
+    //init
+    $.Notification = new Notification, $.Notification.Constructor = Notification
 }(window.jQuery);
 
 /*
  * Mustache.js helpers
  */
 
-function mustacheBuildOptions (object) {
+function mustacheBuildOptions(object) {
   var validTypes = ['string', 'number', 'boolean'];
   var value;
   var key;
@@ -243,9 +243,9 @@ function fromNowDateTime() {
 function circliful() {
   $('.circliful-chart').each(function(i, obj) {
     var percent = $(this).data('percent'),
-        fgcolor = $(this).data('fgcolor'),
-        bgcolor = $(this).data('bgcolor'),
-        icon = $(this).data('icon');
+      fgcolor = $(this).data('fgcolor'),
+      bgcolor = $(this).data('bgcolor'),
+      icon = $(this).data('icon');
 
     $(this).circliful({
       percent: percent,
@@ -264,18 +264,19 @@ function bindTinyMce() {
   tinymce.init({
     selector: '.editor-basic',
     theme: 'modern',
-    menubar:false,
+    menubar: false,
     statusbar: false,
     plugins: 'link paste contextmenu textpattern autolink image code',
     selection_toolbar: 'bold italic | quicklink blockquote',
     toolbar: 'bold italic | bullist numlist | link image | code',
     inline: false,
     file_browser_callback: elFinderBrowser,
-    relative_urls : false,
-    remove_script_host : false,
-    convert_urls : true,
-    content_css : app_root + '/assets/css/tinymce.css'/*,
-    forced_root_block : true*/
+    relative_urls: false,
+    remove_script_host: false,
+    convert_urls: true,
+    content_css: app_root + '/assets/css/tinymce.css'
+    /*,
+        forced_root_block : true*/
   });
 }
 
@@ -283,20 +284,20 @@ function bindTinyMce() {
  * TinyMCE browser
  */
 
-function elFinderBrowser (field_name, url, type, win) {
+function elFinderBrowser(field_name, url, type, win) {
   tinyMCE.activeEditor.windowManager.open({
-  file: app_root + '/elfinder/tinymce',
-  title: 'Files',
-  width: 940,
-  height: 450,
-  resizable: 'yes',
-  inline: 'yes',  // This parameter only has an effect if you use the inlinepopups plugin!
-  popup_css: false, // Disable TinyMCE's default popup CSS
-  close_previous: 'no'
+    file: app_root + '/elfinder/tinymce',
+    title: 'Files',
+    width: 940,
+    height: 450,
+    resizable: 'yes',
+    inline: 'yes', // This parameter only has an effect if you use the inlinepopups plugin!
+    popup_css: false, // Disable TinyMCE's default popup CSS
+    close_previous: 'no'
   }, {
-  setUrl: function (url) {
-    win.document.getElementById(field_name).value = url;
-  }
+    setUrl: function(url) {
+      win.document.getElementById(field_name).value = url;
+    }
   });
   return false;
 }
@@ -305,8 +306,7 @@ function elFinderBrowser (field_name, url, type, win) {
  * Form elements
  */
 
-function bindFormElements()
-{
+function bindFormElements() {
   // Color Picker
   $('.colorpicker-default').colorpicker({
     format: 'hex'
@@ -373,7 +373,7 @@ function bindFormElements()
   });
 
   var vspinTrue = $('.vertical-spin').TouchSpin({
-   verticalbuttons: true
+    verticalbuttons: true
   });
 
   if (vspinTrue) {
@@ -385,10 +385,8 @@ function bindFormElements()
  * File picker
  */
 
-function bindMediaBrowser()
-{
-  $('[data-type~=image]').each(function()
-  {
+function bindMediaBrowser() {
+  $('[data-type~=image]').each(function() {
     var id = $(this).attr('data-id');
     var preview = $(this).attr('data-preview');
     preview = (typeof preview !== 'undefined' && preview !== false) ? preview : '';
@@ -405,8 +403,7 @@ function bindMediaBrowser()
     });
   });
 
-  $('[data-type~=image]').each(function()
-  {
+  $('[data-type~=image]').each(function() {
     var self = $(this);
     var image_input = $(this).attr('data-id');
 
@@ -418,18 +415,16 @@ function bindMediaBrowser()
   });
 }
 
-function updateImagePreview(self)
-{
+function updateImagePreview(self) {
   var image_input = $(self).attr('data-id');
   var filePath = $('#' + image_input).val();
   var previewButton = $(self).next();
 
-  if (filePath != '')
-  {
+  if (filePath != '') {
     var image = new Image();
     image.src = filePath;
 
-    var extra_style = (filePath.match(/.svg$/)) ? 'min-height:64px;min-width:64px;': '';
+    var extra_style = (filePath.match(/.svg$/)) ? 'min-height:64px;min-width:64px;' : '';
 
     $(previewButton).removeClass('disabled');
     $(previewButton).attr('data-toggle', 'popover');
@@ -437,27 +432,24 @@ function updateImagePreview(self)
     $(previewButton).css('cursor', 'help');
     $(previewButton).attr('data-content', '<img src="' + filePath + '" style="max-width:240px;max-height:280px;' + extra_style + '">');
 
-    $(previewButton).popover(
-    {
+    $(previewButton).popover({
       container: 'body',
       trigger: 'hover',
-      template: '<div class="popover" role="tooltip"><div class="popover-arrow"></div><div class="popover-content" style="padding:0"></div></div>',
+      template: '<div class="popover" role="tooltip"><div class="popover-arrow"></div><div class="popover-content image-preview" style="padding:0;"></div></div>',
       html: true
     });
   }
 }
 
 // Callback after elfinder selection
-window.processSelectedFile = function(filePath, requestingField, previewButton)
-{
+window.processSelectedFile = function(filePath, requestingField, previewButton) {
   $('#' + requestingField).val(decodeURI(filePath));
 
-  if (previewButton != '')
-  {
+  if (previewButton != '') {
     var image = new Image();
     image.src = decodeURI(filePath);
 
-    var extra_style = (filePath.match(/.svg$/)) ? 'min-height:64px;min-width:64px;': '';
+    var extra_style = (filePath.match(/.svg$/)) ? 'min-height:64px;min-width:64px;' : '';
 
     $('#' + previewButton).removeClass('disabled');
     $('#' + previewButton).attr('data-toggle', 'popover');
@@ -465,8 +457,7 @@ window.processSelectedFile = function(filePath, requestingField, previewButton)
     $('#' + previewButton).css('cursor', 'help');
     $('#' + previewButton).attr('data-content', '<img src="' + decodeURI(filePath) + '" style="max-width:240px;max-height:280px;' + extra_style + '">');
 
-    $('[data-toggle~=popover]').popover(
-    {
+    $('[data-toggle~=popover]').popover({
       container: 'body',
       trigger: 'hover',
       template: '<div class="popover" role="tooltip"><div class="popover-arrow"></div><div class="popover-content" style="padding:0"></div></div>',
@@ -481,8 +472,7 @@ window.processSelectedFile = function(filePath, requestingField, previewButton)
  * Ajax forms
  */
 
-function ajaxForms()
-{
+function ajaxForms() {
   var ajax_form_opts = {
     dataType: 'json',
     beforeSerialize: beforeSerialize,
@@ -495,17 +485,15 @@ function ajaxForms()
       success: 'fa fa-check',
       error: 'fa fa-times'
     }
-  }).on('submit', function (e) {
-    if (! e.isDefaultPrevented()) 
-    {
+  }).on('submit', function(e) {
+    if (!e.isDefaultPrevented()) {
       $('form.ajax').ajaxSubmit(ajax_form_opts);
       e.preventDefault();
     }
   });
 }
 
-function beforeSerialize($jqForm, options)
-{
+function beforeSerialize($jqForm, options) {
   ladda_button = $jqForm.find('[type=submit]').ladda();
 
   // Loading state
@@ -515,55 +503,41 @@ function beforeSerialize($jqForm, options)
   if (typeof tinymce !== 'undefined') tinymce.triggerSave();
 }
 
-function formResponse(responseText, statusText, xhr, $jqForm)
-{
-  if (typeof responseText.fn !== 'undefined')
-  {
+function formResponse(responseText, statusText, xhr, $jqForm) {
+  if (typeof responseText.fn !== 'undefined') {
     var fn = window[responseText.fn];
-    if(typeof fn === 'function') {
-        fn(responseText);
-        return;
+    if (typeof fn === 'function') {
+      fn(responseText);
+      return;
     }
 
     // Reset form
     var reset_form = (typeof responseText.reset !== 'undefined') ? responseText.reset : true;
 
-    if (reset_form) 
-    {
+    if (reset_form) {
       $jqForm[0].reset();
-    }
-    else
-    {
+    } else {
       $('[type=password]').val('');
     }
 
     // Loading state
     ladda_button.ladda('stop');
-  }
-  else if (typeof responseText.redir !== 'undefined' && responseText.redir == 'reload')
-  {
+  } else if (typeof responseText.redir !== 'undefined' && responseText.redir == 'reload') {
     document.location.reload();
-  }
-  else if (typeof responseText.redir !== 'undefined')
-  {
+  } else if (typeof responseText.redir !== 'undefined') {
     document.location = responseText.redir;
-  }
-  else if (typeof responseText.msg !== 'undefined')
-  {
+  } else if (typeof responseText.msg !== 'undefined') {
     swal({
       type: responseText.type,
       title: responseText.msg
     }, function() {
-  
+
       // Reset form
       var reset_form = (typeof responseText.reset !== 'undefined') ? responseText.reset : true;
 
-      if (reset_form) 
-      {
+      if (reset_form) {
         $jqForm[0].reset();
-      }
-      else
-      {
+      } else {
         $('[type=password]').val('');
       }
 
@@ -577,22 +551,17 @@ function formResponse(responseText, statusText, xhr, $jqForm)
  * BlockUI
  */
 
-function blockUI(el)
-{
-  if (typeof el === 'undefined')
-  {
-    $.blockUI(
-    {
+function blockUI(el) {
+  if (typeof el === 'undefined') {
+    $.blockUI({
       message: '<div class="loader"></div>',
       fadeIn: 0,
       fadeOut: 100,
       baseZ: 21000,
-      overlayCSS:
-      {
+      overlayCSS: {
         backgroundColor: '#000'
       },
-      css:
-      {
+      css: {
         border: 'none',
         padding: '0',
         backgroundColor: 'transparant',
@@ -600,21 +569,16 @@ function blockUI(el)
         color: '#fff'
       }
     });
-  }
-  else
-  {
-    $(el).block(
-    {
+  } else {
+    $(el).block({
       message: '<div class="loader loader-xs"></div>',
       fadeIn: 0,
       fadeOut: 100,
       baseZ: 21000,
-      overlayCSS:
-      {
+      overlayCSS: {
         backgroundColor: '#000'
       },
-      css:
-      {
+      css: {
         border: 'none',
         padding: '0',
         backgroundColor: 'transparant',
@@ -629,14 +593,10 @@ function blockUI(el)
  * unblockUI
  */
 
-function unblockUI(el)
-{
-  if (typeof el === 'undefined')
-  {
+function unblockUI(el) {
+  if (typeof el === 'undefined') {
     $.unblockUI();
-  }
-  else
-  {
+  } else {
     $(el).unblock();
   }
 }
@@ -645,8 +605,7 @@ function unblockUI(el)
  * Show "Saved" notification in top bar
  */
 
-function showSaved()
-{
+function showSaved() {
   $.Notification.notify('success', 'top right', _lang["saved"], _lang["changes_saved"]);
 }
 
@@ -654,18 +613,14 @@ function showSaved()
  * Toggle password text visibility
  */
 
-function togglePassword(field_name, classes, show)
-{
-  if (show)
-  {
+function togglePassword(field_name, classes, show) {
+  if (show) {
     var pwd = $('#' + field_name).val();
     $('#' + field_name).attr('id', field_name + '2');
     $('#' + field_name + '2').after($('<input id="' + field_name + '" name="' + field_name + '" class="' + classes + '" autocapitalize="off" autocorrect="off" autocomplete="off" type="text">'));
     $('#' + field_name + '2').remove();
     $('#' + field_name).val(pwd);
-  }
-  else
-  {
+  } else {
     var pwd = $('#' + field_name).val();
     $('#' + field_name).attr('id', field_name + '2');
     $('#' + field_name + '2').after($('<input id="' + field_name + '" name="' + field_name + '" class="' + classes + '" type="password">'));
@@ -679,94 +634,95 @@ function togglePassword(field_name, classes, show)
  */
 
 function format_fonts(font) {
-  if(!font.id) return font.text; // optgroup
+  if (!font.id) return font.text; // optgroup
   var $font = $(
     '<span style="font-family:\'' + font.text + '\'"> ' + font.text + '</span>'
   );
   return $font;
 }
 
-function select2()
-{
-	if (jQuery().select2)
-	{
-		$('.select2').select2({
-			allowClear: true
-		});
-	
-		$('.select2-required').select2({
-			allowClear: false
-		});
-	
-		$('.select2-tags').select2({
-			tags: [],
-			tokenSeparators: [',', ';', ' ']
-		}); 
+function select2() {
+  if (jQuery().select2) {
+    $('.select2').select2({
+      allowClear: true
+    });
 
-		$('.font-picker').select2({
+    $('.select2-required').select2({
+      allowClear: false
+    });
+
+    $('.select2-tags').select2({
+      tags: [],
+      tokenSeparators: [',', ';', ' ']
+    });
+
+    $('.font-picker').select2({
       templateResult: format_fonts,
       templateSelection: format_fonts
-		});
-
-		var select2_choices;
-	
-		$('.select2-datalist').select2({
-      allowClear: false
-    })
-    .on('select2:close', function() {
-      var el = $(this);
-      if(el.val() === "NEW") {
-        var title = el.attr('data-title');
-        var post_url = el.attr('data-post');
-        var csrf_token = el.attr('data-token');
-
-        swal({
-          title: title,
-          type: "input",
-          showCancelButton: true,
-          closeOnConfirm: false,
-          animation: "slide-from-top"
-        },
-        function(inputValue) {
-          if (inputValue === false) {
-            el.val('').trigger("change");
-            return false;
-          }
-
-          if (inputValue === "") {
-            swal.showInputError(_lang['input_required']);
-            return false;
-          }
-
-          var request = $.ajax({
-            url: post_url,
-            type: 'post',
-            data: {inputValue: inputValue, _token: csrf_token},
-            dataType: 'json'
-          });
-
-          request.done(function(json) {
-            swal.close();
-            if (typeof json.id !== null) {
-              el.append('<option value="' + json.id + '">' + inputValue + '</option>')
-                .val(json.id);
-            } else {
-              el.append('<option value="' + inputValue + '">' + inputValue + '</option>')
-                .val(inputValue);
-            }
-          });
-
-          request.fail(function(jqXHR, textStatus) {
-            swal.close();
-            alert('Request failed, please try again (' + textStatus + ')');
-          });
-
-          return false;
-        });
-      }
     });
-	
-		$('.select2-multiple').select2();
+
+    var select2_choices;
+
+    $('.select2-datalist').select2({
+        allowClear: false
+      })
+      .on('select2:close', function() {
+        var el = $(this);
+        if (el.val() === "NEW") {
+          var title = el.attr('data-title');
+          var post_url = el.attr('data-post');
+          var csrf_token = el.attr('data-token');
+
+          swal({
+              title: title,
+              type: "input",
+              showCancelButton: true,
+              closeOnConfirm: false,
+              animation: "slide-from-top"
+            },
+            function(inputValue) {
+              if (inputValue === false) {
+                el.val('').trigger("change");
+                return false;
+              }
+
+              if (inputValue === "") {
+                swal.showInputError(_lang['input_required']);
+                return false;
+              }
+
+              var request = $.ajax({
+                url: post_url,
+                type: 'post',
+                data: {
+                  inputValue: inputValue,
+                  _token: csrf_token
+                },
+                dataType: 'json'
+              });
+
+              request.done(function(json) {
+                swal.close();
+                if (typeof json.id !== null) {
+                  el.append('<option value="' + json.id + '">' + inputValue + '</option>')
+                    .val(json.id);
+                } else {
+                  el.append('<option value="' + inputValue + '">' + inputValue + '</option>')
+                    .val(inputValue);
+                }
+              });
+
+              request.fail(function(jqXHR, textStatus) {
+                swal.close();
+                alert('Request failed, please try again (' + textStatus + ')');
+              });
+
+              return false;
+            });
+        }
+      });
+
+    $('.select2-multiple').select2();
 
     $('.select2-multiple-spots').select2({
       templateResult: function(result) {
@@ -786,15 +742,14 @@ function select2()
         if (type == 'beacon') return $('<span><i class="fa fa-dot-circle-o"></i> ' + result.text + '</span>');
       }
     });
-	}
+  }
 }
 
 /*
  * DataTable loaded event
  */
 
-function onDataTableLoad()
-{
+function onDataTableLoad() {
   /*
    * moment.js
    */
@@ -812,26 +767,23 @@ function onDataTableLoad()
  * Bootstrap Tooltips, Popovers and AJAX Popovers
  */
 
-function bsTooltipsPopovers()
-{
-  $('[data-toggle~=tooltip]').tooltip(
-  {
+function bsTooltipsPopovers() {
+  $('[data-toggle~=tooltip]').tooltip({
     container: 'body'
   });
 
-  $('[data-toggle~=popover]').popover(
-  {
+  $('[data-toggle~=popover]').popover({
     container: 'body',
     html: true
   });
 
   // Hide popovers and tooltips when clicking outside
   $('body').on('click', function(e) {
-  // Hide tooltips when clicking link with tooltip
-  $('[data-toggle~=tooltip]').each(function() {
-    $(this).tooltip('hide');
-  });
-  $('.tooltip').remove();
+    // Hide tooltips when clicking link with tooltip
+    $('[data-toggle~=tooltip]').each(function() {
+      $(this).tooltip('hide');
+    });
+    $('.tooltip').remove();
   });
 }
 
@@ -839,15 +791,13 @@ function bsTooltipsPopovers()
  * Generate random string
  */
 
-function randomString(string_length)
-{
+function randomString(string_length) {
   if (typeof string_length === 'undefined') string_length = 8;
   var chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz";
   var randomstring = '';
-  for (var i = 0; i < string_length; i++)
-  {
-      var rnum = Math.floor(Math.random() * chars.length);
-      randomstring += chars.substring(rnum, rnum + 1);
+  for (var i = 0; i < string_length; i++) {
+    var rnum = Math.floor(Math.random() * chars.length);
+    randomstring += chars.substring(rnum, rnum + 1);
   }
   return randomstring;
 }
@@ -856,15 +806,13 @@ function randomString(string_length)
  * Generate random number code
  */
 
-function randomCode(string_length)
-{
+function randomCode(string_length) {
   if (typeof string_length === 'undefined') string_length = 8;
   var chars = "0123456789";
   var randomstring = '';
-  for (var i = 0; i < string_length; i++)
-  {
-      var rnum = Math.floor(Math.random() * chars.length);
-      randomstring += chars.substring(rnum, rnum + 1);
+  for (var i = 0; i < string_length; i++) {
+    var rnum = Math.floor(Math.random() * chars.length);
+    randomstring += chars.substring(rnum, rnum + 1);
   }
   return randomstring;
 }
@@ -873,45 +821,38 @@ function randomCode(string_length)
  * Ajax click
  */
 
-function _confirm(url, data, verb, callback, msg)
-{
+function _confirm(url, data, verb, callback, msg) {
   if (typeof msg === 'undefined') msg = _lang['confirm'];
 
-  swal(
-  {
+  swal({
       title: msg,
       type: "warning",
       showCancelButton: true,
       cancelButtonText: _lang['cancel'],
       confirmButtonColor: "#DD6B55",
       confirmButtonText: _lang['yes']
-  },
-  function()
-  {
+    },
+    function() {
       _click(url, data, verb, callback);
-  });
+    });
 };
 
-function _click(url, data, verb, callback)
-{
+function _click(url, data, verb, callback) {
   var callback_arg1 = arguments[4];
   var callback_arg2 = arguments[5];
 
-  var request = $.ajax(
-  {
-      url: url,
-      type: verb,
-      data: data,
-      dataType: 'json'
+  var request = $.ajax({
+    url: url,
+    type: verb,
+    data: data,
+    dataType: 'json'
   });
 
-  request.done(function(json)
-  {
-      callback(callback_arg1, callback_arg2, json);
+  request.done(function(json) {
+    callback(callback_arg1, callback_arg2, json);
   });
 
-  request.fail(function(jqXHR, textStatus)
-  {
-      alert('Request failed, please try again (' + textStatus + ')');
+  request.fail(function(jqXHR, textStatus) {
+    alert('Request failed, please try again (' + textStatus + ')');
   });
 };
