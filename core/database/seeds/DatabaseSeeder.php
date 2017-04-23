@@ -13,7 +13,7 @@ class DatabaseSeeder extends Seeder
     {
         DB::table('resellers')->insert([
             'api_token' => str_random(60),
-            'name' => 'Pulse Platform',
+            'name' => 'Pulse',
             'domain' => '*',
             'active' => true,
             'logo' => '/assets/branding/horizontal-light.svg',
@@ -26,7 +26,7 @@ class DatabaseSeeder extends Seeder
         DB::table('plans')->insert([
             'order' => 1,
             'reseller_id' => 1,
-            'name' => 'Full Access [undeletable]',
+            'name' => 'full_access',
             'price1' => 0,
             'price1_string' => '0',
             'active' => false,

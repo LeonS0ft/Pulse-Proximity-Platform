@@ -475,6 +475,7 @@ class UserController extends \App\Http\Controllers\Controller {
       $undeletable = ($row->id == 1) ? 1 : 0;
 
       $plan = ($row->plan == null) ? trans('global.free') : $row->plan->name;
+      if ($row->plan_id == 1) $plan .= ' <i class="fa fa-lock" aria-hidden="true"></i>';
 
       if (\Gate::allows('owner-management')) {
         $favicon = ($row->favicon == null) ? url('favicon.ico') : $row->favicon;

@@ -448,6 +448,7 @@ return array(
    */
 
   "plans" => "Plans",
+  "full_access" => "Full access",
   "free" => "Free",
   "per_month" => "Per month",
   "subtitle" => "Subtitle",
