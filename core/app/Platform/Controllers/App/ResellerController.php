@@ -352,8 +352,6 @@ class ResellerController extends \App\Http\Controllers\Controller {
         ->where(function ($query) use($q) {
           $query->orWhere('resellers.name', 'like', '%' . $q . '%')
           ->orWhere('resellers.domain', 'like', '%' . $q . '%')
-          ->orWhere('resellers.contact_name', 'like', '%' . $q . '%')
-          ->orWhere('resellers.contact_mail', 'like', '%' . $q . '%')
           ->orWhere('u.name', 'like', '%' . $q . '%')
           ->orWhere('u.email', 'like', '%' . $q . '%');
         })
@@ -365,8 +363,6 @@ class ResellerController extends \App\Http\Controllers\Controller {
         ->where(function ($query) use($q) {
           $query->orWhere('resellers.name', 'like', '%' . $q . '%')
           ->orWhere('resellers.domain', 'like', '%' . $q . '%')
-          ->orWhere('resellers.contact_name', 'like', '%' . $q . '%')
-          ->orWhere('resellers.contact_mail', 'like', '%' . $q . '%')
           ->orWhere('u.name', 'like', '%' . $q . '%')
           ->orWhere('u.email', 'like', '%' . $q . '%');
         })
