@@ -44,7 +44,7 @@ class UserController extends \App\Http\Controllers\Controller {
       if (count($plans) > 0) {
         foreach ($plans as $plan) {
           $suffix = '';
-          if ($plan->plan_active != 1) $suffix .= ' [inactive]';
+          if ($plan->plan_active != 1 && $plan->id > 1) $suffix .= ' [inactive]';
           if ($plan->reseller_active != 1) $suffix .= ' [inactive reseller]';
           $plans_list[$plan->id] = $plan->name . $suffix;
         }
@@ -80,7 +80,7 @@ class UserController extends \App\Http\Controllers\Controller {
         if (count($plans) > 0) {
           foreach ($plans as $plan) {
             $suffix = '';
-            if ($plan->plan_active != 1) $suffix .= ' [inactive]';
+            if ($plan->plan_active != 1 && $plan->id > 1) $suffix .= ' [inactive]';
             if ($plan->reseller_active != 1) $suffix .= ' [inactive reseller]';
             $plans_list[$plan->id] = $plan->name . $suffix;
           }

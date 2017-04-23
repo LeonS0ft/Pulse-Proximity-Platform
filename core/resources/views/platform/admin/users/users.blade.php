@@ -107,7 +107,7 @@ var admin_users_table = $('#dt-table-admin_users').DataTable({
     {
       render: function (data, type, row) {
         if(row.role_name != 'user') {
-          return '<strong>' + row.role + '</strong>';
+          return '' + row.role + '';
         } else {
           return row.role;
         }

@@ -78,7 +78,7 @@ class Plan extends Model
   protected $hidden = [];
 
   public function getNameAttribute($value) {
-    return ($value == 'full_access') ? trans('global.full_access') : $value;
+    return ($this->id == 1) ? trans('global.full_access') : $value;
   }
 
   public function getDates() {

@@ -275,11 +275,16 @@ class PlanController extends \App\Http\Controllers\Controller {
       // Make undeletable if plan has users
       $undeletable = ($row->id ==1 ) ? 1 : 0;
 
+      $name = $row->name;
+      $price1_string = $row->price1_string;
+      if ($row->id == 1) $name .= ' <i class="fa fa-lock" aria-hidden="true"></i>';
+      if ($row->id == 1) $price1_string = '-';
+
       $data[] = array(
         'DT_RowId' => 'row_' . $row->id,
         'order' => $row->order,
-        'name' => $row->name,
-        'price1_string' => $row->price1_string,
+        'name' => $name,
+        'price1_string' => $price1_string,
         'active' => $row->active,
         'created_at' => $row->created_at->timezone(\Auth::user()->timezone)->format('Y-m-d H:i:s'),
         'sl' => Core\Secure::array2string(array('plan_id' => $row->id)),

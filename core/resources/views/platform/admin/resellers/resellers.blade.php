@@ -41,7 +41,7 @@ var admin_resellers_table = $('#dt-table-admin_resellers').DataTable({
   processing: true,
   serverSide: true,
   stateSave: true,
-  responsive: true,
+  responsive: false,
   stripeClasses: [],
   lengthMenu: [
     [10, 25, 50, 75, 100, 1000000],
@@ -136,7 +136,7 @@ $('#dt-table-admin_resellers_wrapper .dataTables_filter input').attr('placeholde
   <div class="row">
   <div class="col-sm-12">
     <div class="card-box table-responsive">
-    <table class="table table-striped table-bordered table-hover" id="dt-table-admin_resellers" style="width:100%">
+    <table class="table table-cutoff table-striped table-bordered table-hover" id="dt-table-admin_resellers" style="width:100%">
       <thead>
       <tr>
         <th>{{ trans('global.platform_name') }}</th>

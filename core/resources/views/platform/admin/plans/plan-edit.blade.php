@@ -30,42 +30,42 @@
 
             <div class="form-group">
               <label for="name">{{ trans('global.name') }} <sup>*</sup></label>
-              <input type="text" class="form-control" name="name" id="name" value="{{ $plan->name }}" required autocomplete="off">
+              <input type="text" class="form-control" name="name" id="name" value="{{ $plan->name }}" required autocomplete="off"<?php if($plan->id == 1)echo ' disabled'; ?>>
             </div>
 
             <div class="form-group">
               <label for="name">{{ trans('global.price_numeric') }} <sup>*</sup></label>
-              <input type="number" class="form-control" name="price1" value="{{ $plan->price1 }}" required autocomplete="off">
+              <input type="number" class="form-control" name="price1" value="{{ $plan->price1 }}" required autocomplete="off"<?php if($plan->id == 1)echo ' disabled'; ?>>
             </div>
 
             <div class="form-group">
               <label for="name">{{ trans('global.price_string') }} <sup>*</sup> <i class="material-icons help-icon" data-container="body" data-trigger="hover" data-toggle="popover" data-placement="top" data-content="{{ trans('global.price_string_help') }}">&#xE887;</i></label>
-              <input type="text" class="form-control" name="price1_string" value="{{ $plan->price1_string }}" required autocomplete="off">
+              <input type="text" class="form-control" name="price1_string" value="{{ $plan->price1_string }}" required autocomplete="off"<?php if($plan->id == 1)echo ' disabled'; ?>>
             </div>
 
             <div class="form-group">
               <label for="name">{{ trans('global.price_period') }}</label>
-              <input type="text" class="form-control" name="price1_period_string" value="{{ $plan->price1_period_string }}" autocomplete="off">
+              <input type="text" class="form-control" name="price1_period_string" value="{{ $plan->price1_period_string }}" autocomplete="off"<?php if($plan->id == 1)echo ' disabled'; ?>>
             </div>
 
             <div class="form-group">
               <label for="name">{{ trans('global.subtitle') }}</label>
-              <input type="text" class="form-control" name="price1_subtitle" value="{{ $plan->price1_subtitle }}" autocomplete="off">
+              <input type="text" class="form-control" name="price1_subtitle" value="{{ $plan->price1_subtitle }}" autocomplete="off"<?php if($plan->id == 1)echo ' disabled'; ?>>
             </div>
 
             <div class="form-group">
               <label for="order_url">{{ trans('global.order_url') }}</label>
-              <input type="text" class="form-control" name="order_url" id="order_url" value="{{ $plan->order_url }}" autocomplete="off">
+              <input type="text" class="form-control" name="order_url" id="order_url" value="{{ $plan->order_url }}" autocomplete="off"<?php if($plan->id == 1)echo ' disabled'; ?>>
             </div>
 
             <div class="form-group">
               <label for="upgrade_url">{{ trans('global.upgrade_url') }}</label>
-              <input type="text" class="form-control" name="upgrade_url" id="upgrade_url" value="{{ $plan->upgrade_url }}" autocomplete="off">
+              <input type="text" class="form-control" name="upgrade_url" id="upgrade_url" value="{{ $plan->upgrade_url }}" autocomplete="off"<?php if($plan->id == 1)echo ' disabled'; ?>>
             </div>
 
             <div class="form-group" style="margin-top:20px">
               <div class="checkbox checkbox-primary">
-                <input name="active" id="active" type="checkbox" value="1"<?php if($plan->active == 1) echo ' checked'; ?>>
+                <input name="active" id="active" type="checkbox" value="1"<?php if($plan->active == 1) echo ' checked'; ?><?php if($plan->id == 1)echo ' disabled'; ?>>
                 <label for="active"> {{ trans('global.active') }}</label>
               </div>
             </div>
