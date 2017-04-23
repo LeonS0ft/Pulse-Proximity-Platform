@@ -93,7 +93,7 @@ if (count($languages) > 1) {
           <li class="has-submenu"> <a href="#/profile"><i class="material-icons">&#xE853;</i> {{ trans('global.account') }}</a></li>
 
 <?php if (Gate::allows('admin-management')) { ?>
-          <li class="has-submenu last-elements"> <a href="javascript:void(0);" data-toggle="tooltip" title="{{ trans('global.admin') }}"><i class="material-icons">&#xE8B8;</i></a>
+          <li class="has-submenu last-elements"> <a href="javascript:void(0);"><i class="material-icons">&#xE8B8;</i> {{ trans('global.admin') }}</a>
             <ul class="submenu">
               <li class="has-submenu">
                 <a href="javascript:void(0);">{{ trans('global.users') }}</a>
