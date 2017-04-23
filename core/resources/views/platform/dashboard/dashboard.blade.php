@@ -20,7 +20,7 @@
   <div class="row">
     <div class="col-sm-6 col-lg-3">
       <div class="card-box widget-icon">
-        <a href="#/campaign/analytics">
+        <a href="#/mobile/analytics">
           <i class="material-icons text-muted" style="font-size: 60px;">&#xE8A0;</i>
           <div class="wid-icon-info">
             <p class="text-muted m-b-5 font-13 text-uppercase">{{ trans('global.cards_viewed') }}</p>
@@ -39,7 +39,7 @@
 
     <div class="col-sm-6 col-lg-3">
       <div class="card-box widget-icon">
-        <a href="#/campaign/analytics">
+        <a href="#/mobile/analytics">
           <i class="material-icons text-muted" style="font-size: 60px;">&#xE569;</i>
           <div class="wid-icon-info">
             <p class="text-muted m-b-5 font-13 text-uppercase">{{ trans('global.scenarios_triggered') }}</p>
@@ -58,7 +58,7 @@
 
     <div class="col-sm-6 col-lg-3">
       <div class="card-box widget-icon">
-        <a href="#/campaign/analytics">
+        <a href="#/mobile/analytics">
           <i class="fa fa-android text-muted" aria-hidden="true" style="font-size: 60px;"></i>
           <div class="wid-icon-info">
             <p class="text-muted m-b-5 font-13 text-uppercase">Android</p>
@@ -77,7 +77,7 @@
 
     <div class="col-sm-6 col-lg-3">
       <div class="card-box widget-icon">
-        <a href="#/campaign/analytics">
+        <a href="#/mobile/analytics">
           <i class="fa fa-apple text-muted" aria-hidden="true" style="font-size: 60px;"></i>
           <div class="wid-icon-info">
             <p class="text-muted m-b-5 font-13 text-uppercase">iOS</p>
