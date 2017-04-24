@@ -25,27 +25,27 @@ class DemoTableSeeder extends Seeder
         $lng_max = 5.479960;
 
         // System users
-        $system_user_count = 5;
+        $system_user_count = 25;
 
         // Beacons
-        $beacon_count = 10;
+        $beacon_count = 15;
 
         // Geofences
-        $geofence_count = 10;
+        $geofence_count = 15;
 
         // Scenarios
-        $beacon_scenario_monitor_count = 10;
-        $beacon_scenario_range_count = 10;
-        $geofence_scenario_monitor_count = 10;
+        $beacon_scenario_monitor_count = 15;
+        $beacon_scenario_range_count = 15;
+        $geofence_scenario_monitor_count = 15;
 
         // Analytics
         $startDate = '-2 months';
         $endDate = 'now';
         $analytics_unique_user_count = 40;
         $analytics_card_view_count = 300;
-        $analytics_beacon_monitor_count = 200;
-        $analytics_beacon_range_count = 200;
-        $analytics_geofence_monitor_count = 200;
+        $analytics_beacon_monitor_count = 250;
+        $analytics_beacon_range_count = 250;
+        $analytics_geofence_monitor_count = 250;
 
         // Cards
         $cards = [];
@@ -141,7 +141,7 @@ class DemoTableSeeder extends Seeder
 
         DB::table('campaign_apps')->insert([
             'user_id' => 1,
-            'name' => 'Demo Production App',
+            'name' => 'Production App',
             'api_token' => 'MO8KeFqpyAjqSfJkpQ9bxzKrN0HGzVXsGqIaPI23MkE1b37opDhg0yGjyJVE',
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s')
@@ -149,7 +149,7 @@ class DemoTableSeeder extends Seeder
 
         DB::table('campaign_apps')->insert([
             'user_id' => 1,
-            'name' => 'Demo Test App',
+            'name' => 'Test App',
             'api_token' => 'FlNQDnEVXE4DYUB4F2X2TTBz9BApOh0iE9o6q0yUcnPPI8S43gjJdUyZlzw3',
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s')
@@ -157,7 +157,7 @@ class DemoTableSeeder extends Seeder
 
         DB::table('campaigns')->insert([
             'user_id' => 1,
-            'name' => 'My First Campaign - Production',
+            'name' => 'Food',
             'language' => 'en',
             'timezone' => 'Europe/Amsterdam',
             'active' => 1,
@@ -167,7 +167,27 @@ class DemoTableSeeder extends Seeder
 
         DB::table('campaigns')->insert([
             'user_id' => 1,
-            'name' => 'My First Campaign - Test',
+            'name' => 'Retail',
+            'language' => 'en',
+            'timezone' => 'Europe/Amsterdam',
+            'active' => 1,
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s')
+        ]);
+
+        DB::table('campaigns')->insert([
+            'user_id' => 1,
+            'name' => 'Expo',
+            'language' => 'en',
+            'timezone' => 'Europe/Amsterdam',
+            'active' => 1,
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s')
+        ]);
+
+        DB::table('campaigns')->insert([
+            'user_id' => 1,
+            'name' => 'Promos',
             'language' => 'en',
             'timezone' => 'Europe/Amsterdam',
             'active' => 1,
@@ -185,18 +205,28 @@ class DemoTableSeeder extends Seeder
             'campaign_id' => 2
         ]);
 
+        DB::table('app_campaigns')->insert([
+            'app_id' => 1,
+            'campaign_id' => 3
+        ]);
+
+        DB::table('app_campaigns')->insert([
+            'app_id' => 1,
+            'campaign_id' => 4
+        ]);
+
         // Beacon scenarios enter/exit
         $scenario_count1 = $beacon_scenario_monitor_count;
         for ($scenario_id = 1; $scenario_id < $scenario_count1 + 1; $scenario_id++) {
           DB::table('scenarios')->insert([
-              'campaign_id' => mt_rand(1, 2),
+              'campaign_id' => mt_rand(1, 4),
               'scenario_if_id' => mt_rand(1, 2),
               'scenario_then_id' => 4,
               'scenario_day_id' => 1,
               'scenario_time_id' => 1,
               'notification' => 'Welcome beacon scenario ' . $scenario_id . '!',
               'active' => 1,
-              'open_url' => 'https://madewithpepper.com',
+              'open_url' => 'https://madewithpepper.com?scenario=' . $scenario_id,
               'created_at' => date('Y-m-d H:i:s'),
               'updated_at' => date('Y-m-d H:i:s')
           ]);
@@ -211,13 +241,13 @@ class DemoTableSeeder extends Seeder
         $scenario_count2 = $beacon_scenario_range_count;
         for ($scenario_id = $scenario_count1 + 1; $scenario_id < ($scenario_count1 + $scenario_count2) + 1; $scenario_id++) {
           DB::table('scenarios')->insert([
-              'campaign_id' => mt_rand(1, 2),
+              'campaign_id' => mt_rand(1, 4),
               'scenario_if_id' => mt_rand(3, 5),
               'scenario_then_id' => 4,
               'scenario_day_id' => 1,
               'scenario_time_id' => 1,
               'active' => 1,
-              'open_url' => 'https://madewithpepper.com',
+              'open_url' => 'https://madewithpepper.com?scenario=' . $scenario_id,
               'created_at' => date('Y-m-d H:i:s'),
               'updated_at' => date('Y-m-d H:i:s')
           ]);
@@ -232,14 +262,14 @@ class DemoTableSeeder extends Seeder
         $scenario_count3 = $geofence_scenario_monitor_count;
         for ($scenario_id = ($scenario_count1 + $scenario_count2) + 1; $scenario_id < ($scenario_count1 + $scenario_count2 + $scenario_count3) + 1; $scenario_id++) {
           DB::table('scenarios')->insert([
-              'campaign_id' => mt_rand(1, 2),
+              'campaign_id' => mt_rand(1, 4),
               'scenario_if_id' => mt_rand(1, 2),
               'scenario_then_id' => 4,
               'scenario_day_id' => 1,
               'scenario_time_id' => 1,
               'notification' => 'Welcome geofence scenario ' . $scenario_id . '!',
               'active' => 1,
-              'open_url' => 'https://madewithpepper.com',
+              'open_url' => 'https://madewithpepper.com?scenario=' . $scenario_id,
               'created_at' => date('Y-m-d H:i:s'),
               'updated_at' => date('Y-m-d H:i:s')
           ]);
@@ -278,9 +308,9 @@ class DemoTableSeeder extends Seeder
             DB::table('category_card')->insert(['category_id' => $i, 'card_id' => $card_id]);
           }
 
-          // Add card to all campaigns
-          DB::table('campaign_card')->insert(['campaign_id' => 1, 'card_id' => $card_id]);
-          DB::table('campaign_card')->insert(['campaign_id' => 2, 'card_id' => $card_id]);
+          // Add card to two random campaigns
+          DB::table('campaign_card')->insert(['campaign_id' => mt_rand(1, 2), 'card_id' => $card_id]);
+          DB::table('campaign_card')->insert(['campaign_id' => mt_rand(3, 4), 'card_id' => $card_id]);
 
           $card_id++;
         }
@@ -349,7 +379,7 @@ class DemoTableSeeder extends Seeder
           $interaction = new \Platform\Models\Location\Interaction;
 
           $interaction->user_id = 1;
-          $interaction->campaign_id = mt_rand(1, 2);
+          $interaction->campaign_id = mt_rand(1, 4);
           $interaction->scenario_id = $scenario_id;
           $interaction->beacon_id = $beacon_id;
           $interaction->beacon = 'Beacon ' . $beacon_id;
@@ -384,7 +414,7 @@ class DemoTableSeeder extends Seeder
           $interaction = new \Platform\Models\Location\Interaction;
 
           $interaction->user_id = 1;
-          $interaction->campaign_id = mt_rand(1, 2);
+          $interaction->campaign_id = mt_rand(1, 4);
           $interaction->scenario_id = $scenario_id;
           $interaction->beacon_id = $beacon_id;
           $interaction->beacon = 'Beacon ' . $beacon_id;
@@ -419,7 +449,7 @@ class DemoTableSeeder extends Seeder
           $interaction = new \Platform\Models\Location\Interaction;
 
           $interaction->user_id = 1;
-          $interaction->campaign_id = mt_rand(1, 2);
+          $interaction->campaign_id = mt_rand(1, 4);
           $interaction->scenario_id = $scenario_id;
           $interaction->geofence_id = $geofence_id;
           $interaction->geofence = 'Geofence ' . $geofence_id;
