@@ -5,6 +5,7 @@ use \Platform\Controllers\Analytics;
 use \Platform\Models\Analytics as ModelAnalytics;
 use \Platform\Models\Location;
 use \Platform\Models\Campaigns;
+use \Platform\Models\Categories;
 use Illuminate\Http\Request;
 
 class MobileAnalyticsController extends \App\Http\Controllers\Controller {
@@ -25,13 +26,13 @@ class MobileAnalyticsController extends \App\Http\Controllers\Controller {
   {
     // Security link
     $sl = request()->get('sl', '');
-    $sql_campaign = '1=1';
+    if ($sl == 'all') $sl = '';
+
     $campaign_id = '';
 
     if ($sl != '') {
       $qs = Core\Secure::string2array($sl);
       $campaign_id = $qs['campaign_id'];
-      $sql_campaign = 'campaign_id = ' . $campaign_id;
       $sl = rawurlencode($sl);
     }
 
@@ -41,6 +42,28 @@ class MobileAnalyticsController extends \App\Http\Controllers\Controller {
 
     $from =  $date_start . ' 00:00:00';
     $to = $date_end . ' 23:59:59';
+
+    // Filter
+    $filter = request()->get('filter', '');
+    if ($filter != '') {
+      $selected_beacons = [];
+      $selected_geofences = [];
+
+      $filter = json_decode($filter);
+
+      if ($filter != null) {
+        foreach ($filter as $place) {
+          if (starts_with($place, 'b')) $selected_beacons[] = str_replace('b', '', $place);
+          if (starts_with($place, 'g')) $selected_geofences[] = str_replace('g', '', $place);
+        }
+      }
+    }
+
+    /*
+     |--------------------------------------------------------------------------
+     | Selected campaign(s)
+     |--------------------------------------------------------------------------
+     */
 
     /*
      |--------------------------------------------------------------------------
@@ -125,6 +148,53 @@ class MobileAnalyticsController extends \App\Http\Controllers\Controller {
       if ($campaign->date < $earliest_date) $earliest_date = $campaign->date;
     }
 
+    // Get linked places
+    if (is_numeric($campaign_id)) {
+      $campaign = Campaigns\Campaign::where('user_id', Core\Secure::userId())->where('id', $campaign_id)->first();
+      $available_beacons = [];
+      $available_geofences = [];
+
+      foreach ($campaign->scenarios as $scenario) {
+        foreach ($scenario->beacons as $beacon) {
+          $available_beacons[] = $beacon->id;
+        }
+        foreach ($scenario->geofences as $geofence) {
+          $available_geofences[] = $geofence->id;
+        }
+      }
+
+    } elseif(is_array($campaign_id)) {
+      // ToDo
+    } else {
+      $campaigns = Campaigns\Campaign::where('user_id', Core\Secure::userId())->get();
+      $available_beacons = [];
+      $available_geofences = [];
+
+      foreach ($campaigns as $campaign) {
+        foreach ($campaign->scenarios as $scenario) {
+          foreach ($scenario->beacons as $beacon) {
+            $available_beacons[] = $beacon->id;
+          }
+          foreach ($scenario->geofences as $geofence) {
+            $available_geofences[] = $geofence->id;
+          }
+        }
+      }
+    }
+
+    asort($available_beacons);
+    asort($available_geofences);
+
+    if ($filter == '') {
+      $selected_beacons = $available_beacons;
+      $selected_geofences = $available_geofences;
+    }
+
+    // Get all gefences and beacons without group and all locations 
+    $available_geofences_wo_group = Location\Geofence::whereIn('id', $available_geofences)->where('user_id', '=', Core\Secure::userId())->where('location_group_id', NULL)->orderBy('name', 'asc')->get();
+    $available_beacons_wo_group = Location\Beacon::whereIn('id', $available_beacons)->where('user_id', '=', Core\Secure::userId())->where('location_group_id', NULL)->orderBy('name', 'asc')->get();
+    $location_groups = Location\LocationGroup::where('user_id', '=', Core\Secure::userId())->orderBy('name', 'asc')->get();
+
     /*
      |--------------------------------------------------------------------------
      | Count views and interactions
@@ -191,28 +261,28 @@ class MobileAnalyticsController extends \App\Http\Controllers\Controller {
     // Interactions
     if (is_numeric($campaign_id)) {
       $stats_interactions = Location\Interaction::where('user_id', Core\Secure::userId())
-        ->select(\DB::raw('DATE(created_at) as date'), \DB::raw('count(id) as interactions'))
+        ->select(\DB::raw('DATE(created_at) as date'), \DB::raw('count(id) as interactions'), 'beacon_id', 'geofence_id')
         ->where('campaign_id', $campaign_id)
         ->where('created_at', '>=', $from)
         ->where('created_at', '<=', $to)
-        ->groupBy([\DB::raw('DATE(created_at)')])
+        ->groupBy([\DB::raw('DATE(created_at)'), 'beacon_id', 'geofence_id'])
         ->get()
         ->toArray();
     } elseif(is_array($campaign_id)) {
       $stats_interactions = Location\Interaction::where('user_id', Core\Secure::userId())
-        ->select(\DB::raw('DATE(created_at) as date'), \DB::raw('count(id) as interactions'))
+        ->select(\DB::raw('DATE(created_at) as date'), \DB::raw('count(id) as interactions'), 'beacon_id', 'geofence_id')
         ->whereIn('campaign_id', $campaign_id)
         ->where('created_at', '>=', $from)
         ->where('created_at', '<=', $to)
-        ->groupBy([\DB::raw('DATE(created_at)')])
+        ->groupBy([\DB::raw('DATE(created_at)'), 'beacon_id', 'geofence_id'])
         ->get()
         ->toArray();
     } else {
       $stats_interactions = Location\Interaction::where('user_id', Core\Secure::userId())
-        ->select(\DB::raw('DATE(created_at) as date'), \DB::raw('count(id) as interactions'))
+        ->select(\DB::raw('DATE(created_at) as date'), \DB::raw('count(id) as interactions'), 'beacon_id', 'geofence_id')
         ->where('created_at', '>=', $from)
         ->where('created_at', '<=', $to)
-        ->groupBy([\DB::raw('DATE(created_at)')])
+        ->groupBy([\DB::raw('DATE(created_at)'), 'beacon_id', 'geofence_id'])
         ->get()
         ->toArray();
     }
@@ -238,8 +308,10 @@ class MobileAnalyticsController extends \App\Http\Controllers\Controller {
       $interactions = ($date < $earliest_date) ? NULL : 0;
       foreach($stats_interactions as $row) {
         if ($date == $row['date']) {
-          $interactions = $row['interactions'];
-          break 1;
+          if ($filter == '' || ($filter != '' && (in_array($row['beacon_id'], $selected_beacons) || in_array($row['geofence_id'], $selected_geofences)))) {
+            $interactions += $row['interactions'];
+          }
+          //break 1;
         }
       }
 
@@ -264,6 +336,10 @@ class MobileAnalyticsController extends \App\Http\Controllers\Controller {
       $segmentation_platform_interactions = Location\Interaction::where('user_id', Core\Secure::userId())
         ->select('platform as name', \DB::raw('count(id) as total'))
         ->where('campaign_id', $campaign_id)
+        ->where(function ($q) use($selected_beacons, $selected_geofences) {
+          $q->orWhereIn('beacon_id', $selected_beacons)
+            ->orWhereIn('geofence_id', $selected_geofences);
+        })
         ->where('created_at', '>=', $from)
         ->where('created_at', '<=', $to)
         ->groupBy('platform')
@@ -292,6 +368,10 @@ class MobileAnalyticsController extends \App\Http\Controllers\Controller {
       $segmentation_model_interactions = Location\Interaction::where('user_id', Core\Secure::userId())
         ->select('model as name', \DB::raw('count(id) as total'))
         ->where('campaign_id', $campaign_id)
+        ->where(function ($q) use($selected_beacons, $selected_geofences) {
+          $q->orWhereIn('beacon_id', $selected_beacons)
+            ->orWhereIn('geofence_id', $selected_geofences);
+        })
         ->where('created_at', '>=', $from)
         ->where('created_at', '<=', $to)
         ->groupBy('model')
@@ -322,6 +402,10 @@ class MobileAnalyticsController extends \App\Http\Controllers\Controller {
       $segmentation_platform_interactions = Location\Interaction::where('user_id', Core\Secure::userId())
         ->select('platform as name', \DB::raw('count(id) as total'))
         ->whereIn('campaign_id', $campaign_id)
+        ->where(function ($q) use($selected_beacons, $selected_geofences) {
+          $q->orWhereIn('beacon_id', $selected_beacons)
+            ->orWhereIn('geofence_id', $selected_geofences);
+        })
         ->where('created_at', '>=', $from)
         ->where('created_at', '<=', $to)
         ->groupBy('platform')
@@ -351,6 +435,10 @@ class MobileAnalyticsController extends \App\Http\Controllers\Controller {
       $segmentation_model_interactions = Location\Interaction::where('user_id', Core\Secure::userId())
         ->select('model as name', \DB::raw('count(id) as total'))
         ->whereIn('campaign_id', $campaign_id)
+        ->where(function ($q) use($selected_beacons, $selected_geofences) {
+          $q->orWhereIn('beacon_id', $selected_beacons)
+            ->orWhereIn('geofence_id', $selected_geofences);
+        })
         ->where('created_at', '>=', $from)
         ->where('created_at', '<=', $to)
         ->groupBy('model')
@@ -381,6 +469,10 @@ class MobileAnalyticsController extends \App\Http\Controllers\Controller {
 
       $segmentation_platform_interactions = Location\Interaction::where('user_id', Core\Secure::userId())
         ->select('platform as name', \DB::raw('count(id) as total'))
+        ->where(function ($q) use($selected_beacons, $selected_geofences) {
+          $q->orWhereIn('beacon_id', $selected_beacons)
+            ->orWhereIn('geofence_id', $selected_geofences);
+        })
         ->where('created_at', '>=', $from)
         ->where('created_at', '<=', $to)
         ->groupBy('platform')
@@ -406,6 +498,10 @@ class MobileAnalyticsController extends \App\Http\Controllers\Controller {
 
       $segmentation_model_interactions = Location\Interaction::where('user_id', Core\Secure::userId())
         ->select('model as name', \DB::raw('count(id) as total'))
+        ->where(function ($q) use($selected_beacons, $selected_geofences) {
+          $q->orWhereIn('beacon_id', $selected_beacons)
+            ->orWhereIn('geofence_id', $selected_geofences);
+        })
         ->where('created_at', '>=', $from)
         ->where('created_at', '<=', $to)
         ->groupBy('model')
@@ -526,6 +622,10 @@ class MobileAnalyticsController extends \App\Http\Controllers\Controller {
       $heatmap_interactions = Location\Interaction::where('user_id', Core\Secure::userId())
         ->select('lat', 'lng', \DB::raw('count(id) as weight'))
         ->where('campaign_id', $campaign_id)
+        ->where(function ($q) use($selected_beacons, $selected_geofences) {
+          $q->orWhereIn('beacon_id', $selected_beacons)
+            ->orWhereIn('geofence_id', $selected_geofences);
+        })
         ->where('created_at', '>=', $from)
         ->where('created_at', '<=', $to)
         ->groupBy('lat')
@@ -536,6 +636,10 @@ class MobileAnalyticsController extends \App\Http\Controllers\Controller {
       $heatmap_interactions = Location\Interaction::where('user_id', Core\Secure::userId())
         ->select('lat', 'lng', \DB::raw('count(id) as weight'))
         ->whereIn('campaign_id', $campaign_id)
+        ->where(function ($q) use($selected_beacons, $selected_geofences) {
+          $q->orWhereIn('beacon_id', $selected_beacons)
+            ->orWhereIn('geofence_id', $selected_geofences);
+        })
         ->where('created_at', '>=', $from)
         ->where('created_at', '<=', $to)
         ->groupBy('lat')
@@ -545,6 +649,10 @@ class MobileAnalyticsController extends \App\Http\Controllers\Controller {
     } else {
       $heatmap_interactions = Location\Interaction::where('user_id', Core\Secure::userId())
         ->select('lat', 'lng', \DB::raw('count(id) as weight'))
+        ->where(function ($q) use($selected_beacons, $selected_geofences) {
+          $q->orWhereIn('beacon_id', $selected_beacons)
+            ->orWhereIn('geofence_id', $selected_geofences);
+        })
         ->where('created_at', '>=', $from)
         ->where('created_at', '<=', $to)
         ->whereNotNull('lat')->whereNotNull('lng')
@@ -558,6 +666,28 @@ class MobileAnalyticsController extends \App\Http\Controllers\Controller {
     foreach ($heatmap_card_views as $row) { $heatmap[] = ['lat' => $row->lat, 'lng' => $row->lng, 'weight' => $row->weight]; } 
     foreach ($heatmap_interactions as $row) { $heatmap[] = ['lat' => $row['lat'], 'lng' => $row['lng'], 'weight' => $row['weight']]; } 
 
-    return view('platform.analytics.mobile-analytics', compact('sl', 'earliest_date', 'date_start', 'date_end', 'campaigns', 'campaign_id', 'main_chart_range', 'heatmap', 'segmentation_platform', 'segmentation_model'));
+    return view('platform.analytics.mobile-analytics', compact(
+      'sl', 
+      'earliest_date', 
+      'date_start', 
+      'date_end', 
+      'campaigns', 
+      'campaign_id', 
+      'main_chart_range', 
+      'heatmap', 
+      'segmentation_platform', 
+      'segmentation_model', 
+      'categories', 
+      'available_categories', 
+      'campaigns', 
+      'available_campaigns', 
+      'available_beacons_wo_group', 
+      'available_beacons', 
+      'selected_beacons', 
+      'available_geofences_wo_group', 
+      'available_geofences', 
+      'selected_geofences', 
+      'location_groups'
+    ));
   }
 }

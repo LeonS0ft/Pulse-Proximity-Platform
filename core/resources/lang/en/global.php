@@ -45,6 +45,8 @@ return array(
   "export" => "Export",
   "search" => "Search",
   "search_" => "Search &hellip;",
+  "filter" => "Filter",
+  "apply_filter" => "Apply filter",
   "subject" => "Subject",
   "title" => "Title",
   "heading" => "Heading",

@@ -12,7 +12,9 @@ if (count($campaigns) == 0) {
 } else { 
 ?>
     <div class="card-box" style="padding:13px">
-      <select id="campaigns" class="select2-required">
+       <div class="row">
+        <div class="col-sm-10">
+          <select id="campaigns" class="select2-required">
 <?php
 echo '<option value="">' . trans('global.all_campaigns') . '</option>';
 
@@ -22,16 +24,75 @@ foreach($campaigns as $key => $row) {
   echo '<option value="' . $sl_campaign . '"' . $selected . '>' . $row['name'] . '</option>';
 }
 ?>
-      </select>
+          </select>
 <script>
 $('#campaigns').on('change', function() {
   document.location = ($(this).val() == '') ? '#/mobile/analytics/<?php echo $date_start ?>/<?php echo $date_end ?>' : '#/mobile/analytics/<?php echo $date_start ?>/<?php echo $date_end ?>/' + $(this).val();
 });
 </script>
+          </div>
+          <div class="col-sm-2">
+             <button type="button" class="btn btn-default btn-block" onClick="$('#filter').slideToggle(150)"><i class="fa fa-filter" aria-hidden="true"></i></button>
+          </div>
+        </div>
     </div>
   </div>
   <div class="col-sm-6 text-center m-b-20">
       <div class="form-control" id="reportrange" style="cursor:pointer;padding:20px; width:100%; display:table"> <i class="fa fa-calendar" style="margin:0 10px 0 0"></i> <span></span> </div>
+  </div>
+</div>
+
+<div class="row" id="filter" style="display: none">
+  <div class="col-sm-12">
+    <div class="card-box">
+      <select multiple="multiple" name="places[]" id="places" class="select2-multiple-spots" data-placeholder="{{ trans('global.select_beacons_and_or_geofences') }}">
+<?php
+// Beacons in a group
+foreach($location_groups as $location_group)
+{
+  $geofences_in_group = $location_group->geofences()->orderBy('name', 'asc')->get();
+  $beacons_in_group = $location_group->beacons()->orderBy('name', 'asc')->get();
+
+  echo '<optgroup label="' . $location_group->name . '">';
+
+  foreach($geofences_in_group as $geofence)
+  {
+    $selected = (in_array($geofence->id, $selected_geofences)) ? ' selected' : '';
+    echo '<option value="g' . $geofence->id . '" data-type="geofence"' . $selected . '>' . $geofence->name . '</option>';
+  }
+
+  foreach($beacons_in_group as $beacon)
+  {
+    $selected = (in_array($beacon->id, $selected_beacons)) ? ' selected' : '';
+    echo '<option value="b' . $beacon->id . '" data-type="beacon"' . $selected . '>' . $beacon->name . '</option>';
+  }
+
+  echo '</optgroup>';
+}
+// Beacons and geofences without a group
+foreach($available_geofences_wo_group as $geofence)
+{
+  $selected = (in_array($geofence->id, $selected_geofences)) ? ' selected' : '';
+  echo '<option value="g' . $geofence->id . '" data-type="geofence"' . $selected . '>' . $geofence->name . '</option>';
+}
+
+foreach($available_beacons_wo_group as $beacon)
+{
+  $selected = (in_array($beacon->id, $selected_beacons)) ? ' selected' : '';
+  echo '<option value="b' . $beacon->id . '" data-type="beacon"' . $selected . '>' . $beacon->name . '</option>';
+}
+?>
+      </select>
+      <button type="button" id="apply_filter" class="btn btn-primary btn-lg btn-block" style="margin-top: 10px">{{ trans('global.apply_filter') }}</button>
+<script>
+$('#apply_filter').on('click', function() {
+  var places = JSON.stringify($('#places').val());
+  var campaigns = $('#campaigns').val();
+  if (campaigns == '') campaigns = 'all';
+  document.location = '#/mobile/analytics/<?php echo $date_start ?>/<?php echo $date_end ?>/' + campaigns + '/' + encodeURIComponent(places);
+});
+</script>
+    </div>
   </div>
 </div>
 
@@ -120,8 +181,13 @@ $('#reportrange').on('apply.daterangepicker', function(ev, picker) {
   var start = picker.startDate.format('YYYY-MM-DD');
   var end = picker.endDate.format('YYYY-MM-DD');
 
-  var sl = '{{ $sl }}';
-  document.location = (sl == '') ? '#/mobile/analytics/' + start + '/' + end : '#/mobile/analytics/' + start + '/' + end + '/' + sl;
+  var places = JSON.stringify($('#places').val());
+  var campaigns = $('#campaigns').val();
+  if (campaigns == '') campaigns = 'all';
+
+  //var sl = '{{ $sl }}';
+  //document.location = (sl == '') ? '#/mobile/analytics/' + start + '/' + end : '#/mobile/analytics/' + start + '/' + end + '/' + sl;
+  document.location = '#/mobile/analytics/' + start + '/' + end + '/' + campaigns + '/' + encodeURIComponent(places);
 });
 
 //Combine graph data

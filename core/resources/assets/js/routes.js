@@ -51,6 +51,7 @@ $(function() {
       '/mobile/analytics/:sl': function (sl) { loadRoute('platform/mobile/analytics?sl=' + sl, 'mobile/analytics'); },
       '/mobile/analytics/:start/:end': function (start, end) { loadRoute('platform/mobile/analytics?start=' + start + '&end=' + end, 'mobile/analytics'); },
       '/mobile/analytics/:start/:end/:sl': function (start, end, sl) { loadRoute('platform/mobile/analytics?sl=' + sl + '&start=' + start + '&end=' + end, 'mobile/analytics'); },
+      '/mobile/analytics/:start/:end/:sl/:filter': function (start, end, sl, filter) { loadRoute('platform/mobile/analytics?sl=' + sl + '&filter=' + filter + '&start=' + start + '&end=' + end, 'mobile/analytics'); },
 
       '/scenarios/:sl': function (sl) { loadRoute('platform/scenarios?sl=' + sl, 'campaigns'); },
 
