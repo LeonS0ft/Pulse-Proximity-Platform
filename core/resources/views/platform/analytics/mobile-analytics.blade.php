@@ -135,15 +135,18 @@ $('#apply_filter').on('click', function() {
     </div>
 
   </div>
+
 </div>
 
 <div class="row">
   <div class="col-sm-6">
 
     <div class="card-box">
+      <h4 class="text-dark  header-title m-t-0 m-b-20">{{ trans('global.beacons') }}</h4>
       <div id="beaconLegend" style="margin-bottom: 30px"></div>
-      <div id="beacon-donut-chart" style="height: 180px">
-        <div class="flot-chart" style="height: 180px;">
+<?php if ($beacons[0]->name == '') echo trans('global.no_data_found'); ?>
+      <div id="beacon-donut-chart" style="height: <?php echo ($beacons[0]->name == '') ? '1' : '180'; ?>px">
+        <div class="flot-chart" style="height: <?php echo ($beacons[0]->name == '') ? '1' : '180'; ?>px;">
         </div>
       </div>
     </div>
@@ -152,9 +155,11 @@ $('#apply_filter').on('click', function() {
   <div class="col-sm-6">
 
     <div class="card-box">
+      <h4 class="text-dark  header-title m-t-0 m-b-20">{{ trans('global.geofences') }}</h4>
       <div id="geofenceLegend" style="margin-bottom: 30px"></div>
-      <div id="geofence-donut-chart" style="height: 180px">
-        <div class="flot-chart" style="height: 180px;">
+<?php if ($geofences[0]->name == '') echo trans('global.no_data_found'); ?>
+      <div id="geofence-donut-chart" style="height: <?php echo ($geofences[0]->name == '') ? '1' : '180'; ?>px">
+        <div class="flot-chart" style="height: <?php echo ($geofences[0]->name == '') ? '1' : '180'; ?>px;">
         </div>
       </div>
     </div>

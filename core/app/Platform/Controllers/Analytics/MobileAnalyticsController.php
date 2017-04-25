@@ -196,8 +196,20 @@ class MobileAnalyticsController extends \App\Http\Controllers\Controller {
     $location_groups = Location\LocationGroup::where('user_id', '=', Core\Secure::userId())->orderBy('name', 'asc')->get();
 
     // Query details for selected places
-    $beacons = Location\Beacon::whereIn('id', $selected_beacons)->where('user_id', '=', Core\Secure::userId())->orderBy('triggers', 'desc')->get();
-    $geofences = Location\Geofence::whereIn('id', $selected_geofences)->where('user_id', '=', Core\Secure::userId())->orderBy('triggers', 'desc')->get();
+    $beacons = Location\Beacon::whereIn('id', $selected_beacons)->where('user_id', '=', Core\Secure::userId())->where('created_at', '>=', $from)->where('created_at', '<=', $to)->orderBy('triggers', 'desc')->get();
+    $geofences = Location\Geofence::whereIn('id', $selected_geofences)->where('user_id', '=', Core\Secure::userId())->where('created_at', '>=', $from)->where('created_at', '<=', $to)->orderBy('triggers', 'desc')->get();
+
+    if (count($beacons) == 0) {
+      $beacons[0] = new \stdClass;
+      $beacons[0]->name = '';
+      $beacons[0]->triggers = 0;
+    }
+
+    if (count($geofences) == 0) {
+      $geofences[0] = new \stdClass;
+      $geofences[0]->name = '';
+      $geofences[0]->triggers = 0;
+    }
 
     /*
      |--------------------------------------------------------------------------
