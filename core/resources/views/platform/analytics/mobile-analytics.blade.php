@@ -380,7 +380,10 @@ var platformOptions = {
   series : {
     pie : {
       show : true,
-      innerRadius : 0
+      innerRadius : 0,
+      stroke : {
+        width : 2
+      }
     }
   },
   legend : {
@@ -421,7 +424,10 @@ var modelOptions = {
   series : {
     pie : {
       show : true,
-      innerRadius : 0
+      innerRadius : 0.5,
+      stroke : {
+        width : 2
+      }
     }
   },
   legend : {
@@ -462,7 +468,10 @@ var beaconOptions = {
   series : {
     pie : {
       show : true,
-      innerRadius : 0
+      innerRadius : 0.5,
+      stroke : {
+        width : 2
+      }
     }
   },
   legend : {
@@ -503,7 +512,10 @@ var geofenceOptions = {
   series : {
     pie : {
       show : true,
-      innerRadius : 0
+      innerRadius : 0.5,
+      stroke : {
+        width : 2
+      }
     }
   },
   legend : {
