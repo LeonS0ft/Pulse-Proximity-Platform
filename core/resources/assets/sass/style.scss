@@ -105,6 +105,17 @@ table.dataTable.dtr-inline.collapsed>tbody>tr>td:first-child:before, table.dataT
   white-space: nowrap;
 }
 
+// Flot chart legend
+td.legendColorBox {
+  padding: 2px 0 0 0;
+}
+
+td.legendLabel {
+  line-height: 15px;
+  font-size:14px;
+  padding: 3px 10px 3px 0;
+}
+
 // Google maps
 .gmap {
   border: 1px solid #eee;

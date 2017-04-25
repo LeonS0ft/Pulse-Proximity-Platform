@@ -191,9 +191,13 @@ class MobileAnalyticsController extends \App\Http\Controllers\Controller {
     }
 
     // Get all gefences and beacons without group and all locations 
-    $available_geofences_wo_group = Location\Geofence::whereIn('id', $available_geofences)->where('user_id', '=', Core\Secure::userId())->where('location_group_id', NULL)->orderBy('name', 'asc')->get();
     $available_beacons_wo_group = Location\Beacon::whereIn('id', $available_beacons)->where('user_id', '=', Core\Secure::userId())->where('location_group_id', NULL)->orderBy('name', 'asc')->get();
+    $available_geofences_wo_group = Location\Geofence::whereIn('id', $available_geofences)->where('user_id', '=', Core\Secure::userId())->where('location_group_id', NULL)->orderBy('name', 'asc')->get();
     $location_groups = Location\LocationGroup::where('user_id', '=', Core\Secure::userId())->orderBy('name', 'asc')->get();
+
+    // Query details for selected places
+    $beacons = Location\Beacon::whereIn('id', $selected_beacons)->where('user_id', '=', Core\Secure::userId())->orderBy('triggers', 'desc')->get();
+    $geofences = Location\Geofence::whereIn('id', $selected_geofences)->where('user_id', '=', Core\Secure::userId())->orderBy('triggers', 'desc')->get();
 
     /*
      |--------------------------------------------------------------------------
@@ -505,6 +509,7 @@ class MobileAnalyticsController extends \App\Http\Controllers\Controller {
         ->where('created_at', '>=', $from)
         ->where('created_at', '<=', $to)
         ->groupBy('model')
+        ->orderBy('total', 'desc')
         ->get()
         ->toArray();
 
@@ -684,9 +689,11 @@ class MobileAnalyticsController extends \App\Http\Controllers\Controller {
       'available_beacons_wo_group', 
       'available_beacons', 
       'selected_beacons', 
+      'beacons', 
       'available_geofences_wo_group', 
       'available_geofences', 
       'selected_geofences', 
+      'geofences', 
       'location_groups'
     ));
   }

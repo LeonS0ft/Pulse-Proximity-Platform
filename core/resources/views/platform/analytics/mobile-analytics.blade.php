@@ -108,13 +108,16 @@ $('#apply_filter').on('click', function() {
 </div>
 
 <div class="row">
-  <div class="col-sm-7">
+  <div class="col-sm-6">
+
     <div class="card-box">
-      <div id="heatmap" style="height: 582px;">
+      <div id="heatmap" style="height: 592px;">
       </div>
     </div>
+
   </div>
-  <div class="col-sm-5">
+  <div class="col-sm-6">
+
     <div class="card-box">
       <div id="platformLegend" style="margin-bottom: 20px"></div>
       <div id="platform-donut-chart" style="height: 180px">
@@ -122,16 +125,42 @@ $('#apply_filter').on('click', function() {
         </div>
       </div>
     </div>
+
     <div class="card-box">
-      <div id="modelLegend" style="margin-bottom: 20px; height: 100px"></div>
+      <div id="modelLegend" style="margin-bottom: 30px; height: 100px"></div>
       <div id="model-donut-chart">
         <div class="flot-chart" style="height: 180px;">
         </div>
       </div>
     </div>
+
   </div>
 </div>
 
+<div class="row">
+  <div class="col-sm-6">
+
+    <div class="card-box">
+      <div id="beaconLegend" style="margin-bottom: 30px"></div>
+      <div id="beacon-donut-chart" style="height: 180px">
+        <div class="flot-chart" style="height: 180px;">
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div class="col-sm-6">
+
+    <div class="card-box">
+      <div id="geofenceLegend" style="margin-bottom: 30px"></div>
+      <div id="geofence-donut-chart" style="height: 180px">
+        <div class="flot-chart" style="height: 180px;">
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
 <script>
 $('#reportrange span').html(moment('<?php echo $date_start ?>').format('MMMM D, YYYY') + ' - ' + moment('<?php echo $date_end ?>').format('MMMM D, YYYY'));
 
@@ -355,7 +384,7 @@ var platformOptions = {
     position: 'ne',
     noColumns: 3,
     labelFormatter : function(label, series) {
-      return '<div style="font-size:14px;margin:5px">&nbsp;' + label + '</div>'
+      return '' + label + ''
     },
     labelBoxBorderColor : null,
     margin : 10
@@ -367,7 +396,7 @@ var platformOptions = {
   colors : ["#50b432", "#058dc7", "#80deea", "#00b19d"],
   tooltip : {
     show: true,
-    content : "%s (%p.0%)",
+    content : "%s<br>{{ trans('global.scenarios_triggered') }}: %n (%p.0%)",
     defaultTheme: false
   }
 };
@@ -396,7 +425,7 @@ var modelOptions = {
     position: 'ne',
     noColumns: 3,
     labelFormatter : function(label, series) {
-      return '<div style="font-size:14px;margin:5px">&nbsp;' + label + '</div>'
+      return '' + label + ''
     },
     labelBoxBorderColor : null,
     margin : 10
@@ -405,15 +434,97 @@ var modelOptions = {
     hoverable : true,
     clickable : true
   },
-  colors : ["#50b432", "#058dc7", "#ed7e17", "#af49c5"],
+  colors : ["#0D47A1", "#1565C0", "#1976D2", "#1E88E5", "#2196F3", "#42A5F5", "#64B5F6", "#90CAF9", "#BBDEFB", "#E3F2FD"],
   tooltip : {
     show: true,
-    content : "%s (%p.0%)",
+    content : "%s<br>{{ trans('global.scenarios_triggered') }}: %n (%p.0%)",
     defaultTheme: false
   }
 };
 
 $.plot($("#model-donut-chart .flot-chart"), modelData, modelOptions);
+
+var beaconData = [
+<?php foreach($beacons as $beacon) { ?>
+{
+  label : "{{ $beacon->name }}",
+  data : {{ $beacon->triggers }}
+},
+<?php } ?>
+];
+
+var beaconOptions = {
+  series : {
+    pie : {
+      show : true,
+      innerRadius : 0
+    }
+  },
+  legend : {
+    show : true,
+    container: '#beaconLegend',
+    position: 'ne',
+    noColumns: 3,
+    labelFormatter : function(label, series) {
+      return '' + label + ''
+    },
+    labelBoxBorderColor : null,
+    margin : 10
+  },
+  grid : {
+    hoverable : true,
+    clickable : true
+  },
+  colors : ["#33691E", "#558B2F", "#689F38", "#7CB342", "#8BC34A", "#9CCC65", "#AED581", "#C5E1A5", "#DCEDC8", "#F1F8E9"],
+  tooltip : {
+    show: true,
+    content : "%s<br>{{ trans('global.scenarios_triggered') }}: %n (%p.0%)",
+    defaultTheme: false
+  }
+};
+
+$.plot($("#beacon-donut-chart .flot-chart"), beaconData, beaconOptions);
+
+var geofenceData = [
+<?php foreach($geofences as $geofence) { ?>
+{
+  label : "{{ $geofence->name }}",
+  data : {{ $geofence->triggers }}
+},
+<?php } ?>
+];
+
+var geofenceOptions = {
+  series : {
+    pie : {
+      show : true,
+      innerRadius : 0
+    }
+  },
+  legend : {
+    show : true,
+    container: '#geofenceLegend',
+    position: 'ne',
+    noColumns: 3,
+    labelFormatter : function(label, series) {
+      return '' + label + ''
+    },
+    labelBoxBorderColor : null,
+    margin : 10
+  },
+  grid : {
+    hoverable : true,
+    clickable : true
+  },
+  colors : ["#E65100", "#EF6C00", "#F57C00", "#FB8C00", "#FF9800", "#FFA726", "#FFB74D", "#FFCC80", "#FFE0B2", "#FFF3E0"],
+  tooltip : {
+    show: true,
+    content : "%s<br>{{ trans('global.scenarios_triggered') }}: %n (%p.0%)",
+    defaultTheme: false
+  }
+};
+
+$.plot($("#geofence-donut-chart .flot-chart"), geofenceData, geofenceOptions);
   
 $(window).resize(function(event) {
   if ($("#combine-chart #main_chart").length) {
@@ -426,6 +537,14 @@ $(window).resize(function(event) {
 
   if ($("#model-donut-chart .flot-chart").length) {
    $.plot($("#model-donut-chart .flot-chart"), modelData, modelOptions);
+  }
+
+  if ($("#beacon-donut-chart .flot-chart").length) {
+   $.plot($("#beacon-donut-chart .flot-chart"), beaconData, beaconOptions);
+  }
+
+  if ($("#geofence-donut-chart .flot-chart").length) {
+   $.plot($("#geofence-donut-chart .flot-chart"), geofenceData, geofenceOptions);
   }
 });
 
