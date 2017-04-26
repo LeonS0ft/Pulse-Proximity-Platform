@@ -101,6 +101,18 @@ class CardController extends \App\Http\Controllers\Controller {
     }
     else
     {
+      // Verify limit
+      $card_count = Location\Card::where('user_id', '=', Core\Secure::userId())->count();
+      $card_count_limit = \Auth::user()->plan->limitations['mobile']['cards'];
+
+      if ($card_count >= $card_count_limit) {
+        return response()->json([
+          'type' => 'error', 
+          'msg' => trans('global.account_limit_reached'),
+          'reset' => false
+        ]);
+      }
+
       $card = new Location\Card;
     }
 

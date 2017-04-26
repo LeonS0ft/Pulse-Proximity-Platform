@@ -60,6 +60,17 @@ class ScenarioController extends \App\Http\Controllers\Controller {
     $campaign = Campaigns\Campaign::where('id', $qs['campaign_id'])->where('user_id', '=', Core\Secure::userId())->first();
 
     if(! empty($campaign)) {
+      // Verify limit
+      $scenario_count = Location\Scenario::where('campaign_id', $qs['campaign_id'])->count();
+      $scenario_count_limit = \Auth::user()->plan->limitations['mobile']['scenarios_per_campaign'];
+
+      if ($scenario_count >= $scenario_count_limit) {
+        return response()->json([
+          'result' => 'error', 
+          'result_msg' => trans('global.account_limit_reached')
+        ]);
+      }
+
       $scenario = new Location\Scenario;
       $scenario->campaign_id = $campaign->id;
     }

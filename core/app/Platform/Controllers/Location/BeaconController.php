@@ -134,6 +134,18 @@ class BeaconController extends \App\Http\Controllers\Controller {
     }
     else
     {
+      // Verify limit
+      $beacon_count = Location\Beacon::where('user_id', '=', Core\Secure::userId())->count();
+      $beacon_count_limit = \Auth::user()->plan->limitations['mobile']['beacons'];
+
+      if ($beacon_count >= $beacon_count_limit) {
+        return response()->json([
+          'type' => 'error', 
+          'msg' => trans('global.account_limit_reached'),
+          'reset' => false
+        ]);
+      }
+
       $beacon = new Location\Beacon;
     }
 

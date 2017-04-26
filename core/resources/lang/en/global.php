@@ -478,6 +478,7 @@ return array(
   "limitations" => "Limitations",
   "show_menu" => "Show menu",
   "show_in_menu" => "Show in menu",
+  "account_limit_reached" => "Your account limit has been reached.",
 
   /*
    |--------------------------------------------------------------------------

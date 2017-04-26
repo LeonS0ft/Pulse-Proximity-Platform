@@ -93,6 +93,18 @@ class GeofenceController extends \App\Http\Controllers\Controller {
     }
     else
     {
+      // Verify limit
+      $geofence_count = Location\Geofence::where('user_id', '=', Core\Secure::userId())->count();
+      $geofence_count_limit = \Auth::user()->plan->limitations['mobile']['geofences'];
+
+      if ($geofence_count >= $geofence_count_limit) {
+        return response()->json([
+          'type' => 'error', 
+          'msg' => trans('global.account_limit_reached'),
+          'reset' => false
+        ]);
+      }
+
       $geofence = new Location\Geofence;
     }
 

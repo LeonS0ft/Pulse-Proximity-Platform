@@ -423,33 +423,41 @@ function addRepeaterRow(action, data)
     });
 
     request.done(function(json) {
+      if (json.result == 'error') {
+        swal({
+          title: json.result_msg,
+          type: "error",
+          showCancelButton: false,
+          confirmButtonText: _lang['ok']
+        });
+      } else {
+        var html = Mustache.render(scenario_row, mustacheBuildOptions({
+          i: i++,
+          sl: json.sl,
+          geofences: {},
+          beacons: {},
+          scenario_if: 1,
+          scenario_then: 1,
+          scenario_day: 1,
+          date_start: null,
+          date_end: null,
+          scenario_time: 1,
+          time_start: null,
+          time_end: null,
+          notification: '',
+          frequency: 0,
+          delay: 0,
+          show_image: '',
+          show_image_thumb: '',
+          open_url: '',
+          template: '',
+        }));
 
-      var html = Mustache.render(scenario_row, mustacheBuildOptions({
-        i: i++,
-        sl: json.sl,
-        geofences: {},
-        beacons: {},
-        scenario_if: 1,
-        scenario_then: 1,
-        scenario_day: 1,
-        date_start: null,
-        date_end: null,
-        scenario_time: 1,
-        time_start: null,
-        time_end: null,
-        notification: '',
-        frequency: 0,
-        delay: 0,
-        show_image: '',
-        show_image_thumb: '',
-        open_url: '',
-        template: '',
-      }));
-
-      $('#tbl-scenarios tbody').append(html);
-      rowBindings();
-      bsTooltipsPopovers();
-      showSaved();
+        $('#tbl-scenarios tbody').append(html);
+        rowBindings();
+        bsTooltipsPopovers();
+        showSaved();
+      }
     });
 
     request.fail(function(jqXHR, textStatus) {

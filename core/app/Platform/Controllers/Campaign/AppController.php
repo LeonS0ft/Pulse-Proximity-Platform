@@ -76,6 +76,18 @@ class AppController extends \App\Http\Controllers\Controller {
       $qs = Core\Secure::string2array($sl);
       $app = Campaigns\App::where('id', $qs['app_id'])->where('user_id', '=', $authUser->id)->first();
     } else {
+      // Verify limit
+      $app_count = Campaigns\App::where('user_id', '=', $authUser->id)->count();
+      $app_count_limit = \Auth::user()->plan->limitations['mobile']['apps'];
+
+      if ($app_count >= $app_count_limit) {
+        return response()->json([
+          'type' => 'error', 
+          'msg' => trans('global.account_limit_reached'),
+          'reset' => false
+        ]);
+      }
+
       $app = new Campaigns\App;
     }
 

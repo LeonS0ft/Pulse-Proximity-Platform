@@ -73,6 +73,18 @@ class CampaignController extends \App\Http\Controllers\Controller {
       $qs = Core\Secure::string2array($sl);
       $campaign = Campaigns\Campaign::where('id', $qs['campaign_id'])->where('user_id', '=', $authUser->id)->first();
     } else {
+      // Verify limit
+      $campaign_count = Campaigns\Campaign::where('user_id', '=', $authUser->id)->count();
+      $campaign_count_limit = \Auth::user()->plan->limitations['mobile']['campaigns'];
+
+      if ($campaign_count >= $campaign_count_limit) {
+        return response()->json([
+          'type' => 'error', 
+          'msg' => trans('global.account_limit_reached'),
+          'reset' => false
+        ]);
+      }
+
       $campaign = new Campaigns\Campaign;
     }
 
@@ -88,15 +100,8 @@ class CampaignController extends \App\Http\Controllers\Controller {
     //$campaign->setLocationAttribute($lng . ',' . $lat);
 
     if($campaign->save()) {
-
       $campaign->apps()->sync($apps);
-
-      if(1==2 && $sl == NULL) {
-        $sl = Core\Secure::array2string(array('campaign_id' => $campaign->id));
-        $response = ['redir' => '#/scenarios/' . $sl];
-      } else {
-        $response = ['redir' => '#/campaigns'];
-      }
+      $response = ['redir' => '#/campaigns'];
     } else {
       $response = [
         'type' => 'error', 
