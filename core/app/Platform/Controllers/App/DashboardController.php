@@ -37,12 +37,16 @@ class DashboardController extends \App\Http\Controllers\Controller {
     $ios_yesterday = 0;
     $app_count = 0;
     $app_count_limit = 0;
+    $app_count_perc = 0;
     $campaign_count = 0;
     $campaign_count_limit = 0;
+    $campaign_count_perc = 0;
     $beacon_count = 0;
     $beacon_count_limit = 0;
+    $beacon_count_perc = 0;
     $campaign_count = 0;
     $campaign_count_limit = 0;
+    $campaign_count_perc = 0;
 
     // Only execute queries when user has access to mobile features
     if (Gate::allows('limitation', 'mobile.visible')) {
@@ -125,18 +129,22 @@ class DashboardController extends \App\Http\Controllers\Controller {
 
       $app_count = Campaigns\App::where('user_id', '=', Core\Secure::userId())->count();
       $app_count_limit = \Auth::user()->plan->limitations['mobile']['apps'];
+      $app_count_perc = ($app_count_limit == 0) ? 0 : round(($app_count / $app_count_limit) * 100);
 
       $campaign_count = Campaigns\Campaign::where('user_id', '=', Core\Secure::userId())->count();
       $campaign_count_limit = \Auth::user()->plan->limitations['mobile']['campaigns'];
+      $campaign_count_perc = ($campaign_count_limit == 0) ? 0 : round(($campaign_count / $campaign_count_limit) * 100);
 
       if (Gate::allows('limitation', 'mobile.beacons_visible')) {
         $beacon_count = Location\Beacon::where('user_id', '=', Core\Secure::userId())->count();
         $beacon_count_limit = \Auth::user()->plan->limitations['mobile']['beacons'];
+        $beacon_count_perc = ($beacon_count_limit == 0) ? 0 : round(($beacon_count / $beacon_count_limit) * 100);
       }
 
       if (Gate::allows('limitation', 'mobile.geofences_visible')) {
         $geofence_count = Location\Geofence::where('user_id', '=', Core\Secure::userId())->count();
         $geofence_count_limit = \Auth::user()->plan->limitations['mobile']['beacons'];
+        $geofence_count_perc = ($geofence_count_limit == 0) ? 0 : round(($geofence_count / $geofence_count_limit) * 100);
       }
     }
 
@@ -155,12 +163,16 @@ class DashboardController extends \App\Http\Controllers\Controller {
       'ios_yesterday', 
       'app_count', 
       'app_count_limit', 
+      'app_count_perc', 
       'campaign_count', 
       'campaign_count_limit', 
+      'campaign_count_perc', 
       'beacon_count', 
       'beacon_count_limit', 
+      'beacon_count_perc', 
       'geofence_count', 
-      'geofence_count_limit'
+      'geofence_count_limit', 
+      'geofence_count_perc'
     ));
   }
 }

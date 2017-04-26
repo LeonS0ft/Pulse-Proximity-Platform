@@ -158,8 +158,9 @@ class AccountController extends \App\Http\Controllers\Controller {
 
   public function showPlan() {
     $user = \Auth::user();
-    $plans = \App\Plan::where('reseller_id', Core\Reseller::get()->id)->where('active', 1)->orderBy('order', 'asc')->get();
+    $plans = \App\Plan::where('reseller_id', Core\Reseller::get()->id)->where('active', 1)->where('default', 0)->orderBy('order', 'asc')->get();
+    $default_plan = \App\Plan::where('reseller_id', Core\Reseller::get()->id)->where('active', 1)->where('default', 1)->first();
 
-    return view('platform.account.plan', compact('user', 'plans'));
+    return view('platform.account.plan', compact('user', 'plans', 'default_plan'));
   }
 }

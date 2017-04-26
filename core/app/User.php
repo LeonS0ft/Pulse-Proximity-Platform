@@ -2,6 +2,8 @@
 
 namespace App;
 
+use \Platform\Controllers\Core;
+
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Notifications\ResetPassword as ResetPasswordNotification;
@@ -50,12 +52,30 @@ class User extends Authenticatable implements StaplerableInterface
     return array('created_at', 'updated_at', 'last_login', 'expires');
   }
 
-  public function getPlanName() {
-    return ($this->plan_id != NULL) ? $this->plan->name : trans('global.free');
+  public function getFreePlanAttribute() {
+    return ($this->attributes['plan_id'] == NULL) ? true : false;
   }
 
-  public function getPlanId() {
-    return ($this->plan_id != NULL) ? $this->plan->id : 0;
+  public function getPlanNameAttribute() {
+    if ($this->attributes['plan_id'] != NULL) {
+      return $this->plan->name;
+    } else {
+      // Check for default plan (will be used instead of free)
+      $default_plan = \App\Plan::where('reseller_id', Core\Reseller::get()->id)->where('active', 1)->where('default', 1)->first();
+      return (empty($default_plan)) ? trans('global.free') : $default_plan->name;
+    }
+  }
+
+  public function getPlanIdAttribute() {
+    return ($this->attributes['plan_id'] != NULL) ? $this->attributes['plan_id'] : 0;
+
+    if ($this->attributes['plan_id'] != NULL) {
+      return $this->attributes['plan_id'];
+    } else {
+      // Check for default plan (will be used instead of free)
+      $default_plan = \App\Plan::where('reseller_id', Core\Reseller::get()->id)->where('active', 1)->where('default', 1)->first();
+      return (empty($default_plan)) ? NULL : $default_plan->id;
+    }
   }
 
   public function getAvatar() {
@@ -79,6 +99,12 @@ class User extends Authenticatable implements StaplerableInterface
   }
 
   public function plan() {
+    if ($this->attributes['plan_id'] == null) {
+      // Check for default plan (will be used instead of free)
+      $default_plan = \App\Plan::where('reseller_id', Core\Reseller::get()->id)->where('active', 1)->where('default', 1)->first();
+      if (! empty($default_plan)) $this->attributes['plan_id'] = $default_plan->id;
+    }
+
     return $this->belongsTo('\App\Plan', 'plan_id');
   }
 

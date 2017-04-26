@@ -9,9 +9,9 @@
         </div>
       </nav>
     </div>
-    <?php if (\Auth::user()->getPlanId() == 0 && Gate::allows('limitation', 'account.plan_visible')) { ?>
+    <?php if (\Auth::user()->free_plan && Gate::allows('limitation', 'account.plan_visible')) { ?>
     <div class="col-md-12">
-      <div class="alert alert-success">{!! trans('global.you_are_on_plan', ['plan' => '<strong>' . \Auth::user()->getPlanName() . '</strong>']) !!} {!! trans('global.click_here_for_more_info', ['link' => '#/plan']) !!}</div>
+      <div class="alert alert-success">{!! trans('global.you_are_on_plan', ['plan' => '<strong>' . \Auth::user()->plan_name . '</strong>']) !!} {!! trans('global.click_here_for_more_info', ['link' => '#/plan']) !!}</div>
     </div>
     <?php } ?>
   </div>
@@ -116,14 +116,14 @@ switch ( $cols ) {
   <div class="row">
     <div class="{{ $col_class }}">
       <div class="widget-simple-chart text-right card-box">
-        <div class="circliful-chart" data-percent="{{ round(($app_count / $app_count_limit) * 100) }}" data-fgcolor="#5fbeaa" data-bgcolor="#ebeff2" style="width: 100px"></div>
+        <div class="circliful-chart" data-percent="{{ $app_count_perc }}" data-fgcolor="#5fbeaa" data-bgcolor="#ebeff2" style="width: 100px"></div>
         <h3 class="text-success">{{ $app_count }} / {{ $app_count_limit }}</h3>
         <p><a href="#/apps" class="text-muted">{{ trans('global.apps') }}</a></p>
       </div>
     </div>
     <div class="{{ $col_class }}">
       <div class="widget-simple-chart text-right card-box">
-        <div class="circliful-chart" data-percent="{{ round(($campaign_count / $campaign_count_limit) * 100) }}" data-fgcolor="#3bafda" data-bgcolor="#ebeff2" style="width: 100px"></div>
+        <div class="circliful-chart" data-percent="{{ $campaign_count_perc }}" data-fgcolor="#3bafda" data-bgcolor="#ebeff2" style="width: 100px"></div>
         <h3 class="text-primary">{{ $campaign_count }} / {{ $campaign_count_limit }}</h3>
         <p><a href="#/campaigns" class="text-muted">{{ trans('global.campaigns') }}</a></p>
       </div>
@@ -131,7 +131,7 @@ switch ( $cols ) {
     <?php if (Gate::allows('limitation', 'mobile.beacons_visible')) { ?>
     <div class="{{ $col_class }}">
       <div class="widget-simple-chart text-right card-box">
-        <div class="circliful-chart" data-percent="{{ round(($beacon_count / $beacon_count_limit) * 100) }}" data-fgcolor="#3bafda" data-bgcolor="#ebeff2" style="width: 100px"></div>
+        <div class="circliful-chart" data-percent="{{ $beacon_count_perc }}" data-fgcolor="#3bafda" data-bgcolor="#ebeff2" style="width: 100px"></div>
         <h3 class="text-primary">{{ $beacon_count }} / {{ $beacon_count_limit }}</h3>
         <p><a href="#/beacons" class="text-muted">{{ trans('global.beacons') }}</a></p>
       </div>
@@ -140,7 +140,7 @@ switch ( $cols ) {
     <?php if (Gate::allows('limitation', 'mobile.geofences_visible')) { ?>
     <div class="{{ $col_class }}">
       <div class="widget-simple-chart text-right card-box">
-        <div class="circliful-chart" data-percent="{{ round(($geofence_count / $geofence_count_limit) * 100) }}" data-fgcolor="#3bafda" data-bgcolor="#ebeff2" style="width: 100px"></div>
+        <div class="circliful-chart" data-percent="{{ $geofence_count_perc }}" data-fgcolor="#3bafda" data-bgcolor="#ebeff2" style="width: 100px"></div>
         <h3 class="text-primary">{{ $geofence_count }} / {{ $geofence_count_limit }}</h3>
         <p><a href="#/geofences" class="text-muted">{{ trans('global.geofences') }}</a></p>
       </div>
