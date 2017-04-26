@@ -60,6 +60,14 @@
               <label for="upgrade_url">{{ trans('global.upgrade_url') }}</label>
               <input type="text" class="form-control" name="upgrade_url" id="upgrade_url" value="" autocomplete="off">
             </div>
+
+            <div class="form-group" style="margin-top:20px">
+              <div class="checkbox checkbox-primary">
+                <input name="default" id="default" type="checkbox" value="1">
+                <label for="default"> {{ trans('global.default_plan') }} <i class="material-icons help-icon" data-container="body" data-trigger="hover" data-toggle="popover" data-placement="top" data-content="{{ trans('global.default_info') }}">&#xE887;</i></label>
+              </div>
+            </div>
+
             <div class="form-group" style="margin-top:20px">
               <div class="checkbox checkbox-primary">
                 <input name="active" id="active" type="checkbox" value="1" checked>

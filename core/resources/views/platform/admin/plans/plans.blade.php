@@ -66,6 +66,10 @@ var admin_plans_table = $('#dt-table-admin_plans').DataTable({
     width: 120,
     sortable: false
   }, {
+    data: "default",
+    width: 60,
+    sortable: false
+  }, {
     data: "active",
     width: 60,
     sortable: false
@@ -101,7 +105,7 @@ var admin_plans_table = $('#dt-table-admin_plans').DataTable({
           return '<div class="text-center"><i class="fa fa-times" aria-hidden="true"></i></div>';
         }
       },
-      targets: 4
+      targets: [4,5]
     },
     {
       render: function (data, type, row) {
@@ -112,7 +116,7 @@ var admin_plans_table = $('#dt-table-admin_plans').DataTable({
           '<a href="javascript:void(0);" class="btn btn-xs btn-danger' + btn_delete + '" data-toggle="tooltip" title="{{ trans('global.delete') }}"' + disabled + '><i class="fa fa-trash"></i></a>' + 
           '</div></div>';
       },
-      targets: 5 /* Column to re-render */
+      targets: 6 /* Column to re-render */
     },
   ],
   language: {
@@ -175,6 +179,7 @@ $('#dt-table-admin_plans_wrapper .dataTables_filter input').attr('placeholder', 
         <th>{{ trans('global.name') }}</th>
         <th>{{ trans('global.price') }}</th>
         <th>{{ trans('global.created') }}</th>
+        <th class="text-center">{{ trans('global.default') }}</th>
         <th class="text-center">{{ trans('global.active') }}</th>
         <th class="text-center">{{ trans('global.actions') }}</th>
       </tr>

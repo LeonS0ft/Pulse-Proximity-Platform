@@ -65,6 +65,13 @@
 
             <div class="form-group" style="margin-top:20px">
               <div class="checkbox checkbox-primary">
+                <input name="default" id="default" type="checkbox" value="1"<?php if($plan->default == 1) echo ' checked'; ?><?php if($plan->id == 1)echo ' disabled'; ?>>
+                <label for="default"> {{ trans('global.default_plan') }} <i class="material-icons help-icon" data-container="body" data-trigger="hover" data-toggle="popover" data-placement="top" data-content="{{ trans('global.default_info') }}">&#xE887;</i></label>
+              </div>
+            </div>
+
+            <div class="form-group" style="margin-top:20px">
+              <div class="checkbox checkbox-primary">
                 <input name="active" id="active" type="checkbox" value="1"<?php if($plan->active == 1) echo ' checked'; ?><?php if($plan->id == 1)echo ' disabled'; ?>>
                 <label for="active"> {{ trans('global.active') }}</label>
               </div>

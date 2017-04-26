@@ -31,6 +31,7 @@ return array(
   "submit" => "Submit",
   "changes_saved" => "Changes saved successfully.",
   "saved" => "Saved",
+  "default" => "Default",
   "active" => "Active",
   "new" => "New",
   "share" => "Share",
@@ -412,7 +413,7 @@ return array(
 
   /*
    |--------------------------------------------------------------------------
-   | Auth
+   | Demo
    |--------------------------------------------------------------------------
    */
 
@@ -452,6 +453,8 @@ return array(
   "plans" => "Plans",
   "full_access" => "Full access",
   "free" => "Free",
+  "default_plan" => "Default plan",
+  "default_info" => "New users start with the default plan. If there is no default plan, a user will start with a free plan with no permissions. There can be only one default plan.",
   "per_month" => "Per month",
   "subtitle" => "Subtitle",
   "new_plan" => "New plan",

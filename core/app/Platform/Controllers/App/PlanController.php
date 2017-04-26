@@ -58,6 +58,7 @@ class PlanController extends \App\Http\Controllers\Controller {
       'price1_subtitle' => request()->input('price1_subtitle'),
       'order_url' => request()->input('order_url'),
       'upgrade_url' => request()->input('upgrade_url'),
+      'default' => (bool) request()->input('default', false),
       'active' => (bool) request()->input('active', false),
       'limitations' => request()->input('limitations', [])
     );
@@ -100,10 +101,16 @@ class PlanController extends \App\Http\Controllers\Controller {
       $plan->order_url = $input['order_url'];
       $plan->upgrade_url = $input['upgrade_url'];
       $plan->limitations = $input['limitations'];
+      $plan->default = $input['default'];
       $plan->active = $input['active'];
 
       if($plan->save())
       {
+        // Set other plans to non-default
+        if ($input['default']) {
+          $result = \App\Plan::where('reseller_id', Core\Reseller::get()->id)->where('id', '<>', $plan->id)->update(['default' => 0]);
+        }
+
         $response = array(
           'type' => 'success',
           'redir' => '#/admin/plans'
@@ -141,6 +148,7 @@ class PlanController extends \App\Http\Controllers\Controller {
         'price1_subtitle' => request()->input('price1_subtitle'),
         'order_url' => request()->input('order_url'),
         'upgrade_url' => request()->input('upgrade_url'),
+        'default' => (bool) request()->input('default', false),
         'active' => (bool) request()->input('active', false),
         'limitations' => request()->input('limitations', [])
       );
@@ -176,6 +184,12 @@ class PlanController extends \App\Http\Controllers\Controller {
         if ($qs['plan_id'] != 1) {
           $plan->limitations = $input['limitations'];
           $plan->active = $input['active'];
+          $plan->default = $input['default'];
+
+          // Set other plans to non-default
+          if ($input['default']) {
+            $result = \App\Plan::where('reseller_id', Core\Reseller::get()->id)->where('id', '<>', $qs['plan_id'])->update(['default' => 0]);
+          }
         }
 
         if($plan->save())
@@ -285,6 +299,7 @@ class PlanController extends \App\Http\Controllers\Controller {
         'order' => $row->order,
         'name' => $name,
         'price1_string' => $price1_string,
+        'default' => $row->default,
         'active' => $row->active,
         'created_at' => $row->created_at->timezone(\Auth::user()->timezone)->format('Y-m-d H:i:s'),
         'sl' => Core\Secure::array2string(array('plan_id' => $row->id)),
