@@ -13,9 +13,7 @@ _notes
 /core/.sass-cache
 /core/storage/oauth-private.key
 /core/storage/oauth-public.key
-
-/core/resources/assets/less/*.css
-
+/core/resources/assets/**/*.css
 /core/vendor/**/*.test
 /core/vendor/**/Makefile
 /core/vendor/**/conf.py
