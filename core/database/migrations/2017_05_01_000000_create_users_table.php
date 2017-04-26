@@ -59,11 +59,12 @@ class CreateUsersTable extends Migration
       $table->string('remote_product_id2', 64)->nullable();
       $table->string('name', 64);
       $table->string('ribbon', 64)->nullable();
-      $table->integer('price1');
+      $table->integer('trial_days')->unsigned()->nullable();
+      $table->integer('price1')->unsigned();
       $table->string('price1_string', 64);
       $table->string('price1_period_string', 64)->nullable();
       $table->string('price1_subtitle', 200)->nullable();
-      $table->integer('price2')->nullable();
+      $table->integer('price2')->unsigned()->nullable();
       $table->string('price2_string', 64)->nullable();
       $table->string('price2_period_string', 64)->nullable();
       $table->string('price2_subtitle', 64)->nullable();
@@ -72,6 +73,7 @@ class CreateUsersTable extends Migration
       $table->text('order_url')->nullable();
       $table->text('upgrade_url')->nullable();
       $table->boolean('active')->default(true);
+      $table->boolean('default')->default(false);
       $table->timestamps();
     });
 
