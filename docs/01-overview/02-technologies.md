@@ -4,6 +4,7 @@
 
  - [Laravel PHP Framework](https://laravel.com/)
  - [jQuery](https://jquery.com/)
+ - [Bootstrap 3](http://getbootstrap.com/)
  - [gulp.js](http://gulpjs.com/)
  - [Bower](https://bower.io/)
  - [Sass](http://sass-lang.com/)

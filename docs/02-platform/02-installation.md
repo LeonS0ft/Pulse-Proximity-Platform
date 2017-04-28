@@ -2,7 +2,7 @@
 
 ## Upload files
 
-The preferred way of installing is with Git, because this makes it easy to update. This may change when a built-in updater is implemented.
+The preferred way of installing is with Git, because this makes it easy to update.
 
 With your CLI, go to the webroot of your hosting account and type:
 
@@ -88,7 +88,10 @@ GMAPS_DEFAULT_LNG=-122.262775
 GMAPS_DEFAULT_ZOOM=12
 GMAPS_DEFAULT_RADIUS=2000
 
-# Leave this key, a new one will be generated on install
+# After deploying the files to your server (with `git clone` or by uploading),
+# `cd` to the `core` directory and run (e.g. `cd var/www/pulse/core`):
+# `php artisan key:generate`
+# This will generate a new app key.
 
 APP_KEY=base64:GZft2mqFBPuCC9FWTmB6vYo06Ezfnqed4J3tUHdjlPo=
 ```
