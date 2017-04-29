@@ -44,6 +44,9 @@ class DashboardController extends \App\Http\Controllers\Controller {
     $beacon_count = 0;
     $beacon_count_limit = 0;
     $beacon_count_perc = 0;
+    $geofence_count = 0;
+    $geofence_count_limit = 0;
+    $geofence_count_perc = 0;
     $campaign_count = 0;
     $campaign_count_limit = 0;
     $campaign_count_perc = 0;
