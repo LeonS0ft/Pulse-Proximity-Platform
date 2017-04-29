@@ -15,8 +15,8 @@
   <script src="<?= url("assets/packages/elfinder/js/i18n/elfinder.$locale.js") ?>"></script>
 <?php } ?>
 </head>
-
-<div id="elfinder"></div>
+<body>
+<div id="elfinder" class="el-picker"></div>
 <script type="text/javascript" charset="utf-8">
   // Documentation for client options:
   // https://github.com/Studio-42/elFinder/wiki/Client-configuration-options

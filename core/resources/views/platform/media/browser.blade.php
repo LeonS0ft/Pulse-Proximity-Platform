@@ -2,7 +2,7 @@
 <link rel="stylesheet" type="text/css" href="<?= url('assets/css/elfinder.min.css') ?>">
 <script src="<?= url('assets/packages/elfinder/js/elfinder.min.js') ?>"></script>
 
-      <div id="elfinder"></div>
+      <div id="elfinder" class="el-fullscreen"></div>
 
 <script type="text/javascript" charset="utf-8">
   // Documentation for client options:
